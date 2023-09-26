@@ -1,0 +1,7 @@
+*.iml
+EserciziAcademy/.idea/
+EserciziAcademy/out/
+EserciziAcademy/bin/
+*.classpath
+*.project
+*.class
