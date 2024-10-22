@@ -1,5 +1,7 @@
 package academy.esercizi.esercizi_9;
 
+import com.sun.nio.sctp.IllegalReceiveException;
+
 import java.math.BigDecimal;
 import java.util.Scanner;
 
@@ -8,27 +10,24 @@ public class Esercizio_9_1 {
         Scanner scanner = new Scanner(System.in);
         String nazionalita;
         BigDecimal ral;
-        while (true) {
-            System.out.print("Inserisci la nazionalità (Italiana o Americana): ");
-            nazionalita = scanner.nextLine();
-            if (nazionalita.equalsIgnoreCase("Italiana") || nazionalita.equalsIgnoreCase("Americana")) {
-                System.out.print("Inserisci il tuo RAL (deve essere positivo): ");
-                ral = scanner.nextBigDecimal();
-                if (ral.compareTo(BigDecimal.ZERO) > 0) {
-                    break;
-                } else {
-                    System.out.println("Il RAL deve essere un valore positivo. Riprova.");
-                }
-            } else {
-                System.out.println("Nazionalità non valida. Riprova.");
-                System.out.println();
-            }
+
+        System.out.print("Inserisci la nazionalità (Italiana o Americana): ");
+        nazionalita = scanner.nextLine();
+
+        System.out.print("Inserisci il tuo RAL (deve essere positivo): ");
+        ral = scanner.nextBigDecimal();
+
+        if (!validificaRal(ral) & !validificaNazionalita(nazionalita)){
+            BigDecimal tasse = calcolaTasse(nazionalita, ral);
+            BigDecimal netto = ral.subtract(tasse);
+            stampaTabella(ral, tasse, netto);
+        } else {
+            System.out.println("I dati che hai inserito non sono validi");
         }
 
 
-        BigDecimal tasse = calcolaTasse(nazionalita, ral);
-        BigDecimal netto = ral.subtract(tasse);
-        stampaTabella(ral, tasse, netto);
+
+
     }
 
     public static BigDecimal calcolaTasse(String nazionalita, BigDecimal ral) {
@@ -127,5 +126,29 @@ public class Esercizio_9_1 {
         System.out.println("-----------------------------------------");
         System.out.printf("%-10s %-10s %-10s%n", ral, tasse, netto);
         System.out.println("-----------------------------------------");
+    }
+
+
+    private static boolean validificaNazionalita(String nazionalita){
+        try {
+            if (!nazionalita.equalsIgnoreCase("Italiana") && !nazionalita.equalsIgnoreCase("Americana")){
+                throw new IllegalReceiveException("La nazionalita che hai inserito non e valida");
+            }
+        } catch (Exception e) {
+            System.out.println("Errore di validazione " + e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    private static boolean validificaRal(BigDecimal ral){
+        try {
+            if (ral.compareTo(BigDecimal.ZERO) <= 0 ){
+                throw new IllegalReceiveException("Il ral inserito non e valido");
+            }
+        } catch (Exception e) {
+            System.out.println("Errore di validazione:" + e.getMessage());
+        }
+        return true;
     }
 }
