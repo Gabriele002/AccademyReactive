@@ -1,4 +1,4 @@
-package academy.esercizi;
+package academy.esercizi.esercizi_1;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

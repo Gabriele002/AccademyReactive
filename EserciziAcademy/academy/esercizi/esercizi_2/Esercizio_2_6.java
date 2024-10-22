@@ -1,4 +1,4 @@
-package academy.esercizi;
+package academy.esercizi.esercizi_2;
 
 import java.util.Arrays;
 

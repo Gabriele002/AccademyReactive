@@ -1,4 +1,4 @@
-package academy.esercizi;
+package academy.esercizi.esercizi_6;
 
 public class Esercizio_6_1 {
     public static void main(String[] args) {

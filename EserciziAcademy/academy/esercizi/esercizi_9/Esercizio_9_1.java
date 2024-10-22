@@ -1,4 +1,4 @@
-package academy.esercizi;
+package academy.esercizi.esercizi_9;
 
 import java.math.BigDecimal;
 import java.util.Scanner;
