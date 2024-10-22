@@ -8,7 +8,6 @@ public class Esercizio_9_1 {
         Scanner scanner = new Scanner(System.in);
         String nazionalita;
         BigDecimal ral;
-
         while (true) {
             System.out.print("Inserisci la nazionalità (Italiana o Americana): ");
             nazionalita = scanner.nextLine();
@@ -41,14 +40,14 @@ public class Esercizio_9_1 {
         BigDecimal tasse = BigDecimal.ZERO;
             //Nazionalita italiana
         if (nazionalita.equalsIgnoreCase("Italiana")) {
-            BigDecimal soglia15000 = BigDecimal.valueOf(15000);
-            BigDecimal soglia28000 = BigDecimal.valueOf(28000);
-            BigDecimal soglia50000 = BigDecimal.valueOf(50000);
+            final BigDecimal soglia15000 = BigDecimal.valueOf(15000);
+            final BigDecimal soglia28000 = BigDecimal.valueOf(28000);
+            final BigDecimal soglia50000 = BigDecimal.valueOf(50000);
 
-            BigDecimal aliquota23 = BigDecimal.valueOf(0.23);
-            BigDecimal aliquota25 = BigDecimal.valueOf(0.25);
-            BigDecimal aliquota35 = BigDecimal.valueOf(0.35);
-            BigDecimal aliquota43 = BigDecimal.valueOf(0.43);
+            final BigDecimal aliquota23 = BigDecimal.valueOf(0.23);
+            final BigDecimal aliquota25 = BigDecimal.valueOf(0.25);
+            final BigDecimal aliquota35 = BigDecimal.valueOf(0.35);
+            final BigDecimal aliquota43 = BigDecimal.valueOf(0.43);
 
             if (ral.compareTo(soglia15000) <= 0) {
                 tasse = ral.multiply(aliquota23);
@@ -72,16 +71,15 @@ public class Esercizio_9_1 {
         }else if (nazionalita.equalsIgnoreCase("Americana")) {
             Scanner scanner = new Scanner(System.in);
             System.out.print("Sei coniugato? (sì/no): ");
-            String risposta = scanner.next().toLowerCase();
-            boolean statoCivile = risposta.equals("sì");
-            if (statoCivile) {
+            String statoCivile = scanner.next().toLowerCase();
+            if (statoCivile.equalsIgnoreCase("si")) {
                 // Tassazione per coniugati
-                BigDecimal soglia16000 = BigDecimal.valueOf(16000);
-                BigDecimal soglia64000 = BigDecimal.valueOf(64000);
+               final BigDecimal soglia16000 = BigDecimal.valueOf(16000);
+               final BigDecimal soglia64000 = BigDecimal.valueOf(64000);
 
-                BigDecimal aliquota10 = BigDecimal.valueOf(0.10);
-                BigDecimal aliquota15 = BigDecimal.valueOf(0.15);
-                BigDecimal aliquota25 = BigDecimal.valueOf(0.25);
+               final BigDecimal aliquota10 = BigDecimal.valueOf(0.10);
+               final BigDecimal aliquota15 = BigDecimal.valueOf(0.15);
+               final BigDecimal aliquota25 = BigDecimal.valueOf(0.25);
 
                 if (ral.compareTo(soglia16000) <= 0) {
                     tasse = ral.multiply(aliquota10);
@@ -97,12 +95,12 @@ public class Esercizio_9_1 {
                 }
             } else {
                 // Tassazione per non coniugati
-                BigDecimal soglia8000 = BigDecimal.valueOf(8000);
-                BigDecimal soglia32000 = BigDecimal.valueOf(32000);
+                final BigDecimal soglia8000 = BigDecimal.valueOf(8000);
+                final BigDecimal soglia32000 = BigDecimal.valueOf(32000);
 
-                BigDecimal aliquota10 = BigDecimal.valueOf(0.10);
-                BigDecimal aliquota15 = BigDecimal.valueOf(0.15);
-                BigDecimal aliquota25 = BigDecimal.valueOf(0.25);
+                final BigDecimal aliquota10 = BigDecimal.valueOf(0.10);
+                final BigDecimal aliquota15 = BigDecimal.valueOf(0.15);
+                final BigDecimal aliquota25 = BigDecimal.valueOf(0.25);
 
                 if (ral.compareTo(soglia8000) <= 0) {
                     tasse = ral.multiply(aliquota10);
@@ -118,7 +116,6 @@ public class Esercizio_9_1 {
                 }
             }
         }
-
         return tasse;
     }
 
