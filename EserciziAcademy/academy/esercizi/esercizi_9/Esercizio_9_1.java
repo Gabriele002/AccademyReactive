@@ -51,6 +51,7 @@ public class Esercizio_9_1 {
         final BigDecimal aliquota35 = BigDecimal.valueOf(0.35);
         final BigDecimal aliquota43 = BigDecimal.valueOf(0.43);
 
+
         if (ral.compareTo(soglia15000) <= 0) {
             return ral.multiply(aliquota23);
         } else if (ral.compareTo(soglia28000) <= 0) {

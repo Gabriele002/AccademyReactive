@@ -1,5 +1,7 @@
 package academy.esercizi.esercizi_1;
 
+import academy.esercizi.utility.Validificazione;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Scanner;
@@ -15,6 +17,7 @@ public class Eserizio_1_2 {
 
         System.out.print("Inserisci il numero di anni: ");
         int anni = scn.nextInt();
+        Validificazione.validificaIntMinoreDiZero(anni, "Gli anni non possono essere inferiori minore di zero");
 
         System.out.print("Inserisci il tasso di interesse: ");
         BigDecimal tassoInteressePercentuale = scn.nextBigDecimal();
