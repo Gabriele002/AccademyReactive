@@ -17,7 +17,7 @@ public class Esercizio_9_1 {
         System.out.print("Inserisci il tuo RAL (deve essere positivo): ");
         ral = scanner.nextBigDecimal();
 
-        if (!validificaRal(ral) & !validificaNazionalita(nazionalita)){
+        if (validificaRal(ral) && validificaNazionalita(nazionalita)){
             BigDecimal tasse = calcolaTasse(nazionalita, ral);
             BigDecimal netto = ral.subtract(tasse);
             stampaTabella(ral, tasse, netto);

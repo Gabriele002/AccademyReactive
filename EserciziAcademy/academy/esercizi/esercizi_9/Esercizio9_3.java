@@ -9,7 +9,6 @@ public class Esercizio9_3 {
     }
 
     private void risolvi (){
-        double x,y;
         double xA= 0, yA = 0;
         double xB= 4, yB = 0;
         double xC= 4, yC = 4;
