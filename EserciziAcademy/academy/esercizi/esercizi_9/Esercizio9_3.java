@@ -9,10 +9,28 @@ public class Esercizio9_3 {
     }
 
     private void risolvi (){
-        double xA= 0, yA = 0;
-        double xB= 4, yB = 0;
-        double xC= 4, yC = 4;
-        double xD= 0, yD = 4;
+        int xA= 0, yA = 0;
+        int xB= 4, yB = 0;
+        int xC= 4, yC = 4;
+        int xD= 0, yD = 4;
+
+        String [][] figura = new String[5][5];
+        figura[xA][yA] = "X";
+        figura[xB][yB] = "X";
+        figura[xC][yC] = "X";
+        figura[xD][yD] = "X";
+
+
+        for (int i = 0; i < figura.length; i++) {
+            for (int j = 0; j < figura[i].length; j++) {
+                if (figura[i][j] == null){
+                    System.out.print("O");
+                } else {
+                    System.out.print(figura[i][j]);
+                }
+            }
+            System.out.println("");
+        }
 
         determinaFigura(xA,yA,xB,yB,xC,yC,xD,yD);
 
@@ -44,6 +62,8 @@ public class Esercizio9_3 {
         } else {
             System.out.println("La figura non e nessuna delle indicate");
         }
+
+
     }
 }
 
