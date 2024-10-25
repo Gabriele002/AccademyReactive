@@ -50,6 +50,17 @@ public class Validificazione {
         }
         return true;
     }
+
+    public static boolean validificaNumeroCompresoTraUnoECento(int numero){
+        try{
+            if (numero > 1 && numero <=100){
+                throw new IllegalArgumentException("Il numero inserito deve essere compreso tra uno e cento");
+            }
+        } catch (Exception e){
+            System.out.println("Errore di valedizione" + e.getMessage());
+        }
+        return true;
+    }
 }
 
 

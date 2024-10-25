@@ -7,7 +7,7 @@ public class Esercizio_10_1 {
     }
 
     private void soluzione (){
-        System.out.println(convertitore(4
+        System.out.println(convertitore(1200
         ));
     }
 
@@ -16,7 +16,7 @@ public class Esercizio_10_1 {
             return "Numero non valido. Deve essere tra 1 e 3999.";
         }else {
             String[] romani = { "M","D","CD","C","XC","L","Xl","X","IX","V","IV","I"};
-            int[] numeriInteri = {1000,490,500,100,90,50,40,10,9,5,4,1};
+            int[] numeriInteri = {1000,500,490,100,90,50,40,10,9,5,4,1};
             StringBuilder numeroConvertito = new StringBuilder();
             for (int i = 0; i < numeriInteri.length; i++) {
                 while (numeroDaConvertire >= numeriInteri[i]){
