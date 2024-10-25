@@ -1,12 +1,10 @@
-package academy.esercizi.esercizi_18;
+package academy.esercizi.esercizi_18.esercizio_18_4;
 
 import academy.esercizi.esercizi_18.esercizio_18_4.model.Conto;
 import academy.esercizi.esercizi_18.esercizio_18_4.model.Utente;
 import academy.esercizi.utility.Validificazione;
 
-import javax.swing.tree.MutableTreeNode;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Scanner;
 
 public class Esercizio_18_4 {

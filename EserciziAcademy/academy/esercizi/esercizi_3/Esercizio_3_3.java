@@ -5,9 +5,9 @@ import java.util.Random;
 public class Esercizio_3_3 {
     public static void main(String[] args) {
         String[][] tris = {
-                {" ", " ", " "},
-                {" ", " ", " "},
-                {" ", " ", " "}
+                {".", ".", "."},
+                {".", ".", "."},
+                {".", ".", "."}
         };
         tris[0][2] = "X";
         riempiTrisCasualmente(tris);
@@ -27,10 +27,13 @@ public class Esercizio_3_3 {
 
     public static void riempiTrisCasualmente(String[][] tris) {
         Random rand = new Random();
+        String[] random= {"X", "O", " "};
+        int randomizatore;
         for (int i = 0; i < tris.length; i++) {
             for (int j = 0; j < tris[i].length; j++) {
-                if (tris[i][j].equals(" ")) {
-                    tris[i][j] = rand.nextBoolean() ? "X" : "O";
+                randomizatore =  rand.nextInt(3);
+                if (tris[i][j].equals(".")) {
+                    tris[i][j] = random[randomizatore];
                 }
             }
         }
