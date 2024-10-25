@@ -27,13 +27,13 @@ public class Esercizio_3_3 {
 
     public static void riempiTrisCasualmente(String[][] tris) {
         Random rand = new Random();
-        String[] random= {"X", "O", " "};
+        String[] possibilitaTris= {"X", "O", " "};
         int randomizatore;
         for (int i = 0; i < tris.length; i++) {
             for (int j = 0; j < tris[i].length; j++) {
                 randomizatore =  rand.nextInt(3);
                 if (tris[i][j].equals(".")) {
-                    tris[i][j] = random[randomizatore];
+                    tris[i][j] = possibilitaTris[randomizatore];
                 }
             }
         }
