@@ -31,7 +31,7 @@ public class Esercizio_3_3 {
         int randomizatore;
         for (int i = 0; i < tris.length; i++) {
             for (int j = 0; j < tris[i].length; j++) {
-                randomizatore =  rand.nextInt(3);
+                randomizatore =  rand.nextInt(possibilitaTris.length);
                 if (tris[i][j].equals(".")) {
                     tris[i][j] = possibilitaTris[randomizatore];
                 }

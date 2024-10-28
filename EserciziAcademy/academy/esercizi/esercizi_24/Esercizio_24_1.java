@@ -66,7 +66,7 @@ public class Esercizio_24_1 {
                 int mossa = mossaUtente(numeroBiglie);
                 numeroBiglie -= mossa;
                 if (numeroBiglie == 1) {
-                    System.out.println("L utente vinto");
+                    System.out.println("L'utente ha vinto");
                     giocoInCorso = false;
                 }
                 primoGiocatore = 1;
@@ -81,7 +81,5 @@ public class Esercizio_24_1 {
             }
         }
     }
-
-
 }
 
