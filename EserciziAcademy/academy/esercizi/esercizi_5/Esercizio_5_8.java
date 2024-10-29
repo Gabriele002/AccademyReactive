@@ -2,8 +2,6 @@ package academy.esercizi.esercizi_5;
 
 
 import java.util.Arrays;
-import java.util.Locale;
-import java.util.Scanner;
 
 public class Esercizio_5_8 {
     public static void main(String[] args) {

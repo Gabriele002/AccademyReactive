@@ -1,6 +1,5 @@
 package academy.esercizi.esercizi_9;
 
-import java.awt.*;
 
 public class Esercizio9_3 {
     public static void main(String[] args) {

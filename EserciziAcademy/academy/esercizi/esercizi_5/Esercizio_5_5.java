@@ -1,7 +1,6 @@
 package academy.esercizi.esercizi_5;
 
 
-import java.util.Scanner;
 
 public class Esercizio_5_5 {
     public static void main(String[] args) {
