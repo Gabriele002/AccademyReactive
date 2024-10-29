@@ -20,7 +20,7 @@ public class Esercizio_3_1 {
         int numero = 1;
         for (int i = 0; i < tabellone.length; i++) {
             for (int j = 0; j < tabellone[i].length; j++) {
-                if (numero <= 90) {
+                if (numero <= 90) {//FIXME l'if-else è necessario?
                     tabellone[i][j] = numero;
                     numero++;
                 } else {
@@ -42,11 +42,16 @@ public class Esercizio_3_1 {
     }
 
     public static void trovaNumeriVicini(int[][] tabellone, int x, int y) {
-        System.out.println("Numeri vicini: ");
+        System.out.println("Numeri vicini: ");//FIXME aggiungere in stampa l'elemento che si trova nelle coordinate in input.
+
+        //FIXME l'ordine degli elementi continua a non essere quello richiesto: sinistra, destra, alto, basso. Al momento sta stampando alto, basso, sinistra, destra
+        //FIXME rendere chiaro in output la posizione dell'elemento che stai stampando (sinistra/destra/alto/basso)
+        //FIXME gestire coordinate in input non presenti nel tabellone
+
         if (x - 1 >= 0){
             System.out.println( tabellone[x-1][y]);
         } else{
-            System.out.println("x");
+            System.out.println("x");//FIXME mettere una informazione parlante (es: "non presente")
         }
 
         if (x + 1 < tabellone.length){
@@ -78,6 +83,7 @@ public class Esercizio_3_1 {
             }
 
         }
+        //FIXME gestire un eventuale numero in input che non è presente
         trovaNumeriVicini(tabellone,x,y);
     }
 
