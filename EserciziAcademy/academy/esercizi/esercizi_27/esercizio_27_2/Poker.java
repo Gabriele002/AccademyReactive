@@ -17,31 +17,33 @@ public class Poker {
         manoGiocatore = mazzo.distribuisci(manoGiocatore.length);
         System.out.println("La tua mano: " + Arrays.toString(manoGiocatore));
         Scanner scn = new Scanner(System.in);
-
-        Carta[] nuoveCarte = new Carta[manoGiocatore.length];
+        Carta[] manoNuova = new Carta[manoGiocatore.length];
         int conteggioCarteNuove = 0;
 
         for (int i = 0; i < manoGiocatore.length; i++) {
             System.out.println("Vuoi tenere questa carta (Si o No)? " + manoGiocatore[i]);
             String scelta = scn.nextLine();
             if (scelta.equalsIgnoreCase("si")) {
-                nuoveCarte[i] = manoGiocatore[i];
+                manoNuova[i] = manoGiocatore[i];
             } else {
                 conteggioCarteNuove++;
             }
         }
 
-        Carta[] carteScartate = mazzo.distribuisci(conteggioCarteNuove);
-        int indiceNuoveCarte = 0;
-
+        Carta[] carteNuove = mazzo.distribuisci(conteggioCarteNuove);
         for (int i = 0; i < manoGiocatore.length; i++) {
-            if (nuoveCarte[i] == null) {
-                nuoveCarte[i] = carteScartate[indiceNuoveCarte++];
+            if (manoNuova[i] == null) {
+                manoNuova[i] = carteNuove[i --];
             }
         }
-
-        manoGiocatore = nuoveCarte; // Aggiorna la mano del giocatore
+        manoGiocatore = manoNuova;
         System.out.println("La tua nuova mano: " + Arrays.toString(manoGiocatore));
     }
 
+
+    public void punteggio(Carta[] manoGiocatore){
+        for (Carta carta : manoGiocatore) {
+            
+        }
+    }
 }

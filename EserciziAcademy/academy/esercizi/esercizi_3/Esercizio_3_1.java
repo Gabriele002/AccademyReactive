@@ -41,42 +41,42 @@ public class Esercizio_3_1 {
 
     public static void trovaNumeriVicini(int[][] tabellone, int x, int y) {
         System.out.println("Numeri vicini: ");
-        if (x - 1 >= 0){
-            System.out.println( tabellone[x-1][y]);
-        } else{
+        if (x - 1 >= 0) {
+            System.out.println(tabellone[x - 1][y]);
+        } else {
             System.out.println("x");
         }
 
-        if (x + 1 < tabellone.length){
+        if (x + 1 < tabellone.length) {
             System.out.println(tabellone[x + 1][y]);
-        } else{
+        } else {
             System.out.println("x");
         }
-        if (y - 1 >= 0){
+        if (y - 1 >= 0) {
             System.out.println(tabellone[x][y - 1]);
-        } else{
+        } else {
             System.out.println("x");
         }
-        if (y + 1 < tabellone[0].length){
+        if (y + 1 < tabellone[0].length) {
             System.out.println(tabellone[x][y + 1]);
-        } else{
+        } else {
             System.out.println("x");
         }
     }
 
-    public static void trovaCoordinate(int[][] tabellone,int numero) {
+    public static void trovaCoordinate(int[][] tabellone, int numero) {
         int x = 0;
         int y = 0;
         for (int i = 0; i < tabellone.length; i++) {
-            for (int j = 0; j < tabellone[i].length;j++) {
-                if (tabellone[i][j] == numero ){
+            for (int j = 0; j < tabellone[i].length; j++) {
+                if (tabellone[i][j] == numero) {
                     x = i;
                     y = j;
                 }
             }
 
         }
-        trovaNumeriVicini(tabellone,x,y);
+        trovaNumeriVicini(tabellone, x, y);
     }
 
-    }
+}
