@@ -1,8 +1,6 @@
 package academy.esercizi.esercizi_5;
 
-import academy.esercizi.utility.Validificazione;
 
-import java.util.Scanner;
 
 public class Esercizio_5_3 {
     public static void main(String[] args) {

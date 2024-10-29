@@ -1,6 +1,5 @@
 package academy.esercizi.esercizi_3;
 
-import com.sun.xml.internal.ws.util.StringUtils;
 
 public class Esercizio_3_5 {
     public static void main(String[] args) {
@@ -28,8 +27,5 @@ public class Esercizio_3_5 {
             }
             System.out.println(" ");
         }
-
-
-
     }
 }

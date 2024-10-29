@@ -2,9 +2,9 @@ package academy.esercizi.esercizi_27;
 
 import java.util.Scanner;
 
-public class Esercizio_27 {
+public class Esercizio_27_1 {
     public static void main(String[] args) {
-        Esercizio_27 esercizio_27 = new Esercizio_27();
+        Esercizio_27_1 esercizio_27 = new Esercizio_27_1();
         esercizio_27.soluzione();
     }
 

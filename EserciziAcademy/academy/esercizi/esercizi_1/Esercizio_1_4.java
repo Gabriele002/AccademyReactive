@@ -1,9 +1,7 @@
 package academy.esercizi.esercizi_1;
 
-import sun.util.resources.LocaleData;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class Esercizio_1_4 {
     public static void main(String[] args) {
