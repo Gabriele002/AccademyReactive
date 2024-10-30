@@ -21,6 +21,8 @@ public class Esercizio_3_1 {
                 if (numero <= 90) {
                     tabellone[i][j] = numero;
                     numero++;
+                } else {
+                    tabellone[i][j] = 0;
                 }
             }
         }
@@ -71,12 +73,12 @@ public class Esercizio_3_1 {
 
     }
 
-    public static void trovaCoordinate(int[][] tabellone, int numero) {
+    public static void trovaCoordinate(int[][] tabellone,int numero) {
         int x = 0;
         int y = 0;
         for (int i = 0; i < tabellone.length; i++) {
-            for (int j = 0; j < tabellone[i].length; j++) {
-                if (tabellone[i][j] == numero) {
+            for (int j = 0; j < tabellone[i].length;j++) {
+                if (tabellone[i][j] == numero ){
                     x = i;
                     y = j;
                 }
@@ -87,4 +89,4 @@ public class Esercizio_3_1 {
         trovaNumeriVicini(tabellone, x, y);
     }
 
-}
+    }
