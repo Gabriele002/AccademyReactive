@@ -39,9 +39,7 @@ public class Esercizio_3_1 {
 
     public static void trovaNumeriVicini(int[][] tabellone, int x, int y) {
         System.out.println("Numeri vicini al numero " + tabellone[x][y] + ":");
-
         //FIXME gestire coordinate in input non presenti nel tabellone
-
         if (y - 1 >= 0) {
             System.out.println(tabellone[x][y - 1] + " Numero alla sinitra");
         } else {
