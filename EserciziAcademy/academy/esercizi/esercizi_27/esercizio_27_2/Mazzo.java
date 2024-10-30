@@ -8,17 +8,16 @@ public class Mazzo {
 
     public Mazzo() {
         String[] semi = {"Cuori", "Fiori", "Picche", "Quadri"};
-        String[] valori = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Regina", "Re", "Asso"};
+        int[] valori = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
         carte = new Carta[52];
         int indiceCarta = 0;
 
         for (String seme : semi) {
-            for (String valore : valori) {
+            for (int valore : valori) {
                 carte[indiceCarta++] = new Carta(seme, valore);
             }
         }
         mescola();
-
     }
 
     public void mescola() {
@@ -33,7 +32,6 @@ public class Mazzo {
 
     public Carta[] distribuisci(int numero) {
         Carta[] carteDistribuite = new Carta[numero];
-
         for (int i = 0; i < numero; i++) {
             if (indiceCarta < carte.length) {
                 carteDistribuite[i] = carte[indiceCarta++];

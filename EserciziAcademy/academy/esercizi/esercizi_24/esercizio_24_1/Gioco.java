@@ -39,7 +39,7 @@ public class Gioco {
             System.out.printf("Biglie rimanenti: %d. Quante ne vuoi prendere? ", biglieRimaste);
             mossa = scn.nextInt();
             if (mossa <= 0 || mossa > biglieRimaste / 2) {
-                System.out.println("Mossa non valida! Devi prendere almeno 1 biglia e al massimo metà delle biglie rimanenti.");
+                System.out.printf("Mossa non valida! Devi prendere almeno 1 biglia e al massimo %d", biglieRimaste /2);
             }
         } while (mossa <= 0 || mossa > biglieRimaste / 2);
         return mossa;

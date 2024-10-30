@@ -2,9 +2,9 @@ package academy.esercizi.esercizi_27.esercizio_27_2;
 
 public class Carta {
     private String seme;
-    private String valore;
+    private int valore;
 
-    public Carta(String seme, String valore) {
+    public Carta(String seme, int valore) {
         this.seme = seme;
         this.valore = valore;
     }
@@ -17,11 +17,11 @@ public class Carta {
         this.seme = seme;
     }
 
-    public String getValore() {
+    public int getValore() {
         return valore;
     }
 
-    public void setValore(String valore) {
+    public void setValore(int valore) {
         this.valore = valore;
     }
 

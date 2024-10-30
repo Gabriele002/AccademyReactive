@@ -21,8 +21,6 @@ public class Esercizio_3_1 {
                 if (numero <= 90) {
                     tabellone[i][j] = numero;
                     numero++;
-                } else {
-                    tabellone[i][j] = 0;
                 }
             }
         }
@@ -40,28 +38,39 @@ public class Esercizio_3_1 {
     }
 
     public static void trovaNumeriVicini(int[][] tabellone, int x, int y) {
-        System.out.println("Numeri vicini: ");
-        if (x - 1 >= 0) {
-            System.out.println(tabellone[x - 1][y]);
+        System.out.println("Numeri vicini al numero " + tabellone[x][y] + ":");
+
+        //FIXME gestire coordinate in input non presenti nel tabellone
+
+        if (y - 1 >= 0) {
+            System.out.println(tabellone[x][y - 1] + " Numero alla sinitra");
         } else {
             System.out.println("x");
+            System.out.println("Non presente");
+        }
+
+        if (y + 1 < tabellone[0].length) {
+            System.out.println(tabellone[x][y + 1] + " Numero alla destra");
+        } else {
+            System.out.println("x");
+            System.out.println("Non presente");
+
+        }
+
+        if (x - 1 >= 0) {
+            System.out.println(tabellone[x - 1][y] + " Numero in alto");
+        } else {
+            System.out.println("x");
+            System.out.println("Non presente");
         }
 
         if (x + 1 < tabellone.length) {
-            System.out.println(tabellone[x + 1][y]);
+            System.out.println(tabellone[x + 1][y] + " Numero in basso");
         } else {
             System.out.println("x");
+            System.out.println("Non presente");
         }
-        if (y - 1 >= 0) {
-            System.out.println(tabellone[x][y - 1]);
-        } else {
-            System.out.println("x");
-        }
-        if (y + 1 < tabellone[0].length) {
-            System.out.println(tabellone[x][y + 1]);
-        } else {
-            System.out.println("x");
-        }
+
     }
 
     public static void trovaCoordinate(int[][] tabellone, int numero) {
@@ -76,6 +85,7 @@ public class Esercizio_3_1 {
             }
 
         }
+        //FIXME gestire un eventuale numero in input che non è presente
         trovaNumeriVicini(tabellone, x, y);
     }
 

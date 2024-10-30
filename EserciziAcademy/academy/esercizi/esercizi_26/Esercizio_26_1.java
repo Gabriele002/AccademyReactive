@@ -12,7 +12,6 @@ public class Esercizio_26_1 {
     private static final int NUM_CARTE = 45;
     static Random random = new Random();
     Scanner scn = new Scanner(System.in);
-
     public void soluzione() {
         System.out.println("Inserisci il numero di mucchietti iniziali: ");
         int numMucchietti = scn.nextInt();

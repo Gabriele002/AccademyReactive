@@ -31,19 +31,21 @@ public class Poker {
         }
 
         Carta[] carteNuove = mazzo.distribuisci(conteggioCarteNuove);
-        for (int i = 0; i < manoGiocatore.length; i++) {
-            if (manoNuova[i] == null) {
-                manoNuova[i] = carteNuove[i --];
+        for (int j = 0; j < carteNuove.length; j++) {
+            for (int i = 0; i < manoNuova.length; i++) {
+                if (manoNuova[i] == null) {
+                    manoNuova[i] = carteNuove[j];
+                    break;
+                }
             }
         }
+
         manoGiocatore = manoNuova;
         System.out.println("La tua nuova mano: " + Arrays.toString(manoGiocatore));
     }
 
 
-    public void punteggio(Carta[] manoGiocatore){
-        for (Carta carta : manoGiocatore) {
-            
-        }
+    public void valutaPunteggio() {
+
     }
 }

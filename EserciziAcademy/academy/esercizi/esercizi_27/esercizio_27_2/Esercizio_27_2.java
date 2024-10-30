@@ -10,5 +10,6 @@ public class Esercizio_27_2 {
     public void soluzione(){
         Poker gioco = new Poker();
         gioco.iniziaGioco();
+        gioco.valutaPunteggio();
     }
 }
