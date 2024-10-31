@@ -1,4 +1,4 @@
-package academy.esercizi.esercizio_28;
+package academy.esercizi.esercizi_28;
 
 import java.util.Scanner;
 

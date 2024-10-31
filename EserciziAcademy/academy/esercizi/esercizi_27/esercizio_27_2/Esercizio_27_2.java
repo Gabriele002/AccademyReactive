@@ -7,9 +7,10 @@ public class Esercizio_27_2 {
         esercizio_27_2.soluzione();
     }
 
-    public void soluzione(){
+    public void soluzione() {
         Poker gioco = new Poker();
         gioco.iniziaGioco();
-        gioco.valutaDoppia();
+        gioco.valutaMano();
     }
 }
+
