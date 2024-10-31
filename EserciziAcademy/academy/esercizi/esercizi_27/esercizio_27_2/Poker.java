@@ -14,55 +14,6 @@ public class Poker {
     boolean isColore = false;
     boolean isScala = false;
     boolean isScalaReale = false;
-
-    public boolean isFull() {
-        return isFull;
-    }
-
-    public int getPunteggioFinale() {
-        return punteggioFinale;
-    }
-
-    public void setPunteggioFinale(int punteggioFinale) {
-        this.punteggioFinale = punteggioFinale;
-    }
-
-    public void setFull(boolean full) {
-        isFull = full;
-    }
-
-    public boolean isDoppiaCoppia() {
-        return isDoppiaCoppia;
-    }
-
-    public void setDoppiaCoppia(boolean doppiaCoppia) {
-        isDoppiaCoppia = doppiaCoppia;
-    }
-
-    public boolean isCoppia() {
-        return isCoppia;
-    }
-
-    public void setCoppia(boolean coppia) {
-        isCoppia = coppia;
-    }
-
-    public boolean isPoker() {
-        return isPoker;
-    }
-
-    public void setPoker(boolean poker) {
-        isPoker = poker;
-    }
-
-    public boolean isTris() {
-        return isTris;
-    }
-
-    public void setTris(boolean tris) {
-        isTris = tris;
-    }
-
     private boolean isPoker = false;
     private boolean isTris = false;
 
@@ -155,42 +106,32 @@ public class Poker {
         }
         Arrays.sort(valori);
 
-        boolean hasScala = true;
-        boolean hasColore = true;
+        isColore = Arrays.stream(manoGiocatore)
+                .allMatch(carta -> carta.getSeme().equals(semeIniziale));
 
-        for (int i = 1; i < manoGiocatore.length; i++) {
-            if (!manoGiocatore[i].getSeme().equals(semeIniziale)) {
-                hasColore = false;
-                break;
-            }
-        }
-
-        for (int i = 1; i < manoGiocatore.length; i++) {
+        isScala = true;
+        for (int i = 1; i < valori.length; i++) {
             if (valori[i] != valori[i - 1] + 1) {
-                hasScala = false;
+                isScala = false;
                 break;
             }
         }
 
-        if (hasColore) {
-            isColore = true;
+        if (isColore) {
             punteggioFinale += 50;
         }
-
-        if (hasScala) {
-            isScala = true;
+        if (isScala) {
             punteggioFinale += 40;
         }
-
         if (isColore && isScala) {
             isScalaReale = true;
             punteggioFinale += 100;
         }
     }
 
+
     public void valutaMano() {
         punteggioFinale = 0;
-
         valutaCoppiaDoppiaFullPoker();
         valutaScalaColore();
 
@@ -212,7 +153,6 @@ public class Poker {
         } else if (isCoppia) {
             combinazione = "Coppia";
         }
-
         System.out.println("Combinazione: " + combinazione + ", Punteggio Finale: " + punteggioFinale);
     }
 
