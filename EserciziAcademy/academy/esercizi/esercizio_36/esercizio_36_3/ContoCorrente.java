@@ -22,7 +22,6 @@ public class ContoCorrente {
     }
 
     public void versa(double importo) {
-
         try {
             if (importo > 1000) {
                 throw new ImportoSuperioreAMilleException("Impossibile versare più di 1000 euro.");

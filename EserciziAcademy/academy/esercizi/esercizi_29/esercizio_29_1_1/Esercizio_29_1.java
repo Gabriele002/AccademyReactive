@@ -1,4 +1,4 @@
-package academy.esercizi.esercizi_29;
+package academy.esercizi.esercizi_29.esercizio_29_1_1;
 
 public class Esercizio_29_1 {
     public static void main(String[] args) throws Exception {

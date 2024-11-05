@@ -12,7 +12,7 @@ public class PrioritaAttivita {
         return 0;
     }
 
-    public static String confrontaPriorita(Agenda ag1, Agenda ag2) {
+    public static void confrontaPriorita(Agenda ag1, Agenda ag2) {
         int priorita1 = getPriorita(ag1.impegno);
         int priorita2 = getPriorita(ag2.impegno);
 
@@ -20,11 +20,11 @@ public class PrioritaAttivita {
         String agenda2String = ag2.giornoDellaSettimana + " - " + ag2.impegno;
 
         if (priorita1 > priorita2) {
-            return String.format("L'agenda '%s' è più importante dell'agenda '%s'", agenda1String, agenda2String);
+            System.out.println("L'agenda "  + agenda1String + " e piu importante dell'agenda " + agenda2String);
         } else if (priorita1 < priorita2) {
-            return String.format("L'agenda '%s' è più importante dell'agenda '%s'", agenda2String, agenda1String);
+            System.out.println("L'agenda "  + agenda2String + " e piu importante dell'agenda " + agenda1String);
         } else {
-            return String.format("Le agende '%s' e '%s' hanno la stessa importanza", agenda1String, agenda2String);
+            System.out.println("L'agenda "  + agenda2String + " e " + agenda1String + " sono importanti uguali");
         }
     }
 
