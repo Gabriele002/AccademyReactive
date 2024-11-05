@@ -21,11 +21,11 @@ public class Esercizio_30_1 {
         System.out.println(question3.checkAnswer("Blu"));
 
         ChoiceQuestion q  = new ChoiceQuestion();
-        q.setAnswer("Daniele");
         q.setChoice("Daniele", 0,true);
         q.setChoice("Mario", 1,false);
         q.setChoice("Luigi", 2, false);
-        System.out.println(q.display());
+        q.setAnswer("Daniele");
+        q.display();
     }
 }
 

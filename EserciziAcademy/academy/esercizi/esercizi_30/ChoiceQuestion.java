@@ -19,12 +19,10 @@ public class ChoiceQuestion extends Question {
     }
 
     @Override
-    public boolean display() {
-        System.out.println(text);
+    public void display() {
         for (int i = 0; i < choices.length; i++) {
             System.out.println((i + 1) + ": " + choices[i]);
         }
-        return false;
     }
 }
 

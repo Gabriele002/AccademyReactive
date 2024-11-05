@@ -14,6 +14,6 @@ abstract class Question {
     }
 
     public abstract boolean checkAnswer(String response);
-    public abstract boolean display();
+    public abstract void display();
 }
 

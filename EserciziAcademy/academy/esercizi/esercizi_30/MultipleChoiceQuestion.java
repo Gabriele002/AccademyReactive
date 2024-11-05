@@ -2,19 +2,19 @@ package academy.esercizi.esercizi_30;
 
 
 public class MultipleChoiceQuestion extends Question {
-    private String[] choices = new String[3];
-    private int[] positionsCorrect = new int[3];
+    private final String[] scelte = new String[3];
+    private final int[] positionsCorrect = new int[3];
     private int correctCount = 0;
 
     public MultipleChoiceQuestion(String text) {
         this.text = text;
     }
 
-    public void setChoice(String choiceText, int position, boolean isCorrect) {
-        if (position >= 0 && position < choices.length) {
-            choices[position] = choiceText;
+    public void setChoice(String choiceText, int posizione, boolean isCorrect) {
+        if (posizione >= 0 && posizione < scelte.length) {
+            scelte[posizione] = choiceText;
             if (isCorrect && correctCount < positionsCorrect.length) {
-                positionsCorrect[correctCount++] = position;
+                positionsCorrect[correctCount++] = posizione;
             }
         }
     }
@@ -22,21 +22,21 @@ public class MultipleChoiceQuestion extends Question {
     @Override
     public boolean checkAnswer(String response) {
         String[] risposte = response.split(",");
-        boolean[] givenAnswers = new boolean[choices.length];
+        boolean[] risposteDate = new boolean[scelte.length];
 
         for (String risposta : risposte) {
             int index = Integer.parseInt(risposta) - 1;
-            if (index >= 0 && index < choices.length) {
-                givenAnswers[index] = true;
+            if (index >= 0 && index < scelte.length) {
+                risposteDate[index] = true;
             }
         }
         for (int i = 0; i < correctCount; i++) {
-            if (!givenAnswers[positionsCorrect[i]]) {
+            if (!risposteDate[positionsCorrect[i]]) {
                 return false;
             }
         }
-        for (int i = 0; i < givenAnswers.length; i++) {
-            if (givenAnswers[i] && !isCorrect(i)) {
+        for (int i = 0; i < risposteDate.length; i++) {
+            if (risposteDate[i] && !isCorrect(i)) {
                 return false;
             }
         }
@@ -53,12 +53,11 @@ public class MultipleChoiceQuestion extends Question {
     }
 
     @Override
-    public boolean display() {
+    public void display() {
         System.out.println(text);
-        for (int i = 0; i < choices.length; i++) {
-            System.out.println((i + 1) + ": " + choices[i]);
+        for (int i = 0; i < scelte.length; i++) {
+            System.out.println((i + 1) + ": " + scelte[i]);
         }
-        return false;
     }
 }
 

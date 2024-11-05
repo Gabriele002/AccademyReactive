@@ -10,8 +10,7 @@ public class FreeResponse extends Question {
     }
 
     @Override
-    public boolean display() {
+    public void display() {
         System.out.println(text);
-        return false;
     }
 }
