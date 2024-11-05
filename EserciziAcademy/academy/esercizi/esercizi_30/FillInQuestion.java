@@ -11,7 +11,6 @@ public class FillInQuestion extends Question {
     public boolean checkAnswer(String response) {
         String[] risposte = response.split(",");
         StringBuilder filledText = new StringBuilder(text);
-
         for (String risposta : risposte) {
             int index = filledText.indexOf("****");
             if (index != -1) {
@@ -20,7 +19,6 @@ public class FillInQuestion extends Question {
         }
         return filledText.toString().equals(answer);
     }
-
 
     @Override
     public boolean display() {

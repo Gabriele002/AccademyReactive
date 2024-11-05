@@ -51,64 +51,48 @@ public class Poker {
         System.out.println("La tua nuova mano: " + Arrays.toString(manoGiocatore));
     }
 
-
-    public void valutaCoppiaDoppiaFullPoker() {
-        int numeriDiCarteUguali = 1;
-        int valoreCarta = 0;
-
-        for (int j = 0; j < manoGiocatore.length; j++) {
-            Carta cartaIniziale = manoGiocatore[j];
-            int punteggio = cartaIniziale.getValore();
-            int numeriDiCarteUgualiForfettario = 1;
-            for (int i = 0; i < manoGiocatore.length; i++) {
-                if (i > j) {
-                    if (cartaIniziale.getValore() == manoGiocatore[i].getValore()) {
-                        punteggio += manoGiocatore[i].getValore();
-                        numeriDiCarteUgualiForfettario++;
-                    }
+    private void valutaCoppiaFullTris() {
+        int[] frequenze = new int[14];
+        for (Carta carta : manoGiocatore) {
+            frequenze[carta.getValore()]++;
+        }
+        for (int i = 1; i < frequenze.length; i++) {
+            if (frequenze[i] == 4) {
+                isPoker = true;
+                punteggioFinale += i * 4;
+            } else if (frequenze[i] == 3) {
+                isTris = true;
+                punteggioFinale += i * 3;
+            } else if (frequenze[i] == 2) {
+                if (isCoppia) {
+                    isDoppiaCoppia = true;
+                } else {
+                    isCoppia = true;
                 }
-            }
-            numeriDiCarteUguali = numeriDiCarteUgualiForfettario;
-            if (valoreCarta != cartaIniziale.getValore() && numeriDiCarteUgualiForfettario > 1) {
-                if (numeriDiCarteUguali == 2) {
-                    if (isCoppia) {
-                        isDoppiaCoppia = true;
-                        isCoppia = false;
-                    } else {
-                        isCoppia = true;
-                    }
-
-                    punteggioFinale += punteggio;
-
-                } else if (numeriDiCarteUguali == 3) {
-                    isTris = true;
-                    punteggioFinale += punteggio;
-                } else if (numeriDiCarteUguali == 4) {
-                    isPoker = true;
-                    punteggioFinale += punteggio;
-                }
-                valoreCarta = punteggio / numeriDiCarteUguali;
+                punteggioFinale += i * 2;
             }
         }
+
         if (isTris && isCoppia) {
+            isFull = true;
             isTris = false;
             isCoppia = false;
-            isFull = true;
         }
     }
 
     public void valutaScalaColore() {
         int[] valori = new int[manoGiocatore.length];
         String semeIniziale = manoGiocatore[0].getSeme();
+        boolean colore = true;
 
         for (int i = 0; i < manoGiocatore.length; i++) {
             valori[i] = manoGiocatore[i].getValore();
+            if (!manoGiocatore[i].getSeme().equals(semeIniziale)) {
+                colore = false;
+            }
         }
+
         Arrays.sort(valori);
-
-        isColore = Arrays.stream(manoGiocatore)
-                .allMatch(carta -> carta.getSeme().equals(semeIniziale));
-
         isScala = true;
         for (int i = 1; i < valori.length; i++) {
             if (valori[i] != valori[i - 1] + 1) {
@@ -116,6 +100,8 @@ public class Poker {
                 break;
             }
         }
+
+        isColore = colore;
 
         if (isColore) {
             punteggioFinale += 50;
@@ -132,7 +118,7 @@ public class Poker {
 
     public void valutaMano() {
         punteggioFinale = 0;
-        valutaCoppiaDoppiaFullPoker();
+        valutaCoppiaFullTris();
         valutaScalaColore();
 
         String combinazione = "Nessuna combinazione";

@@ -48,18 +48,15 @@ public class Gioco {
     private static int mossaComputer(int biglieRimaste, Difficolta difficolta) {
         int mossa;
         if (difficolta == Difficolta.FACILE) {
-            System.out.println("Modalita facile");
+            System.out.println("Modalità facile");
             mossa = random.nextInt(biglieRimaste / 2) + 1;
         } else {
-            System.out.println("Modalita difficile");
-            int[] potenze = {63, 31, 15, 7, 3};
-            mossa = 0;
-            for (int pot : potenze) {
-                if (pot < biglieRimaste && biglieRimaste - (pot + 1) > 0 && biglieRimaste - (pot + 1) <= biglieRimaste / 2) {
-                    mossa = biglieRimaste - (pot + 1);
-                    break;
-                }
+            System.out.println("Modalità difficile");
+            int potenza = 1;
+            while (potenza * 2 <= biglieRimaste) {
+                potenza *= 2;
             }
+            mossa = (biglieRimaste == potenza) ? 1 : biglieRimaste - potenza;
             if (mossa <= 0 || mossa > biglieRimaste / 2) {
                 mossa = random.nextInt(biglieRimaste / 2) + 1;
             }

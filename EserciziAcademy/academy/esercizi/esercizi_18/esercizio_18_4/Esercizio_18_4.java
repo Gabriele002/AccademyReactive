@@ -106,9 +106,6 @@ public class Esercizio_18_4 {
                     break;
             }
         }
-
         scanner.close();
     }
-
-
 }

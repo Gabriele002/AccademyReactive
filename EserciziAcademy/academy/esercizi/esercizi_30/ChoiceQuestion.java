@@ -1,7 +1,7 @@
 package academy.esercizi.esercizi_30;
 
 public class ChoiceQuestion extends Question {
-    private String[] choices = new String[3];
+    private final String[] choices = new String[3];
     private int positionCorrect;
 
     public void setChoice(String choiceText, int position, boolean isCorrect) {

@@ -32,7 +32,7 @@ public class Conto {
 
     public void preleva(BigDecimal soldiDaPrelevare) {
         boolean validificazione = Validificazione.validificaPrelievo(saldoIniziale, soldiDaPrelevare);
-        if (!validificazione){
+        if (!validificazione) {
             System.out.println(validificazione);
             System.out.printf("%-20s %-20s %-30s\n", "Saldo Iniziale", "Soldi da Prelevare", "Soldi sul Conto");
             BigDecimal saldoFinale = saldoIniziale.subtract(soldiDaPrelevare);
@@ -50,11 +50,13 @@ public class Conto {
 
     public void bonifico(Conto conto, BigDecimal importo) {
         if (importo.compareTo(saldoIniziale) <= 0) {
-            this.setSaldoIniziale(this.getSaldoIniziale().subtract(importo));;
-            this.setSaldoIniziale(conto.getSaldoIniziale().add(importo));
+            this.setSaldoIniziale(this.getSaldoIniziale().subtract(importo));
+            conto.setSaldoIniziale(conto.getSaldoIniziale().add(importo));
+            System.out.printf("Bonifico di %.2f€ a %s completato.\n", importo, conto.utente);
             System.out.printf("Bonifico di %.2f€ a %s completato. Saldo attuale: %.2f€\n", importo, conto.utente, conto.getSaldoIniziale());
         } else {
             System.out.println("Saldo insufficiente per il bonifico.");
         }
     }
+
 }

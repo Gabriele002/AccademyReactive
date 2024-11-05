@@ -11,7 +11,8 @@ public class Esercizio_27_1 {
     static Scanner scanner = new Scanner(System.in);
 
     public void soluzione() {
-        int[][] matrice = new int[4][4];
+        final int dimensioneMatrice = 4;
+        int[][] matrice = new int[dimensioneMatrice][dimensioneMatrice];
         boolean[] numeriDuplicati = new boolean[16];
         System.out.println("Inserisci 16 numeri da 1 a 16:");
 
@@ -33,15 +34,14 @@ public class Esercizio_27_1 {
         }
 
         int somma = 0;
-        for (int j = 0; j < 4; j++) {
+        for (int j = 0; j < dimensioneMatrice; j++) {
             somma += matrice[0][j];
         }
-
         boolean quadratoMagico = true;
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < dimensioneMatrice; i++) {
             int sommaRiga = 0;
-            for (int j = 0; j < 4; j++) {
+            for (int j = 0; j < dimensioneMatrice; j++) {
                 sommaRiga += matrice[i][j];
             }
             if (sommaRiga != somma) {
@@ -49,9 +49,9 @@ public class Esercizio_27_1 {
             }
         }
 
-        for (int j = 0; j < 4; j++) {
+        for (int j = 0; j < dimensioneMatrice; j++) {
             int sommaColonna = 0;
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < dimensioneMatrice; i++) {
                 sommaColonna += matrice[i][j];
             }
             if (sommaColonna != somma) {
@@ -61,7 +61,7 @@ public class Esercizio_27_1 {
 
         int sommaDiagonale1 = 0;
         int sommaDiagonale2 = 0;
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < dimensioneMatrice; i++) {
             sommaDiagonale1 += matrice[i][i];
             sommaDiagonale2 += matrice[i][3 - i];
         }
