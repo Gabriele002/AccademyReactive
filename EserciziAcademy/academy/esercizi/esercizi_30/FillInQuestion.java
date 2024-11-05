@@ -13,9 +13,7 @@ public class FillInQuestion extends Question {
         StringBuilder filledText = new StringBuilder(text);
         for (String risposta : risposte) {
             int index = filledText.indexOf("****");
-            if (index != -1) {
-                filledText.replace(index, index + 4, risposta);
-            }
+            filledText.replace(index, index + 4, risposta);
         }
         return filledText.toString().equals(answer);
     }

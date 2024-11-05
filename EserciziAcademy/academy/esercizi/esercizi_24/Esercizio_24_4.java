@@ -18,6 +18,7 @@ public class Esercizio_24_4 {
         for (int i = 0; i < nomi.length; i++) {
             System.out.print("Inserisci un nome: ");
             nomi[i] = scn.nextLine();
+            nomi[i] ="  " + nomi[i] + "  ";
             valori[i] = nomi[i].length();
         }
 
@@ -40,9 +41,7 @@ public class Esercizio_24_4 {
                 maxValore = valore;
             }
         }
-
         double proporzione = maxAsterischi / maxValore;
-
         for (int i = 0; i < nomi.length; i++) {
             String nome = nomi[i];
             int valore = valori[i];
@@ -61,6 +60,7 @@ public class Esercizio_24_4 {
         int maxValore = 0;
         final int maxAsterischi = 20;
 
+
         for (int valore : valori) {
             if (valore > maxValore) {
                 maxValore = valore;
@@ -72,17 +72,26 @@ public class Esercizio_24_4 {
         for (int i = 0; i < maxAsterischi; i++) {
             for (int j = 0; j < nomi.length; j++) {
                 int asterischi = (int) (valori[j] * proporzione);
-                if (maxAsterischi - 1 - i < asterischi) {
-                    System.out.printf("%-12s", "*");
+
+                int lunghezzaNome = nomi[j].length();
+
+                if (maxAsterischi - i <= asterischi) {
+                    int spazioSx = (lunghezzaNome) / 2;
+                    int spazioDx = lunghezzaNome - spazioSx;
+                    System.out.printf("%" + (spazioDx) + "s" + "%" + spazioSx + "s", "*", "");
+                } else{
+                    System.out.printf("%" + lunghezzaNome + "s", "");
                 }
             }
             System.out.println();
         }
+
         for (String nome : nomi) {
-            System.out.printf("%-12s", nome);
+            System.out.printf("%s", nome);
         }
         System.out.println();
     }
+
 
 }
 
