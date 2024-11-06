@@ -1,59 +1,84 @@
 package academy.esercizi.esercizi_29.esercizio_29_1;
 
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Random;
 
 public class Grid {
-    private static final int RIGHE = 5;
-    private static final int COLONNE = 8;
+    private Tile[][] tabella;
+    protected static final int righe = 5;
+    protected static final int colonne = 8;
 
 
-    public void avviaGioco() {
-        int[][] tabella = new int[RIGHE][COLONNE];
+    public Grid() {
+        this.tabella = new Tile[righe][colonne];
         inizializzaTabella(tabella);
-        stampaTabella(tabella);
-        popolaCarte();
-
     }
 
-    private static void stampaTabella(int[][] tabella) {
-        System.out.println("----------------");
-        for (int[] riga : tabella) {
-            System.out.print("|");
-            for (int cella : riga) {
-                System.out.print(cella);
-                System.out.print("|");
+    public static Tile[][] tabellaCompleta() {
+        Tile[][] tabella = new Tile[righe][colonne];
+        inizializzaTabella(tabella);
+        return tabella;
+    }
+
+    public static void stampaTabella(Tile[][] tabella) {
+        System.out.println("---------------------------------");
+        for (Tile[] riga : tabella) {
+            System.out.printf("%-2s", "|");
+            for (Tile cella : riga) {
+                System.out.printf("%-2s", cella);
+                System.out.printf("%-2s", "|");
             }
             System.out.println();
-            System.out.println("----------------");
+            System.out.println("---------------------------------");
         }
     }
 
-    private static void inizializzaTabella(int[][] tabella) {
-        for (int i = 0; i < RIGHE; i++) {
-            for (int j = 0; j < COLONNE; j++) {
-                tabella[i][j] = tabella[2][2];
+    private static void inizializzaTabella(Tile[][] tabella) {
+        Tile[] carte = popolaCarte();
+        int index = 0;
+        for (int i = 0; i < righe; i++) {
+            for (int j = 0; j < colonne; j++) {
+                tabella[i][j] = carte[index];
+                index++;
             }
         }
     }
 
 
-    private static void popolaCarte() {
+    private static Tile[] popolaCarte() {
         Random random = new Random();
-        int numeroCoppie = (RIGHE * COLONNE) / 2;
-        Tile[] carte = new Tile[(RIGHE * COLONNE)];
+        int numeroCoppie = (righe * colonne) / 2;
+        Tile[] carte = new Tile[(righe * colonne)];
         for (int i = 0; i < numeroCoppie; i++) {
             carte[2 * i] = new Tile(i + 1);
             carte[2 * i + 1] = new Tile(i + 1);
         }
-        System.out.println(Arrays.toString(carte));
-
         for (int i = 0; i < carte.length; i++) {
             int indiceRandom = random.nextInt(carte.length);
+            Tile cartaDaSostiruireRandomicamente = carte[i];
             carte[i] = carte[indiceRandom];
+            carte[indiceRandom] = cartaDaSostiruireRandomicamente;
         }
-        System.out.println(Arrays.toString(carte));
+        return carte;
+    }
+
+    public static Tile[][] popolaTabellaConValoriFissi() {
+        int[] valoriFissi = {
+                1, 1, 2, 2, 3, 3, 4, 4,
+                5, 5, 6, 6, 7, 7, 8, 8,
+                9, 9, 10, 10, 11, 11, 12,12, 13,
+                13, 14, 14, 15,15, 16, 16, 17, 17,
+                18, 18, 19, 19, 20, 20
+        };
+        int index = 0;
+        Tile [][] tabellaValoriFissi = new Tile[righe][colonne];
+        for (int i = 0; i < righe; i++) {
+            for (int j = 0; j < colonne; j++) {
+                tabellaValoriFissi[i][j] = new Tile(valoriFissi[index]);
+                index++;
+            }
+        }
+        return tabellaValoriFissi;
     }
 }
+

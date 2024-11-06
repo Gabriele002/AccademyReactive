@@ -9,8 +9,8 @@ public class Esercizio_29_1 {
     }
 
     public void avviaGioco() {
-       Grid grid = new Grid();
-       grid.avviaGioco();
+        MemoryGame memoryGame = new MemoryGame();
+        memoryGame.avviaPartita();
     }
 
 }
