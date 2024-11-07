@@ -8,6 +8,6 @@ public class Esercizio_4_1 {
     }
     public void soluzione(){
         for (int i = 10; i >= 0 ; i--) {}
-        System.out.println("Il ciclo stampa 10 numeri");
+        System.out.println("Il ciclo stampa 11 numeri");
     }
 }
