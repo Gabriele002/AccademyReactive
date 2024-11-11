@@ -24,7 +24,7 @@ public class RoachPopulation {
     public void simula(int anni) {
         for (int anno = 1; anno <= anni; anno++) {
             System.out.println("Anno " + anno + ": Popolazione attuale = " + getScarafaggi());
-            if (anno == 6){
+            if (anno % 4 == 0){
                 spruzza(10);
                 System.out.println("Popolazione dopo la spruzzata: " + getScarafaggi());
             }
@@ -33,4 +33,5 @@ public class RoachPopulation {
                 System.out.println("La popolazione si e raddoppiata: " + getScarafaggi());
             }
         }
-    }}
+    }
+}
