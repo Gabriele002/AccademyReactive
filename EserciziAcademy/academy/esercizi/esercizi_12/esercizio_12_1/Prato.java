@@ -5,13 +5,13 @@ public class Prato {
     private static int y = 12;
     private static boolean isFalciato = false;
 
-    public static void stampaPrato(String[][] pratoPopolato) {
-        for (int i = 0; i < x; i++) {
-            for (int j = 0; j < y; j++) {
-                System.out.printf("%-3s", pratoPopolato[i][j]);
-            }
-            System.out.println();
-        }
+
+    public static int getX() {
+        return x;
+    }
+
+    public static int getY() {
+        return y;
     }
 
     public static String[][] popolaPrato() {
@@ -19,16 +19,13 @@ public class Prato {
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
                 if (i == 0 || i == x - 1 || j == 0 || j == y - 1) {
-                    pratoPopolato[i][j] = "§";
+                    pratoPopolato[i][j] = "|";
                 } else {
-                    if (isFalciato) {
-                        pratoPopolato[i][j] = " ";
-                    } else {
-                        pratoPopolato[i][j] = "■";
-                    }
+                    pratoPopolato[i][j] = "■";
                 }
             }
         }
         return pratoPopolato;
     }
+
 }

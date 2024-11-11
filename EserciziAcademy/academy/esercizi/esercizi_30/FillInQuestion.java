@@ -1,10 +1,9 @@
 package academy.esercizi.esercizi_30;
 
-public class FillInQuestion extends Question {
+public class FillInQuestion extends Question<String,String> {
 
-    public FillInQuestion(String text, String answer) {
-        this.text = text;
-        this.answer = answer;
+    public FillInQuestion() {
+
     }
 
     @Override

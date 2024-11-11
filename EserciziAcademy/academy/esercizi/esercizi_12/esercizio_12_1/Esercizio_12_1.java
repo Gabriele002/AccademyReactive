@@ -10,7 +10,21 @@ public class Esercizio_12_1 {
 
     private void soluzione() {
         String[][] pratoPopolato = Prato.popolaPrato();
-        Prato.stampaPrato(pratoPopolato);
+        Robot robot = new Robot(pratoPopolato);
+        System.out.println("Stato iniziale del prato:");
+        robot.stampaPratoTagliato();
+
+        robot.muoviGiu(pratoPopolato);
+        robot.muoviGiu(pratoPopolato);
+        robot.muoviDestra(pratoPopolato);
+        robot.muoviDestra(pratoPopolato);
+        robot.muoviDestra(pratoPopolato);
+        robot.muoviDestra(pratoPopolato);
+        robot.muoviDestra(pratoPopolato);
+
+
+        System.out.println("Stato del prato dopo i movimenti del robot:");
+        robot.stampaPratoTagliato();
     }
 
 }

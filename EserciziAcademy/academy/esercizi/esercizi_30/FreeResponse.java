@@ -1,8 +1,7 @@
 package academy.esercizi.esercizi_30;
 
-public class FreeResponse extends Question {
-    public FreeResponse(String text) {
-        this.text = text;
+public class FreeResponse extends Question<String,String> {
+    public FreeResponse() {
     }
     @Override
     public boolean checkAnswer(String response) {

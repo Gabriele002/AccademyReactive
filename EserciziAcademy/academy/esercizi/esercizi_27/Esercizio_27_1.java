@@ -16,8 +16,8 @@ public class Esercizio_27_1 {
         boolean[] numeriDuplicati = new boolean[16];
         System.out.println("Inserisci 16 numeri da 1 a 16:");
 
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
+        for (int i = 0; i < dimensioneMatrice; i++) {
+            for (int j = 0; j < dimensioneMatrice; j++) {
                 int numero;
                 do {
                     System.out.print("Inserisci il numero per la posizione [" + i + "][" + j + "]: ");

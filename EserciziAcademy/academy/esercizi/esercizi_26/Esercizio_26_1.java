@@ -84,7 +84,6 @@ public class Esercizio_26_1 {
                 }
                 nuovoMucchietti[nuovoMucchietti.length - 1] = sommaRimosse;
                 mucchietti = nuovoMucchietti;
-                System.out.println("Aggiunto un nuovo mucchietto alla fine.");
             }
         }
         stampa(mucchietti);

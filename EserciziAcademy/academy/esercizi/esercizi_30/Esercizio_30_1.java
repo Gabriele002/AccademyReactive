@@ -7,15 +7,20 @@ public class Esercizio_30_1 {
     }
 
     public void soluzione() {
-        Question question1 = new FillInQuestion("La capitale dell'Italia è ****, si trova nella regione **** ed ha **** abitanti", "La capitale dell'Italia è Roma, si trova nella regione Lazio ed ha 2800000 abitanti");
+        Question question1 = new FillInQuestion();
+        question1.setText("La capitale dell'Italia è ****, si trova nella regione **** ed ha **** abitanti");
+        question1.setAnswer("La capitale dell'Italia è Roma, si trova nella regione Lazio ed ha 2800000 abitanti");
         question1.display();
         System.out.println(question1.checkAnswer("Roma,Lazio,2800000"));
 
-        Question question2 = new NumericQuestion("Qual è la radice quadrata di 16?", "4");
+        Question question2 = new NumericQuestion();
+        question2.setText("Qual è la radice quadrata di 16?");
+        question2.setAnswer(4);
         question2.display();
-        System.out.println(question2.checkAnswer("4"));
+        System.out.println(question2.checkAnswer(4));
 
-        Question question3 = new FreeResponse("Qual è il colore del cielo?");
+        Question question3 = new FreeResponse();
+        question3.setText("Qual è il colore del cielo?");
         question3.setAnswer("blu");
         question3.display();
         System.out.println(question3.checkAnswer("Blu"));

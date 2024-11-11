@@ -16,7 +16,7 @@ public class MemoryGame {
         int coppieTrovate = 0;
         Scanner scn;
 
-        boolean modalitaTest = true;
+        boolean modalitaTest = false;
 
         if (modalitaTest) {
             tabella = Grid.popolaTabellaConValoriFissi();
@@ -79,8 +79,6 @@ public class MemoryGame {
         }
 
         System.out.println("Gioco finito!");
-        System.out.println(giocatore1);
-        System.out.println(giocatore2);
         if (giocatore1.getPunteggio() < giocatore2.getPunteggio()) {
             System.out.println("Il vincitore e' : " + giocatore2.getNome() + " con un totale di: " + giocatore2.getPunteggio());
         } else if (giocatore1.getPunteggio() > giocatore2.getPunteggio()){

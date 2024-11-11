@@ -24,8 +24,8 @@ public class Grid {
         System.out.println("---------------------------------");
         for (Tile[] riga : tabella) {
             System.out.printf("%-2s", "|");
-            for (Tile cella : riga) {
-                System.out.printf("%-2s", cella);
+            for (Tile carta : riga) {
+                System.out.printf("%-2s", carta);
                 System.out.printf("%-2s", "|");
             }
             System.out.println();

@@ -1,20 +1,15 @@
 package academy.esercizi.esercizi_30;
 
-public class NumericQuestion extends Question {
-    public NumericQuestion(String text, String answer) {
-        this.text = text;
-        this.answer = answer;
+public class NumericQuestion extends Question<String,Integer> {
+    public NumericQuestion() {
     }
 
     @Override
-    public boolean checkAnswer(String response) {
-        try {
-            Double.parseDouble(response);
-            return response.equals(answer);
-        } catch (NumberFormatException e) {
-            System.out.println("Errore: La risposta deve essere un numero.");
+    public boolean checkAnswer(Integer response) {
+        if (response == null){
             return false;
         }
+        return answer.equals(response);
     }
 
     @Override

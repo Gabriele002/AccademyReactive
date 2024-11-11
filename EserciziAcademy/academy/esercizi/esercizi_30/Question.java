@@ -1,19 +1,27 @@
 package academy.esercizi.esercizi_30;
 
-abstract class Question {
-    protected String text;
-    protected String answer;
+abstract class Question <T,A>{
+    protected T text;
+    protected A answer;
 
 
-    public void setText(String text) {
+    public void setText(T text) {
         this.text = text;
     }
 
-    public void setAnswer(String answer) {
+    public void setAnswer(A answer) {
         this.answer = answer;
     }
 
-    public abstract boolean checkAnswer(String response);
+    public T getText() {
+        return text;
+    }
+
+    public A getAnswer() {
+        return answer;
+    }
+
+    public abstract boolean checkAnswer(A response);
     public abstract void display();
 }
 
