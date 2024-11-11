@@ -1,41 +1,32 @@
 package academy.esercizi.esercizi_15.eserczio_15_4;
 
 public class Circuito {
-    private StatoLampadina primoInterruttore;
-    private StatoLampadina secondoInterruttore;
-    private StatoLampadina lampadina;
+    private StatoInteruttore primoInterruttore = StatoInteruttore.GIU;
+    private StatoInteruttore secondoInterruttore = StatoInteruttore.GIU;
+    private StatoLampadina lampadina = StatoLampadina.SPENTO;
 
-    public Circuito() {
-        this.primoInterruttore = StatoLampadina.SPENTO;
-        this.secondoInterruttore = StatoLampadina.SPENTO;
-        this.lampadina = StatoLampadina.SPENTO;
-    }
 
     public void cambiaPrimoInterruttore() {
-        this.primoInterruttore = (this.primoInterruttore == StatoLampadina.SPENTO) ? StatoLampadina.ACCESSO : StatoLampadina.SPENTO;
-        aggiornaStatoLampada();
+        primoInterruttore = (primoInterruttore == StatoInteruttore.SU) ? StatoInteruttore.GIU : StatoInteruttore.SU;
+        aggiornaStatoLampadina();
     }
 
     public void cambiaSecondoInterruttore() {
-        this.secondoInterruttore = (this.secondoInterruttore == StatoLampadina.SPENTO) ? StatoLampadina.ACCESSO : StatoLampadina.SPENTO;
-        aggiornaStatoLampada();
+        secondoInterruttore = (secondoInterruttore == StatoInteruttore.SU) ? StatoInteruttore.GIU : StatoInteruttore.SU;
+        aggiornaStatoLampadina();
     }
 
-    private void aggiornaStatoLampada() {
-        if (this.primoInterruttore == StatoLampadina.ACCESSO || this.secondoInterruttore == StatoLampadina.ACCESSO) {
-            this.lampadina = StatoLampadina.ACCESSO;
-        } else {
-            this.lampadina = StatoLampadina.SPENTO;
-        }
+    private void aggiornaStatoLampadina() {
+        int conteggioInterruttoriSu = (primoInterruttore == StatoInteruttore.SU ? 1 : 0) + (secondoInterruttore == StatoInteruttore.SU ? 1 : 0);
+        lampadina = (conteggioInterruttoriSu % 2 == 0) ? StatoLampadina.SPENTO : StatoLampadina.ACCESSO;
     }
 
 
     @Override
     public String toString() {
-        return "Circuito { " +
+        return "Circuito " +
                 "primoInterruttore=" + primoInterruttore +
                 ", secondoInterruttore=" + secondoInterruttore +
-                ", lampada=" + lampadina +
-                " }";
+                ", lampadina=" + lampadina;
     }
 }

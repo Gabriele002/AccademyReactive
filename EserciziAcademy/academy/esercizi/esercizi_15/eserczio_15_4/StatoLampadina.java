@@ -4,3 +4,8 @@ enum StatoLampadina {
     ACCESSO,
     SPENTO;
 }
+
+enum StatoInteruttore {
+    GIU,
+    SU;
+}
