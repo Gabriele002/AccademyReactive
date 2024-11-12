@@ -33,19 +33,19 @@ public class Esercizio_9_2 {
         boolean conversioneValida = true;
 
         if (unitaPartenza.equals("fl.oz") && unitaDestinazione.equals("ml")) {
-            risultato = valoreDaConvertire * 29.5735;
+            risultato = valoreDaConvertire * 29.57;
         } else if (unitaPartenza.equals("gal") && unitaDestinazione.equals("l")) {
-            risultato = valoreDaConvertire * 3.78541;
+            risultato = valoreDaConvertire * 3.78;
         } else if (unitaPartenza.equals("oz") && unitaDestinazione.equals("g")) {
-            risultato = valoreDaConvertire * 28.3495;
+            risultato = valoreDaConvertire * 28.34;
         } else if (unitaPartenza.equals("lb") && unitaDestinazione.equals("kg")) {
-            risultato = valoreDaConvertire * 0.453592;
+            risultato = valoreDaConvertire * 0.45;
         } else if (unitaPartenza.equals("in") && unitaDestinazione.equals("cm")) {
             risultato = valoreDaConvertire * 2.54;
         } else if (unitaPartenza.equals("ft") && unitaDestinazione.equals("m")) {
-            risultato = valoreDaConvertire * 0.3048;
+            risultato = valoreDaConvertire * 0.30;
         } else if (unitaPartenza.equals("mi") && unitaDestinazione.equals("km")) {
-            risultato = valoreDaConvertire * 1.60934;
+            risultato = valoreDaConvertire * 1.60;
         } else {
             conversioneValida = false;
         }
@@ -57,6 +57,5 @@ public class Esercizio_9_2 {
         }
 
     }
-
 
 }
