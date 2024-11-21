@@ -14,7 +14,7 @@ public class Bibliotecario extends Utente {
     static void aggiungiLibro(Bibloteca bibloteca, Scanner scn) throws IOException {
         String titolo = "";
         String autore = "";
-        while (Utility.controllaStringheNonVuote(titolo, autore)){
+        do {
             if (titolo.isEmpty()) {
                 System.out.println("Inserisci il titolo del libro da aggiungere:");
                 titolo = scn.nextLine();
@@ -26,13 +26,12 @@ public class Bibliotecario extends Utente {
             if (titolo.isEmpty() || autore.isEmpty()) {
                 System.out.println("Entrambi i campi (titolo e autore) devono essere compilati. Riprova.");
             }
-        }
+        }while (Utility.controllaStringheNonVuote(titolo, autore));
         bibloteca.creaLibro(autore, titolo);
         System.out.println("Libro aggiunto con successo!");
     }
 
-
-    static void rimuoviLibro(Bibloteca bibloteca, Scanner scn) {
+    static void rimuoviLibro(Bibloteca bibloteca, Scanner scn) throws IOException {
         System.out.println("Inserisci il titolo del libro da rimuovere:");
         String titolo = scn.nextLine();
         Optional<Libro> libroDaRimuovere = bibloteca.trovaLibroPerTitolo(titolo);
@@ -43,4 +42,6 @@ public class Bibliotecario extends Utente {
             System.out.println("Libro non trovato.");
         }
     }
+
+
 }

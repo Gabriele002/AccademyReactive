@@ -18,6 +18,10 @@ public class Main {
         InizializaBibloteca inizializzaBibloteca = new InizializaBibloteca();
         Bibloteca bibloteca = inizializzaBibloteca.bibloteca();
         Scanner scn = new Scanner(System.in);
+        System.out.println("----------------------------------");
+        bibloteca.getUtenti().forEach(System.out::println);
+        System.out.println("----------------------------------");
+
         int scelta;
         do {
             mostraMenu();
@@ -88,24 +92,32 @@ public class Main {
         }
     }
 
-    private static void creaNuovoUtente(Bibloteca bibloteca, Scanner scn) {
+    private static void creaNuovoUtente(Bibloteca bibloteca, Scanner scn) throws IOException {
         String nome = "";
         String cognome = "";
-
-        while (!Utility.controllaStringheNonVuote(nome, cognome)) {
+        String livelloDiAcesso = "";
+        do {
             if (nome.isEmpty()) {
                 System.out.println("Inserisci il nome:");
-                nome = scn.next();
+                nome = scn.nextLine();
             }
             if (cognome.isEmpty()) {
                 System.out.println("Inserisci il cognome:");
-                cognome = scn.next();
+                cognome = scn.nextLine();
+            }
+            if (livelloDiAcesso.isEmpty()) {
+                System.out.println("Inserisci il livello di acesso(biblotecario, studente):");
+                livelloDiAcesso = scn.nextLine();
+                if (livelloDiAcesso.equalsIgnoreCase("studente")) {
+                    bibloteca.creaUtente(nome, cognome, LivelliDiAccesso.Studente, false );
+                } else {
+                    bibloteca.creaUtente(nome, cognome, LivelliDiAccesso.Bibliotecario, false);
+                }
             }
             if (nome.isEmpty() || cognome.isEmpty()) {
                 System.out.println("Errore: entrambi i campi (nome e cognome) devono essere compilati.");
             }
-        }
-        bibloteca.creaUtente(nome, cognome, LivelliDiAccesso.User);
+        } while (Utility.controllaStringheNonVuote(nome, cognome, livelloDiAcesso));
         System.out.println("Utente creato con successo.");
     }
 

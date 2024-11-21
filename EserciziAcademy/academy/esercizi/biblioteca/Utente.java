@@ -1,5 +1,7 @@
 package academy.esercizi.biblioteca;
 
+import java.util.Objects;
+
 public class Utente {
 
 
@@ -41,5 +43,19 @@ public class Utente {
                 "nome='" + nome + '\'' +
                 ", cognome='" + cognome + '\'' +
                 ", id=" + id ;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Utente utente = (Utente) o;
+        return id == utente.id && Objects.equals(nome, utente.nome) && Objects.equals(cognome, utente.cognome);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nome, cognome, id);
     }
 }
