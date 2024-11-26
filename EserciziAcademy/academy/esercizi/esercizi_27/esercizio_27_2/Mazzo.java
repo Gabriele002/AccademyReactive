@@ -3,13 +3,14 @@ package academy.esercizi.esercizi_27.esercizio_27_2;
 import java.util.Random;
 
 public class Mazzo {
+    final int numeroDiCarte = 52;
     private Carta[] carte;
     private int indiceCarta;
 
     public Mazzo() {
         String[] semi = {"Cuori", "Fiori", "Picche", "Quadri"};
         int[] valori = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
-        carte = new Carta[52];
+        carte = new Carta[numeroDiCarte];
         int indiceCarta = 0;
 
         for (String seme : semi) {

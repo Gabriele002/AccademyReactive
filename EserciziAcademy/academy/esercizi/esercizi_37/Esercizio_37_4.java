@@ -18,12 +18,11 @@ public class Esercizio_37_4 {
 
     public void listFiles(File folder) {
         File[] files = folder.listFiles();
-        if (files != null){
+        if (files != null) {
             for (File fileEntry : files) {
                 if (fileEntry.isDirectory()) {
                     listFiles(fileEntry);
-                } else
-                if (fileEntry.getName().endsWith(estensione)){
+                } else if (fileEntry.getName().endsWith(estensione)) {
                     System.out.println(fileEntry.getName());
                 }
             }

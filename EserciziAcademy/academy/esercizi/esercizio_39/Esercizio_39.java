@@ -16,7 +16,6 @@ public class Esercizio_39 {
     private void soluzione() {
         UfficioPostale ufficioPostale = new UfficioPostale(Arrays.asList("Rossi", "Bianchi"));
 
-
         Runnable pacco = new Runnable() {
             @Override
             public void run() {
@@ -39,7 +38,7 @@ public class Esercizio_39 {
                 Sportello sportelloLibero = ufficioPostale.getSportelloLibero();
                 System.out.println("Buongiorno" + sportelloLibero.getNome() + ", avrei una bolelta da pagare");
                 Thread.sleep(2000);
-                System.out.println("... Grazie, la bolletta è stata pagata da " + sportelloLibero.getNome());
+                System.out.println("Grazie, la bolletta è stata pagata da " + sportelloLibero.getNome());
                 sportelloLibero.cambiaStato();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);

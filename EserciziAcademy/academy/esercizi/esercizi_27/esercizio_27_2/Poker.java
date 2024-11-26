@@ -1,12 +1,15 @@
 package academy.esercizi.esercizi_27.esercizio_27_2;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
 public class Poker {
 
+    private final int manoIniziale = 5;
+
     private final Mazzo mazzo;
-    private Carta[] manoGiocatore = new Carta[5];
+    private Carta[] manoGiocatore = new Carta[manoIniziale];
     private int punteggioFinale = 0;
     private boolean isFull = false;
     private boolean isDoppiaCoppia = false;
@@ -22,13 +25,18 @@ public class Poker {
     }
 
     public void iniziaGioco() {
-        manoGiocatore = mazzo.distribuisci(manoGiocatore.length);
-        System.out.println("La tua mano: " + Arrays.toString(manoGiocatore));
+        manoGiocatore = mazzo.distribuisci(manoIniziale);
+
+        ArrayList<String> manoInizialeFormattata = formattaMano(manoGiocatore);
+        System.out.print("La tua mano: ");
+        manoInizialeFormattata.forEach(string -> System.out.print(string + ", "));
+        System.out.println();
+
         Scanner scn = new Scanner(System.in);
-        Carta[] manoNuova = new Carta[manoGiocatore.length];
+        Carta[] manoNuova = new Carta[manoIniziale];
         int conteggioCarteNuove = 0;
-        for (int i = 0; i < manoGiocatore.length; i++) {
-            System.out.println("Vuoi tenere questa carta (Si o No)? " + manoGiocatore[i]);
+        for (int i = 0; i < manoInizialeFormattata.size(); i++) {
+            System.out.println("Vuoi tenere questa carta (Si o No)? " + manoInizialeFormattata.get(i));
             String scelta = scn.nextLine();
             if (scelta.equalsIgnoreCase("si")) {
                 manoNuova[i] = manoGiocatore[i];
@@ -48,11 +56,14 @@ public class Poker {
         }
 
         manoGiocatore = manoNuova;
-        System.out.println("La tua nuova mano: " + Arrays.toString(manoGiocatore));
+        ArrayList<String> manoNuovaformattata = formattaMano(manoGiocatore);
+        System.out.print("La tua nuova mano: ");
+        manoNuovaformattata.forEach(string -> System.out.print(string + ", "));
+        System.out.println();
     }
 
     private void valutaCoppiaFullTris() {
-        int[] frequenze = new int[14];
+        int[] frequenze = new int[15];
         for (Carta carta : manoGiocatore) {
             frequenze[carta.getValore()]++;
         }
@@ -142,5 +153,31 @@ public class Poker {
         System.out.println("Combinazione: " + combinazione + ", Punteggio Finale: " + punteggioFinale);
     }
 
+    enum Figura {
+        Asso,
+        Jack,
+        Donna,
+        Re;
+    }
 
+    public ArrayList<String> formattaMano(Carta[] manoGiocatore) {
+        ArrayList<String> stampaCarte = new ArrayList<>();
+        for (Carta carta : manoGiocatore) {
+            if (carta.getValore() == 11) {
+                Figura valoreCarta = Figura.Jack;
+                stampaCarte.add(valoreCarta.toString() + " di " + carta.getSeme());
+            } else if (carta.getValore() == 12) {
+                Figura valoreCarta = Figura.Donna;
+                stampaCarte.add(valoreCarta.toString() + " di " + carta.getSeme());
+            } else if (carta.getValore() == 13) {
+                Figura valoreCarta = Figura.Re;
+                stampaCarte.add(valoreCarta.toString() + " di " + carta.getSeme());
+            } else if (carta.getValore() == 14) {
+                Figura valoreCarta = Figura.Asso;
+                stampaCarte.add(valoreCarta.toString() + " di " + carta.getSeme());
+            } else
+                stampaCarte.add(carta.getValore() + " di " + carta.getSeme());
+        }
+        return stampaCarte;
+    }
 }

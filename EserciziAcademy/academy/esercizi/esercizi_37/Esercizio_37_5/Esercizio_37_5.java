@@ -26,11 +26,11 @@ public class Esercizio_37_5 {
         countries.forEach(System.out::println);
         System.out.println("---------------");
 
-        countries = countries.stream().sorted((a, b) -> a.getSuperficia() < b.getSuperficia() ? -1 : a.getSuperficia() == b.getSuperficia() ? 0 : 1)
+        countries = countries.stream()
+                .sorted((a, b) -> a.getSuperficia() < b.getSuperficia() ? -1 : a.getSuperficia() == b.getSuperficia() ? 0 : 1)
                 .collect(Collectors.toList()
                 );
-        countries.forEach(System.out::println);
-
+        countries.forEach(x -> System.out.println(x));
 
 
        countries.sort(Comparator.comparing(country -> country.getSuperficia()));
