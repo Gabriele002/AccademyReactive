@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Mazzo {
     final int numeroDiCarte = 52;
-    private Carta[] carte;
+    private final Carta[] carte;
     private int indiceCarta;
 
     public Mazzo() {

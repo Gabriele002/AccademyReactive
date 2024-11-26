@@ -157,26 +157,30 @@ public class Poker {
         Asso,
         Jack,
         Donna,
-        Re;
+        Re
     }
 
     public ArrayList<String> formattaMano(Carta[] manoGiocatore) {
         ArrayList<String> stampaCarte = new ArrayList<>();
         for (Carta carta : manoGiocatore) {
-            if (carta.getValore() == 11) {
-                Figura valoreCarta = Figura.Jack;
-                stampaCarte.add(valoreCarta.toString() + " di " + carta.getSeme());
-            } else if (carta.getValore() == 12) {
-                Figura valoreCarta = Figura.Donna;
-                stampaCarte.add(valoreCarta.toString() + " di " + carta.getSeme());
-            } else if (carta.getValore() == 13) {
-                Figura valoreCarta = Figura.Re;
-                stampaCarte.add(valoreCarta.toString() + " di " + carta.getSeme());
-            } else if (carta.getValore() == 14) {
-                Figura valoreCarta = Figura.Asso;
-                stampaCarte.add(valoreCarta.toString() + " di " + carta.getSeme());
-            } else
-                stampaCarte.add(carta.getValore() + " di " + carta.getSeme());
+            String descrizioneCarta;
+            switch (carta.getValore()) {
+                case 11:
+                    descrizioneCarta = Figura.Jack + " di " + carta.getSeme();
+                    break;
+                case 12:
+                    descrizioneCarta = Figura.Donna + " di " + carta.getSeme();
+                    break;
+                case 13:
+                    descrizioneCarta = Figura.Re + " di " + carta.getSeme();
+                    break;
+                case 14:
+                    descrizioneCarta = Figura.Asso + " di " + carta.getSeme();
+                    break;
+                default:
+                    descrizioneCarta = carta.getValore() + " di " + carta.getSeme();
+            }
+            stampaCarte.add(descrizioneCarta);
         }
         return stampaCarte;
     }

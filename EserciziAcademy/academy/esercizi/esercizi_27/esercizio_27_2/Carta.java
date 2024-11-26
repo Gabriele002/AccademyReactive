@@ -1,7 +1,7 @@
 package academy.esercizi.esercizi_27.esercizio_27_2;
 
 public class Carta {
-    private String seme;
+    private final String seme;
     private int valore;
 
     public Carta(String seme, int valore) {
@@ -11,10 +11,6 @@ public class Carta {
 
     public String getSeme() {
         return seme;
-    }
-
-    public void setSeme(String seme) {
-        this.seme = seme;
     }
 
     public int getValore() {
