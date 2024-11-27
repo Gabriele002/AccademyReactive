@@ -18,9 +18,4 @@ public class Windows implements SistemaOperativo {
     public String getLinguaggio() {
         return linguaggio;
     }
-
-    @Override
-    public String getLineSeparator() {
-        return System.lineSeparator();
-    }
 }

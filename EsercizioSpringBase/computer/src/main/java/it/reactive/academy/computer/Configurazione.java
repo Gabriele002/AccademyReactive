@@ -5,11 +5,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class Configurazione {
+public class Configurazione extends Utility{
 
     @Value("${harddisk}")
     private String hardDisck;
-
 
     @Bean
     public HardDisck setHardDisck(){
@@ -19,7 +18,8 @@ public class Configurazione {
             case "SSD":
                 return new Ssd();
             default:
-                throw new IllegalArgumentException("Errore: valore non valido per HARD_DISK: " + hardDisck);
+                logger.error("Errore: valore non valido per HARD_DISK: {}", hardDisck);
+                throw new IllegalArgumentException();
         }
     }
 }

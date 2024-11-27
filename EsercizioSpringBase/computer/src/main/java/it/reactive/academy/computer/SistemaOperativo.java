@@ -5,6 +5,9 @@ import org.springframework.stereotype.Component;
 public interface SistemaOperativo {
     String getNome();
     String getLinguaggio();
-    String getLineSeparator();
+
+    default String getLineSeparator(){
+        return System.lineSeparator();
+    };
 }
 

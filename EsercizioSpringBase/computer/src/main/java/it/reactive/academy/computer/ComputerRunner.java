@@ -1,15 +1,13 @@
 package it.reactive.academy.computer;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 
 @Component
-public class ComputerRunner {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+public class ComputerRunner extends Utility{
 
         private HardDisck hardDisck;
         private Schermo schermo;
@@ -32,7 +30,7 @@ public class ComputerRunner {
 
     public void saluta() {
         logger.info("Sono il computer");
-        logger.info("uso lo schermo: " + schermo.getSchermo());
+        logger.info("uso lo schermo: {}", schermo.getSchermo());
         logger.info("sono configurato con il sistema operativo: {}",  sistemaOperativo.getNome());
         logger.info("ed il linguaggio: {}", sistemaOperativo.getLinguaggio());
         logger.info("Il separatore di linee: {}", sistemaOperativo.getLineSeparator());
@@ -41,7 +39,7 @@ public class ComputerRunner {
         } else {
             logger.info("non hai configurato la tastiera");
         }
-        logger.info("l'hard disk scelto è: {}", hardDisck.tipo() );
+        logger.info("l'hard disk scelto e: {}", hardDisck.tipo() );
     }
 
 }
