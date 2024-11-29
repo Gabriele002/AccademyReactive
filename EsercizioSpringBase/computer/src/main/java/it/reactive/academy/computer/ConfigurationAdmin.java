@@ -12,5 +12,4 @@ public class ConfigurationAdmin {
     public Tastiera getTastiera(){
         return new Tastiera();
     }
-
 }
