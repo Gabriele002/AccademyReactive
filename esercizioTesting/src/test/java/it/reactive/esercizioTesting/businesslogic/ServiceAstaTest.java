@@ -1,8 +1,10 @@
 package it.reactive.esercizioTesting.businesslogic;
 
+
 import java.util.*;
 
 import it.reactive.esercizioTesting.exception.*;
+import it.reactive.esercizioTesting.utility.Utility;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,28 +12,15 @@ import it.reactive.esercizioTesting.entrypoint.Asta;
 
 import static org.junit.Assert.*;
 
-public class ServiceAstaTest {
+public class ServiceAstaTest extends Utility{
 
-    private final String oggettoBandito = "Vinile";
     static ServiceAsta serviceAsta;
     static Asta asta;
+
+
     private final String VALORE_MAPPA = "valore";
     private final String VINCITORE_MAPPA = "vincitore";
     private final String IS_FINITA_MAPPA = "fine asta";
-
-
-
-
-    private List<String> partecipanti = setPartecipanti();
-
-    public List<String> setPartecipanti() {
-        List<String> partecipanti = new ArrayList<>();
-        partecipanti.add("Pippo");
-        partecipanti.add("Gabriele");
-        partecipanti.add("Daniele");
-        return partecipanti;
-    }
-
 
     @Before
     public void before() {
@@ -42,13 +31,13 @@ public class ServiceAstaTest {
 
     @Test
     public void testAvviaAsta() {
-        asta.avvia(oggettoBandito, partecipanti);
+        asta.avvia(OGGETTO_PROPOSTO, partecipanti);
         assertEquals(asta.visualizzaPartecipantiSessioneCorrente(), partecipanti);
     }
 
     @Test
     public void testGetPartecipanti() {
-        asta.avvia(oggettoBandito, partecipanti);
+        asta.avvia(OGGETTO_PROPOSTO, partecipanti);
         assertEquals(serviceAsta.getPartecipanti(), partecipanti);
     }
 
@@ -61,7 +50,7 @@ public class ServiceAstaTest {
 
     @Test(expected = PartecipanteEsistenteException.class)
     public void testMetodoPartecipanteEsistente() {
-        asta.avvia(oggettoBandito, partecipanti);
+        asta.avvia(OGGETTO_PROPOSTO, partecipanti);
         asta.fineAstaForzata();
         serviceAsta.addPartecipante("Gabriele");
     }
@@ -77,19 +66,19 @@ public class ServiceAstaTest {
 
     @Test(expected = AstaInCorsoException.class)
     public void testAggiungiPartecipanteAstaInCorso() {
-        asta.avvia(oggettoBandito, partecipanti);
+        asta.avvia(OGGETTO_PROPOSTO, partecipanti);
         asta.addPartecipante("Daniele");
     }
 
     @Test
     public void testVerificaFineAsta() {
-        asta.avvia(oggettoBandito, partecipanti);
+        asta.avvia(OGGETTO_PROPOSTO, partecipanti);
         assertFalse("Asta ancora in corso parteciapanti: " + serviceAsta.getPartecipanti(), asta.verificaFineAsta());
     }
 
     @Test(expected = AstaTerminataException.class)
     public void testAstaInCorso() {
-        asta.avvia(oggettoBandito, partecipanti);
+        asta.avvia(OGGETTO_PROPOSTO, partecipanti);
         asta.passa(partecipanti.get(0));
         asta.passa(partecipanti.get(1));
         asta.passa(partecipanti.get(2));
@@ -98,34 +87,33 @@ public class ServiceAstaTest {
 
     @Test
     public void testRilancia() {
-        asta.avvia(oggettoBandito, partecipanti);
+        asta.avvia(OGGETTO_PROPOSTO, partecipanti);
         asta.rilancia("Pippo", 1);
         assertEquals(2, asta.getValoreCorrente());
     }
 
     @Test(expected = PartecipanteNonCensitoException.class)
     public void testRilanciaPartecipanteNonCensito() {
-        asta.avvia(oggettoBandito, partecipanti);
+        asta.avvia(OGGETTO_PROPOSTO, partecipanti);
         asta.rilancia("Mario", 10);
     }
 
     @Test(expected = ValoreNonAmmessoException.class)
     public void testRilanciaValoreZero() {
-        asta.avvia(oggettoBandito, partecipanti);
+        asta.avvia(OGGETTO_PROPOSTO, partecipanti);
         asta.rilancia("Pippo", 0);
     }
 
     @Test
     public void testPassaggioTurno() {
-        asta.avvia(oggettoBandito, partecipanti);
+        asta.avvia(OGGETTO_PROPOSTO, partecipanti);
         asta.rilancia("Pippo", 5);
         assertEquals("Gabriele", serviceAsta.getPartecipanti().get(1));
     }
 
-
     @Test
     public void testPassaggioTurnoConPartecipantePassato() {
-        asta.avvia(oggettoBandito, partecipanti);
+        asta.avvia(OGGETTO_PROPOSTO, partecipanti);
         asta.rilancia("Pippo", 5);
         asta.passa("Gabriele");
         assertEquals("Daniele", serviceAsta.getPartecipanti().get(2));
@@ -133,14 +121,14 @@ public class ServiceAstaTest {
 
     @Test(expected = TurnoNonValidoException.class)
     public void testPassaggioTurnoConPartecipanteNonDiQuelTurno() {
-        asta.avvia(oggettoBandito, partecipanti);
+        asta.avvia(OGGETTO_PROPOSTO, partecipanti);
         asta.rilancia("Pippo", 5);
         asta.passa("Daniele");
     }
 
     @Test
     public void testVerificaTurnoCorretti() {
-        asta.avvia(oggettoBandito, partecipanti);
+        asta.avvia(OGGETTO_PROPOSTO, partecipanti);
         asta.rilancia("Pippo", 1);
         asta.rilancia("Gabriele", 2);
         assertEquals("Daniele", serviceAsta.getPartecipanti().get(2));
@@ -148,18 +136,17 @@ public class ServiceAstaTest {
 
     @Test
     public void testFineAsta() {
-        asta.avvia(oggettoBandito, partecipanti);
+        asta.avvia(OGGETTO_PROPOSTO, partecipanti);
         serviceAsta.fine();
         assertEquals(asta.getSessioneAsta().get(IS_FINITA_MAPPA), false);
     }
-
 
     @Test
     public void testFinale() {
         asta.addPartecipante(partecipanti.get(0));
         asta.addPartecipante(partecipanti.get(1));
         asta.addPartecipante(partecipanti.get(2));
-        asta.avvia(oggettoBandito);
+        asta.avvia(OGGETTO_PROPOSTO);
         assertEquals(asta.getSessioneAsta().get(IS_FINITA_MAPPA), false);
         assertEquals(asta.visualizzaPartecipantiSessioneCorrente(), partecipanti);
         asta.rilancia(partecipanti.get(0), 1);
