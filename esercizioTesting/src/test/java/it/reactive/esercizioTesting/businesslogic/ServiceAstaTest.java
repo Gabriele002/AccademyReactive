@@ -17,17 +17,11 @@ public class ServiceAstaTest extends Utility{
     static ServiceAsta serviceAsta;
     static Asta asta;
 
-
-    private final String VALORE_MAPPA = "valore";
-    private final String VINCITORE_MAPPA = "vincitore";
-    private final String IS_FINITA_MAPPA = "fine asta";
-
     @Before
     public void before() {
         serviceAsta = new ServiceAsta();
         asta = new Asta(serviceAsta);
     }
-
 
     @Test
     public void testAvviaAsta() {

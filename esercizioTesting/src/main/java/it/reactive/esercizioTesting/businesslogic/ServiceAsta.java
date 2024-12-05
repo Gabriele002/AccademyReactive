@@ -109,5 +109,4 @@ public class ServiceAsta implements IServiceAsta {
 		}
 	}
 
-
 }
