@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import it.reactive.esercizioTesting.entrypoint.Asta;
 
-import static org.junit.Assert.*;
+    import static org.junit.Assert.*;
 
 public class ServiceAstaTest extends Utility{
 
