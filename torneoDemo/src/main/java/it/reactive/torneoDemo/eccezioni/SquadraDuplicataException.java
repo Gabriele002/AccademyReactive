@@ -1,9 +1,8 @@
 package it.reactive.torneoDemo.eccezioni;
 
-public class SquadraDuplicataException extends RuntimeException {
+public class SquadraDuplicataException extends CustomException {
 
-    public SquadraDuplicataException() {
-        super("Squadra duplicata");
+    public SquadraDuplicataException(String codErr, String messaggio) {
+        super("C1", "Squadra gia censita");
     }
 }
-

@@ -1,8 +1,8 @@
 package it.reactive.torneoDemo.eccezioni;
 
-public class SquadraNonPresenteException extends RuntimeException {
+public class SquadraNonPresenteException extends CustomException {
 
     public SquadraNonPresenteException() {
-        super("Squadra non presente");
+        super("C4","Squadra non presente");
     }
 }

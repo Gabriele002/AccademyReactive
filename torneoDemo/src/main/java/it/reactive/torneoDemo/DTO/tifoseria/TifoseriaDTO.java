@@ -1,10 +1,11 @@
 package it.reactive.torneoDemo.DTO.tifoseria;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class TifoseriaDTO {
 
-    @NotNull
+    @NotBlank
     private String nome;
 
     public @NotNull String getNome() {

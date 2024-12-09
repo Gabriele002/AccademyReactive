@@ -1,14 +1,12 @@
 package it.reactive.torneoDemo.resource;
 
-public class Tifoseria {
+public class TifoseriaResponse {
     private Integer idTifoseria;
     private String nomeTifoseria;
-    private Squadra squadra;
 
-    public Tifoseria(Integer idTifoseria, String nomeTifoseria, Squadra squadra) {
+    public TifoseriaResponse(Integer idTifoseria, String nomeTifoseria) {
         this.idTifoseria = idTifoseria;
         this.nomeTifoseria = nomeTifoseria;
-        this.squadra = squadra;
     }
 
     public Integer getIdTifoseria() {
@@ -27,12 +25,5 @@ public class Tifoseria {
         this.nomeTifoseria = nomeTifoseria;
     }
 
-    public Squadra getSquadra() {
-        return squadra;
-    }
-
-    public void setSquadra(Squadra squadra) {
-        this.squadra = squadra;
-    }
 }
 

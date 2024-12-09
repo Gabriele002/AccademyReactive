@@ -1,19 +1,22 @@
 package it.reactive.torneoDemo.resource;
 
-public class Giocatore {
+import java.util.HashSet;
+import java.util.Set;
+
+public class GiocatoreResponse {
     private Integer idGiocatore;
     private String nomeCognome;
     private Integer numeroAmmonizioni;
-    private Squadra squadra;
+    private Set<Trasferimenti> trasferimenti = new HashSet<>();
 
-    public Giocatore(Integer idGiocatore, String nomeCognome, Integer numeroAmmonizioni, Squadra squadra) {
+    public GiocatoreResponse(Integer idGiocatore, String nomeCognome, Integer numeroAmmonizioni, Set<Trasferimenti> trasferimenti) {
         this.idGiocatore = idGiocatore;
         this.nomeCognome = nomeCognome;
         this.numeroAmmonizioni = numeroAmmonizioni;
-        this.squadra = squadra;
+        this.trasferimenti= trasferimenti;
     }
 
-    public Giocatore() {}
+    public GiocatoreResponse() {}
 
     public Integer getIdGiocatore() {
         return idGiocatore;
@@ -39,12 +42,12 @@ public class Giocatore {
         this.numeroAmmonizioni = numeroAmmonizioni;
     }
 
-    public Squadra getSquadra() {
-        return squadra;
+    public Set<Trasferimenti> getTrasferimenti() {
+        return trasferimenti;
     }
 
-    public void setSquadra(Squadra squadra) {
-        this.squadra = squadra;
+    public void setTrasferimenti(Set<Trasferimenti> trasferimenti) {
+        this.trasferimenti = trasferimenti;
     }
 }
 

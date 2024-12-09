@@ -2,12 +2,12 @@ package it.reactive.torneoDemo.resource;
 
 import java.util.Set;
 
-public class Torneo {
+public class TorneoResponse {
     private Integer idTorneo;
     String nomeTorneo;
-    Set<Squadra> squadre;
+    Set<SquadraResponse> squadre;
 
-    public Torneo(Integer idTorneo, String nomeTorneo, Set<Squadra> squadre) {
+    public TorneoResponse(Integer idTorneo, String nomeTorneo, Set<SquadraResponse> squadre) {
         this.idTorneo = idTorneo;
         this.nomeTorneo = nomeTorneo;
         this.squadre = squadre;
@@ -29,11 +29,11 @@ public class Torneo {
         this.nomeTorneo = nomeTorneo;
     }
 
-    public Set<Squadra> getSquadre() {
+    public Set<SquadraResponse> getSquadre() {
         return squadre;
     }
 
-    public void setSquadre(Set<Squadra> squadre) {
+    public void setSquadre(Set<SquadraResponse> squadre) {
         this.squadre = squadre;
     }
 }

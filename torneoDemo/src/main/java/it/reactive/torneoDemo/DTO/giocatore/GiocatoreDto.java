@@ -1,14 +1,14 @@
 package it.reactive.torneoDemo.DTO.giocatore;
 
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 public class GiocatoreDto {
 
-    @NotNull(message = "Il nome non puo essere null")
+    @NotBlank(message = "Il nome non puo essere null")
     private String nome;
 
-    @NotNull(message = "Il nome non puo essere null")
+    @NotBlank(message = "Il nome non puo essere null")
     private String cognome;
 
     public String getNomeCognome() {
