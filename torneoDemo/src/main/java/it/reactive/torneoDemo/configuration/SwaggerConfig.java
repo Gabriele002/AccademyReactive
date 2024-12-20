@@ -20,5 +20,4 @@ public class SwaggerConfig {
     public InternalResourceViewResolver defaultViewResolver() {
         return new InternalResourceViewResolver();
     }
-
 }

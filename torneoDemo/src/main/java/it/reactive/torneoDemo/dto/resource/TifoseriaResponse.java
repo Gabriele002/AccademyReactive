@@ -1,16 +1,10 @@
-package it.reactive.torneoDemo.resource;
+package it.reactive.torneoDemo.dto.resource;
 
 public class TifoseriaResponse {
     private Integer idTifoseria;
     private String nomeTifoseria;
     private String squadra;
 
-
-    public TifoseriaResponse(Integer idTifoseria, String nomeTifoseria, String squadra) {
-        this.idTifoseria = idTifoseria;
-        this.nomeTifoseria = nomeTifoseria;
-        this.squadra = squadra;
-    }
 
     public String getSquadra() {
         return squadra;

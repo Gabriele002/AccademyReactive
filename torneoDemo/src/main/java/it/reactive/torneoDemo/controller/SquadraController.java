@@ -4,14 +4,14 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import it.reactive.torneoDemo.dto.giocatore.GiocatoreDTO;
-import it.reactive.torneoDemo.dto.squadra.SquadraDTO;
-import it.reactive.torneoDemo.dto.squadra.SquadreDiGiocatoriDTO;
-import it.reactive.torneoDemo.dto.tifoseria.TifoseriaDTO;
-import it.reactive.torneoDemo.exception.CodiceErrori;
-import it.reactive.torneoDemo.exception.GiocatoreDuplicatoException;
-import it.reactive.torneoDemo.resource.ErrorResponse;
-import it.reactive.torneoDemo.resource.SquadraResponse;
+import it.reactive.torneoDemo.dto.in.GiocatoreDTO;
+import it.reactive.torneoDemo.dto.in.SquadraDTO;
+import it.reactive.torneoDemo.dto.in.SquadreDiGiocatoriDTO;
+import it.reactive.torneoDemo.dto.in.TifoseriaDTO;
+import it.reactive.torneoDemo.dto.resource.ErrorResponse;
+import it.reactive.torneoDemo.dto.resource.SquadraResponse;
+import it.reactive.torneoDemo.service.SquadraService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +21,16 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "squadre", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
 public class SquadraController {
+
+    @Autowired
+    SquadraService squadraService;
 
     @ApiOperation(value = "Creao una nuova squadra", response = SquadraResponse.class)
     @ApiResponses(value = {
@@ -40,8 +44,9 @@ public class SquadraController {
                     "C6 in caso di errore di validazione\n", response = ErrorResponse.class)
     })
     @PostMapping
-    public ResponseEntity<SquadraResponse> salvaSquadra(@RequestBody @Valid SquadraDTO squadraDTO){
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    public ResponseEntity<SquadraResponse> salvaSquadra(@RequestBody @Valid SquadraDTO squadraDTO) throws Exception {
+        SquadraResponse squadraResponse = squadraService.createSquadra(squadraDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(squadraResponse);
     }
 
 
@@ -65,8 +70,8 @@ public class SquadraController {
             @ApiResponse(code = 500, message = "Errore del server")
     })
     @GetMapping()
-    public ResponseEntity<List<SquadraResponse>> ricercaSquadra(@RequestParam @ApiParam("Parametro che mi inizializza una lista di giocatori vuota o meno") boolean completo) {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<List<SquadraResponse>> ricercaSquadra(@RequestParam @ApiParam("Parametro che mi inizializza una lista di giocatori vuota o meno") boolean completo) throws SQLException {
+        return ResponseEntity.ok(squadraService.returnSquadre(completo));
     }
 
     @ApiOperation(value = "Aggiungo un giocatore ad una determinata squadra e restituisco la squadra aggiornata", response = SquadraResponse.class)
@@ -76,9 +81,9 @@ public class SquadraController {
             @ApiResponse(code = 500, message = "errore di server")})
     @PutMapping("/addGiocatore/{id}")
     public ResponseEntity<SquadraResponse> aggiungiGiocatore(@PathVariable @Min (0) @Max (10000)@ApiParam(value = "id squadra") Integer id,
-                                                             @RequestBody @ApiParam(value = "giocatoreDTO", required = true) @Valid GiocatoreDTO giocatoreDTO)
-    {
-        return ResponseEntity.ok(null);
+                                                             @RequestBody @ApiParam(value = "giocatoreDTO", required = true) @Valid GiocatoreDTO giocatoreDTO) throws SQLException {
+        SquadraResponse squadraResponse =squadraService.aggiungiGiocatore(giocatoreDTO, id);
+        return ResponseEntity.ok(squadraResponse);
     }
 
     @ApiOperation(value = "Aggiorno una tifoseria se no ne creo una", response = SquadraResponse.class)
@@ -88,16 +93,17 @@ public class SquadraController {
             @ApiResponse(code = 500, message = "errore di server")})
     @PutMapping("/addTifoseria/{id}")
     public ResponseEntity<SquadraResponse> aggiungiTifoseria(@PathVariable @Min(0) @Max(10000) @ApiParam(value = "id squadra", required = true) Integer id,
-                                                              @RequestBody @ApiParam(value = "tifoseria") @Valid TifoseriaDTO tifoseriaDTO)
-    {
-        return ResponseEntity.ok(null);
+                                                              @RequestBody @ApiParam(value = "tifoseria") @Valid TifoseriaDTO tifoseriaDTO) throws Exception {
+        SquadraResponse squadraResponse = squadraService.aggiungiTifoseria(tifoseriaDTO, id);
+        return ResponseEntity.ok(squadraResponse);
     }
 
 
     @ApiOperation(value = "Elimino squadra con relativi giocatori")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> rimuoviSquadra(@PathVariable @Min(0) @Max(10000)
-                                                   @ApiParam("id squadra")  Integer id) {
+                                                   @ApiParam("id squadra")  Integer id) throws SQLException {
+        squadraService.deleteSquadra(id);
         return ResponseEntity.noContent().build();
     }
 

@@ -1,4 +1,4 @@
-package it.reactive.torneoDemo.resource;
+package it.reactive.torneoDemo.dto.resource;
 
 public class Trasferimenti {
 

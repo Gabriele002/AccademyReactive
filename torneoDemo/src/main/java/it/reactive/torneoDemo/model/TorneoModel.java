@@ -1,17 +1,14 @@
-package it.reactive.torneoDemo.resource;
+package it.reactive.torneoDemo.model;
+
+import it.reactive.torneoDemo.dto.resource.SquadraResponse;
 
 import java.util.Set;
 
-public class TorneoResponse {
-    private Integer idTorneo;
-    String nomeTorneo;
-    Set<SquadraResponse> squadre;
+public class TorneoModel {
 
-    public TorneoResponse(Integer idTorneo, String nomeTorneo, Set<SquadraResponse> squadre) {
-        this.idTorneo = idTorneo;
-        this.nomeTorneo = nomeTorneo;
-        this.squadre = squadre;
-    }
+    private Integer idTorneo;
+    private String nomeTorneo;
+    private Set<SquadraResponse> squadre;
 
     public Integer getIdTorneo() {
         return idTorneo;

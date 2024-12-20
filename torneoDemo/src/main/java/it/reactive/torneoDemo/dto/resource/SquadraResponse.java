@@ -1,8 +1,12 @@
-package it.reactive.torneoDemo.resource;
+package it.reactive.torneoDemo.dto.resource;
+
+import it.reactive.torneoDemo.repository.dao.DaoGiocatori;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Set;
 
 public class SquadraResponse {
+
     private Integer idSquadra;
     private String nome;
     private String coloriSociali;

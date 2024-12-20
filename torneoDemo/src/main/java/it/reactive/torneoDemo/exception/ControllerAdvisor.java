@@ -1,6 +1,6 @@
 package it.reactive.torneoDemo.exception;
 
-import it.reactive.torneoDemo.resource.ErrorResponse;
+import it.reactive.torneoDemo.dto.resource.ErrorResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
@@ -73,11 +71,8 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         for (ObjectError error : ex.getBindingResult().getGlobalErrors()) {
             errors.add(error.getDefaultMessage());
         }
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("message", ex.getMessage());
-        body.put("errors", errors);
-        body.put("Cod: ", "C6");
-        return ResponseEntity.status(550).body(body);
+        ErrorResponse errorResponse = new ErrorResponse("C6", errors.toString());
+        return ResponseEntity.status(550).body(errorResponse);
     }
 
 }

@@ -1,6 +1,4 @@
-package it.reactive.torneoDemo.dto.squadra;
-
-import it.reactive.torneoDemo.dto.giocatore.GiocatoreDTO;
+package it.reactive.torneoDemo.dto.in;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
