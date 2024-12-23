@@ -2,6 +2,7 @@ package it.reactive.torneoDemo.repository.mapper;
 
 import it.reactive.torneoDemo.dto.resource.GiocatoreResponse;
 import it.reactive.torneoDemo.dto.resource.SquadraResponse;
+import it.reactive.torneoDemo.dto.resource.TifoseriaResponse;
 import it.reactive.torneoDemo.model.GiocatoriModel;
 import it.reactive.torneoDemo.model.SquadraModel;
 
@@ -25,6 +26,13 @@ public class MapperSquadra {
         squadraResponse.setNome(squadraModel.getNome());
         squadraResponse.setColoriSociali(squadraModel.getColoriSociali());
         squadraResponse.setIdSquadra(squadraModel.getIdSquadra());
+        if (squadraModel.getTifoseria() != null){
+            TifoseriaResponse tifoseriaResponse = new TifoseriaResponse();
+            tifoseriaResponse.setNomeTifoseria(squadraModel.getTifoseria().getNomeTifoseria());
+            tifoseriaResponse.setSquadra(squadraModel.getNome());
+            squadraResponse.setTifoseria(tifoseriaResponse);
+
+        }
         if (squadraModel.getGiocatori() != null && !squadraModel.getGiocatori().isEmpty()) {
             Set<GiocatoreResponse> giocatoriResponseList = new HashSet<>();
             for (GiocatoriModel giocatoriModel : squadraModel.getGiocatori()) {

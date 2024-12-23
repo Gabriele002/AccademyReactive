@@ -63,6 +63,7 @@ public class SquadraService {
         List<SquadraModel> squadraModels = daoSquadra.readAll(giocatori);
         List<SquadraResponse> squadraResponses = new ArrayList<>();
         for (SquadraModel squadraModel : squadraModels) {
+            squadraModel.setTifoseria(daoTifoseria.readForIdSquadra(squadraModel.getIdSquadra()).get());
             SquadraResponse squadraResponse = MapperSquadra.modelToResponse(squadraModel);
             squadraResponses.add(squadraResponse);
         }
