@@ -36,12 +36,19 @@ public class MapperSquadra {
         return squadraResponse;
     }
 
-
-    public static SquadraResponse rsToResponse(ResultSet rs) throws SQLException {
+    public static SquadraResponse sgToResponse(SquadraModel squadraModel, Set<GiocatoriModel> giocatoriModels){
         SquadraResponse squadraResponse = new SquadraResponse();
-        squadraResponse.setIdSquadra(rs.getInt("id"));
-        squadraResponse.setNome(rs.getString("nome"));
-        squadraResponse.setColoriSociali(rs.getString("colori_sociali"));
+        squadraResponse.setNome(squadraModel.getNome());
+        squadraResponse.setColoriSociali(squadraModel.getColoriSociali());
+        Set<GiocatoreResponse> giocatoreResponseHashSet = new HashSet<>();
+        giocatoriModels.forEach(giocatoriModel -> {
+            GiocatoreResponse giocatoreResponse = new GiocatoreResponse();
+            giocatoreResponse.setNomeCognome(giocatoriModel.getNomeCognome());
+            giocatoreResponse.setIdGiocatore(giocatoriModel.getIdGiocatore());
+            giocatoreResponse.setNumeroAmmonizioni(0);
+            giocatoreResponseHashSet.add(giocatoreResponse);
+        });
+        squadraResponse.setGiocatori(giocatoreResponseHashSet);
         return squadraResponse;
     }
 }

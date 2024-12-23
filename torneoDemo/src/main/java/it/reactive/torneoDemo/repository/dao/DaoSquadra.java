@@ -9,9 +9,7 @@ import java.util.Optional;
 
 public interface DaoSquadra {
     SquadraModel create(SquadraDTO torneoDTO) throws SQLException;
-    SquadraModel read(int id) throws SQLException;
-    SquadraModel update(int id, SquadraDTO torneoDTO);
-    SquadraModel delete(int id) throws SQLException;
+    void delete(int id) throws SQLException;
     Optional<SquadraModel> findById(int id) throws SQLException;
     List<SquadraModel> readAll (boolean listaGiocatori) throws SQLException;
     Optional<SquadraModel> readForName (String nome);

@@ -1,5 +1,4 @@
 package it.reactive.torneoDemo.repository.mapper;
-import it.reactive.torneoDemo.dto.in.GiocatoreDTO;
 import it.reactive.torneoDemo.dto.resource.GiocatoreResponse;
 import it.reactive.torneoDemo.model.GiocatoriModel;
 
@@ -30,15 +29,6 @@ public class MapperGiocatore {
         return giocatoreResponseHashSet;
     }
 
-
-
-    public static GiocatoreResponse dtoToResponse(GiocatoreDTO giocatoreDTO){
-        GiocatoreResponse giocatoreResponse = new GiocatoreResponse();
-        giocatoreResponse.setNomeCognome(giocatoreDTO.getNomeCognome());
-        return giocatoreResponse;
-    }
-
-
     public static GiocatoreResponse modelToResponse(GiocatoriModel giocatoriModel){
         GiocatoreResponse giocatoreResponse = new GiocatoreResponse();
         giocatoreResponse.setIdGiocatore(giocatoriModel.getIdGiocatore());
@@ -46,7 +36,5 @@ public class MapperGiocatore {
         giocatoreResponse.setNumeroAmmonizioni(giocatoriModel.getNumeroAmmonizioni());
         return giocatoreResponse;
     }
-
-
 
 }

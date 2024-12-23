@@ -53,29 +53,8 @@ public class SquadraImpl implements DaoSquadra {
         return squadra;
     }
 
-
     @Override
-    public SquadraModel read(int id) throws SQLException {
-        SquadraModel squadraModel = new SquadraModel();
-        String query = " select * from squadra where id = ?";
-        PreparedStatement ps = cn.init().prepareStatement(query);
-        ps.setInt(1, id);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            squadraModel = MapperSquadra.rsToModel(rs);
-        }
-        rs.close();
-        return squadraModel;
-    }
-
-
-    @Override
-    public SquadraModel update(int id, SquadraDTO torneoDTO) {
-        return null;
-    }
-
-    @Override
-    public SquadraModel delete(int id) throws SQLException {
+    public void delete(int id) throws SQLException {
         Connection connection = cn.init();
 
         String deleteTifoseriaQuery = "delete from tifoseria where id_squadra = ?";
@@ -118,7 +97,6 @@ public class SquadraImpl implements DaoSquadra {
             connection.rollback();
             throw new RuntimeException(e);
         }
-        return null;
     }
 
     @Override
@@ -183,4 +161,5 @@ public class SquadraImpl implements DaoSquadra {
             throw new RuntimeException(e);
         }
     }
+
 }

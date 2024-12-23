@@ -23,9 +23,6 @@ public class GiocatoreImpl implements DaoGiocatori {
     @Autowired
     ConnesioneDb cn;
 
-    @Autowired
-    DbCostanti dbCostanti;
-
     @Override
     public GiocatoriModel create(GiocatoreDTO giocatoreDTO, int id) throws SQLException {
         Connection co = cn.init();
@@ -89,17 +86,6 @@ public class GiocatoreImpl implements DaoGiocatori {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public GiocatoriModel update(int id) {
-        return null;
-    }
-
-
-    @Override
-    public GiocatoriModel delete(int id) {
-        return null;
     }
 
 }

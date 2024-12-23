@@ -58,8 +58,8 @@ public class SquadraController {
             @ApiResponse(code = 550, message = "La squadra gia censita", response = ErrorResponse.class)
     })
     @PostMapping("/squadreGiocatori")
-    public ResponseEntity<SquadraResponse> salvaSquadraSquadraGiocatori(@RequestBody @Valid SquadreDiGiocatoriDTO squadraGiocatoreDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    public ResponseEntity<SquadraResponse> salvaSquadraSquadraGiocatori(@RequestBody @Valid SquadreDiGiocatoriDTO squadraGiocatoreDTO) throws SQLException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(squadraService.aggiungoSquadraGiocatori(squadraGiocatoreDTO));
     }
 
 

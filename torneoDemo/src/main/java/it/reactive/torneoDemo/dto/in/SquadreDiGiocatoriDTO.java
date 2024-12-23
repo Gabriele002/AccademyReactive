@@ -3,6 +3,7 @@ package it.reactive.torneoDemo.dto.in;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.List;
 
 public class SquadreDiGiocatoriDTO {
@@ -15,7 +16,7 @@ public class SquadreDiGiocatoriDTO {
     private String coloriSociali;
 
     @Valid
-    private List<GiocatoreDTO> listaGiocatori;
+    private HashSet<GiocatoreDTO> listaGiocatori;
 
     public @NotBlank @Size(min = 3, max = 20) String getNome() {
         return nome;
@@ -33,11 +34,11 @@ public class SquadreDiGiocatoriDTO {
         this.coloriSociali = coloriSociali;
     }
 
-    public @Valid List<GiocatoreDTO> getListaGiocatori() {
+    public @Valid HashSet<GiocatoreDTO> getListaGiocatori() {
         return listaGiocatori;
     }
 
-    public void setListaGiocatori(@Valid List<GiocatoreDTO> listaGiocatori) {
+    public void setListaGiocatori(@Valid HashSet<GiocatoreDTO> listaGiocatori) {
         this.listaGiocatori = listaGiocatori;
     }
 }

@@ -5,6 +5,7 @@ import it.reactive.torneoDemo.configuration.ConnesioneDb;
 import it.reactive.torneoDemo.dto.in.TifoseriaDTO;
 import it.reactive.torneoDemo.model.TifoseriaModel;
 import it.reactive.torneoDemo.repository.dao.DaoTifoseria;
+import it.reactive.torneoDemo.repository.mapper.MapperTifoseria;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -46,34 +47,38 @@ public class TifoseriaImpl implements DaoTifoseria {
     }
 
     @Override
-    public Optional<TifoseriaModel> read(int id) throws SQLException {
-        String querry = "select t.* from tifoseria where id_squadra = ?";
+    public Optional<TifoseriaModel> readForIdSquadra(int id) throws SQLException {
+        String query = "select t.* from tifoseria t where id_squadra = ?";
         Connection connection = cn.init();
-        PreparedStatement pr = connection.prepareStatement(querry);
+        PreparedStatement pr = connection.prepareStatement(query);
         pr.setInt(1, id);
-        return null;
+        ResultSet rs = pr.executeQuery();
+        if (rs.next()) {
+            TifoseriaModel tifoseriaModel = MapperTifoseria.rsToModel(rs);
+            return Optional.of(tifoseriaModel);
+        } else {
+            return Optional.empty();
+        }
     }
 
+
     @Override
-    public TifoseriaModel update(TifoseriaDTO tifoseriaDTO) throws SQLException {
+    public TifoseriaModel update(TifoseriaDTO tifoseriaDTO, int idSquadra) throws SQLException {
+        String queryUpdate = "update tifoseria SET nome_tifoseria = ? WHERE id_squadra = ?";
         Connection connection = cn.init();
-        String query = "UPDATE tifoseria SET tifoseria.nome_tifoseria=?";
-        TifoseriaModel tifoseriaModel = new TifoseriaModel();
         try {
-            PreparedStatement pr = connection.prepareStatement(query);
-            pr.setString(1, tifoseriaDTO.getNomeTifoseria());
+            PreparedStatement prUpdate = connection.prepareStatement(queryUpdate);
+            prUpdate.setString(1, tifoseriaDTO.getNomeTifoseria());
+            prUpdate.setInt(2, idSquadra);
+            prUpdate.executeUpdate();
+            TifoseriaModel tifoseriaModel = new TifoseriaModel();
             tifoseriaModel.setNomeTifoseria(tifoseriaDTO.getNomeTifoseria());
-            pr.executeUpdate();
+            connection.commit();
+            return tifoseriaModel;
         } catch (SQLException e) {
             connection.rollback();
-            throw new RuntimeException(e);
+            throw new SQLException(e);
         }
-         return tifoseriaModel;
     }
 
-
-    @Override
-    public TifoseriaModel delete(int id) {
-        return null;
-    }
 }

@@ -17,7 +17,7 @@ public class GiocatoreService {
     DaoGiocatori daoGiocatori;
 
     public HashSet<GiocatoreResponse> giocatore(int id) throws Exception {
-        HashSet<GiocatoriModel> giocatoriModels = daoGiocatori.read(id);
+        HashSet<GiocatoriModel> giocatoriModels = (HashSet<GiocatoriModel>) daoGiocatori.read(id);
         return MapperGiocatore.modelToRs(giocatoriModels);
     }
 

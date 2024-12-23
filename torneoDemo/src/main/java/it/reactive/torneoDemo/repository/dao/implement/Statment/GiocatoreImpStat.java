@@ -41,13 +41,4 @@ public class GiocatoreImpStat implements DaoGiocatori {
         return Optional.empty();
     }
 
-    @Override
-    public GiocatoriModel update(int id) {
-        return null;
-    }
-
-    @Override
-    public GiocatoriModel delete(int id) {
-        return null;
-    }
 }

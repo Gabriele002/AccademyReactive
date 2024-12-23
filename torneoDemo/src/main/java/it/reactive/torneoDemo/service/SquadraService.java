@@ -2,8 +2,8 @@ package it.reactive.torneoDemo.service;
 
 import it.reactive.torneoDemo.dto.in.GiocatoreDTO;
 import it.reactive.torneoDemo.dto.in.SquadraDTO;
+import it.reactive.torneoDemo.dto.in.SquadreDiGiocatoriDTO;
 import it.reactive.torneoDemo.dto.in.TifoseriaDTO;
-import it.reactive.torneoDemo.dto.resource.GiocatoreResponse;
 import it.reactive.torneoDemo.dto.resource.SquadraResponse;
 import it.reactive.torneoDemo.dto.resource.TifoseriaResponse;
 import it.reactive.torneoDemo.exception.CodiceErrori;
@@ -16,7 +16,6 @@ import it.reactive.torneoDemo.model.TifoseriaModel;
 import it.reactive.torneoDemo.repository.dao.DaoGiocatori;
 import it.reactive.torneoDemo.repository.dao.DaoSquadra;
 import it.reactive.torneoDemo.repository.dao.DaoTifoseria;
-import it.reactive.torneoDemo.repository.mapper.MapperGiocatore;
 import it.reactive.torneoDemo.repository.mapper.MapperSquadra;
 import it.reactive.torneoDemo.repository.mapper.MapperTifoseria;
 import it.reactive.torneoDemo.utility.Utility;
@@ -25,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,21 +89,38 @@ public class SquadraService {
 
     public SquadraResponse aggiungiTifoseria(TifoseriaDTO tifoseriaDTO, int id) throws Exception {
         Optional<SquadraModel> squadraModel = daoSquadra.findById(id);
-        System.out.println("squadraModel = " + squadraModel.toString());
-        TifoseriaModel tifoseriaModel;
         if (squadraModel.isPresent()) {
             SquadraModel squadra = squadraModel.get();
-            tifoseriaModel = daoTifoseria.create(tifoseriaDTO, id);
-            tifoseriaModel.setSquadra(squadraModel.get());
-          //  tifoseriaModel = daoTifoseria.update(tifoseriaDTO);
+            TifoseriaModel tifoseriaModel;
+            Optional<TifoseriaModel> tifoseriaModelOptional = daoTifoseria.readForIdSquadra(id);
+            if (tifoseriaModelOptional.isPresent()) {
+                tifoseriaModel = daoTifoseria.update(tifoseriaDTO, id);
+            } else {
+                tifoseriaModel = daoTifoseria.create(tifoseriaDTO, id);
+            }
+            tifoseriaModel.setSquadra(squadra);
             squadra.setGiocatori(daoGiocatori.read(id));
+            SquadraResponse squadraResponse = MapperSquadra.modelToResponse(squadra);
+            TifoseriaResponse tifoseriaResponse = MapperTifoseria.modelToResponse(tifoseriaModel);
+            squadraResponse.setTifoseria(tifoseriaResponse);
+            return squadraResponse;
         } else {
             throw new SquadraNonPresenteException(CodiceErrori.ERRORE_SQUADRANONPRESENTE);
         }
-        SquadraResponse squadraResponse = MapperSquadra.modelToResponse(squadraModel.get());
-        TifoseriaResponse tifoseriaResponse = MapperTifoseria.modelToResponse(tifoseriaModel);
-        squadraResponse.setTifoseria(tifoseriaResponse);
-        return squadraResponse;
+    }
+
+
+    public SquadraResponse aggiungoSquadraGiocatori(SquadreDiGiocatoriDTO squadreDiGiocatoriDTO) throws SQLException {
+        SquadraDTO squadraDTO = new SquadraDTO();
+        squadraDTO.setNome(squadreDiGiocatoriDTO.getNome());
+        squadraDTO.setColoriSociali(squadreDiGiocatoriDTO.getColoriSociali());
+        SquadraModel squadraModel = daoSquadra.create(squadraDTO);
+        HashSet<GiocatoriModel> giocatoriModels = new HashSet<>();
+        for (GiocatoreDTO giocatoreDTO : squadreDiGiocatoriDTO.getListaGiocatori()) {
+            GiocatoriModel giocatoriModel = daoGiocatori.create(giocatoreDTO, squadraModel.getIdSquadra());
+            giocatoriModels.add(giocatoriModel);
+        }
+        return MapperSquadra.sgToResponse(squadraModel, giocatoriModels);
     }
 
 }
