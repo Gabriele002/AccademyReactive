@@ -101,7 +101,7 @@ public class SquadraImpl implements DaoSquadra {
 
     @Override
     public Optional<SquadraModel> findById(int id) {
-        String query = "select * from squadra" + " where " + dbCostanti.SQUADRA_ID_COL + " = ?";
+        String query = "select s.*,t.*, t.id as id_tifoseria from squadra s join tifoseria t on s.id = t.id_squadra where s.id = ?";
         Connection connection = cn.init();
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, id);
@@ -122,8 +122,8 @@ public class SquadraImpl implements DaoSquadra {
     public List<SquadraModel> readAll(boolean listaGiocatori) throws SQLException {
         Connection connection = cn.init();
         List<SquadraModel> squadre = new ArrayList<>();
-        String querySquadre = "select * from squadra";
-        PreparedStatement pr = connection.prepareStatement(querySquadre);
+        String querySquadreTifoseria = "select s.*, t.*, t.id as id_tifoseria FROM squadra s LEFT JOIN tifoseria t ON t.id_squadra = s.id";
+        PreparedStatement pr = connection.prepareStatement(querySquadreTifoseria);
         ResultSet rs = pr.executeQuery();
         while (rs.next()) {
             SquadraModel squadraModel = MapperSquadra.rsToModel(rs);
@@ -140,7 +140,6 @@ public class SquadraImpl implements DaoSquadra {
             }
             squadre.add(squadraModel);
         }
-
         return squadre;
     }
 

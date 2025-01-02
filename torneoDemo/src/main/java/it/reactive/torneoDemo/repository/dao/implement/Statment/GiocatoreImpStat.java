@@ -24,7 +24,7 @@ public class GiocatoreImpStat implements DaoGiocatori {
     }
 
     @Override
-    public HashSet<GiocatoriModel> read(int id) throws Exception {
+    public HashSet<GiocatoriModel> readGiocatoriWithIdSquadra(int id) throws Exception {
         GiocatoriModel giocatore = new GiocatoriModel();
         String query = "SELECT g.*, s.nome as nome_squadra FROM giocatore g JOIN squadra s ON g.id_squadra = s.id where g.id=1";
         Statement ps = cn.init().prepareStatement(query);
@@ -39,6 +39,16 @@ public class GiocatoreImpStat implements DaoGiocatori {
     @Override
     public Optional<GiocatoriModel> readForName(String nome) {
         return Optional.empty();
+    }
+
+    @Override
+    public Optional<GiocatoriModel> readForId(int id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public void incrementaAmmonizioni(int id) throws SQLException {
+
     }
 
 }

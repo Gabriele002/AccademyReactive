@@ -71,8 +71,8 @@ public class TifoseriaImpl implements DaoTifoseria {
             prUpdate.setString(1, tifoseriaDTO.getNomeTifoseria());
             prUpdate.setInt(2, idSquadra);
             prUpdate.executeUpdate();
-            TifoseriaModel tifoseriaModel = new TifoseriaModel();
-            tifoseriaModel.setNomeTifoseria(tifoseriaDTO.getNomeTifoseria());
+            ResultSet rs = prUpdate.getResultSet();
+            TifoseriaModel tifoseriaModel = MapperTifoseria.rsToModel(rs);
             connection.commit();
             return tifoseriaModel;
         } catch (SQLException e) {

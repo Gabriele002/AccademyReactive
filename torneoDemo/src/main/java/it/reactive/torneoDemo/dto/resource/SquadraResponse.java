@@ -1,7 +1,5 @@
 package it.reactive.torneoDemo.dto.resource;
 
-import it.reactive.torneoDemo.repository.dao.DaoGiocatori;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Set;
 
@@ -13,13 +11,6 @@ public class SquadraResponse {
     private Set<GiocatoreResponse> giocatori;
     private TifoseriaResponse tifoseria;
 
-    public SquadraResponse(Integer idSquadra, String nome, String coloriSociali, Set<GiocatoreResponse> giocatori, TifoseriaResponse tifoseria) {
-        this.idSquadra = idSquadra;
-        this.nome = nome;
-        this.coloriSociali = coloriSociali;
-        this.giocatori = giocatori;
-        this.tifoseria = tifoseria;
-    }
 
     public SquadraResponse() {
     }

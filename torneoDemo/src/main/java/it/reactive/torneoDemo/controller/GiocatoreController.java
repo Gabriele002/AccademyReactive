@@ -33,7 +33,7 @@ public class GiocatoreController {
             @ApiResponse(code = 550, message = "C6 in caso di valisazione fallita per l id giocatore", response = ErrorResponse.class)
     @PutMapping("/updateAmmonizioni/{id}")
     public ResponseEntity<GiocatoreResponse> aggiornaAmmonizione(@PathVariable @Min(0) @Max (10000) @ApiParam(value = "id giocatore compreso tra 0 e 10000", required = true) Integer id) throws Exception {
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(giocatoreService.aggiornaAmmonizioni(id));
     }
 
     @GetMapping("{id}")

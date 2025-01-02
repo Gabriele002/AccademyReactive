@@ -5,6 +5,7 @@ import it.reactive.torneoDemo.dto.resource.SquadraResponse;
 import it.reactive.torneoDemo.dto.resource.TifoseriaResponse;
 import it.reactive.torneoDemo.model.GiocatoriModel;
 import it.reactive.torneoDemo.model.SquadraModel;
+import it.reactive.torneoDemo.model.TifoseriaModel;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,6 +19,11 @@ public class MapperSquadra {
         squadraModel.setIdSquadra(rs.getInt("id"));
         squadraModel.setNome(rs.getString("nome"));
         squadraModel.setColoriSociali(rs.getString("colori_sociali"));
+        TifoseriaModel tifoseriaModel = new TifoseriaModel();
+        tifoseriaModel.setSquadra(squadraModel);
+        tifoseriaModel.setNomeTifoseria(rs.getString("nome_tifoseria"));
+        tifoseriaModel.setIdTifoseria(rs.getInt("id_tifoseria"));
+        squadraModel.setTifoseria(tifoseriaModel);
         return squadraModel;
     }
 
@@ -30,8 +36,8 @@ public class MapperSquadra {
             TifoseriaResponse tifoseriaResponse = new TifoseriaResponse();
             tifoseriaResponse.setNomeTifoseria(squadraModel.getTifoseria().getNomeTifoseria());
             tifoseriaResponse.setSquadra(squadraModel.getNome());
+            tifoseriaResponse.setIdTifoseria(squadraModel.getTifoseria().getIdTifoseria());
             squadraResponse.setTifoseria(tifoseriaResponse);
-
         }
         if (squadraModel.getGiocatori() != null && !squadraModel.getGiocatori().isEmpty()) {
             Set<GiocatoreResponse> giocatoriResponseList = new HashSet<>();

@@ -5,7 +5,6 @@ import it.reactive.torneoDemo.dto.in.GiocatoreDTO;
 import it.reactive.torneoDemo.model.GiocatoriModel;
 import it.reactive.torneoDemo.repository.dao.DaoGiocatori;
 import it.reactive.torneoDemo.repository.mapper.MapperGiocatore;
-import it.reactive.torneoDemo.utility.DbCostanti;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -51,7 +50,7 @@ public class GiocatoreImpl implements DaoGiocatori {
     }
 
     @Override
-    public HashSet<GiocatoriModel> read(int id) {
+    public HashSet<GiocatoriModel> readGiocatoriWithIdSquadra(int id) {
         HashSet<GiocatoriModel> giocatori = new HashSet<>();
         GiocatoriModel giocatore;
         String query = "select g.*, s.nome from giocatore g join squadra s on g.id_squadra = s.id where g.id_squadra =?";
@@ -88,4 +87,36 @@ public class GiocatoreImpl implements DaoGiocatori {
         }
     }
 
+    @Override
+    public Optional<GiocatoriModel> readForId(int id) {
+        String query = "select * from giocatore where id = ?";
+        Connection connection = cn.init();
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                GiocatoriModel giocatoriModel = MapperGiocatore.rsToModel(rs);
+                return Optional.of(giocatoriModel);
+            } else {
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void incrementaAmmonizioni(int idGiocatore) throws SQLException {
+        Connection connection = cn.init();
+        String query = "update giocatore set numero_ammonizioni = numero_ammonizioni + 1 where id = ?";
+        try{
+            PreparedStatement pr = connection.prepareStatement(query);
+            pr.setInt(1, idGiocatore);
+            pr.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            connection.rollback();
+            throw new SQLException(e);
+        }
+    }
 }

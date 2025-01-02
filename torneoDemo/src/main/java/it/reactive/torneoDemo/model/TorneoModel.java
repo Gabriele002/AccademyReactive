@@ -1,14 +1,13 @@
 package it.reactive.torneoDemo.model;
 
-import it.reactive.torneoDemo.dto.resource.SquadraResponse;
-
+import java.util.HashSet;
 import java.util.Set;
 
 public class TorneoModel {
 
     private Integer idTorneo;
     private String nomeTorneo;
-    private Set<SquadraResponse> squadre;
+    private Set<SquadraModel> squadre = new HashSet<>();
 
     public Integer getIdTorneo() {
         return idTorneo;
@@ -26,11 +25,11 @@ public class TorneoModel {
         this.nomeTorneo = nomeTorneo;
     }
 
-    public Set<SquadraResponse> getSquadre() {
+    public Set<SquadraModel> getSquadre() {
         return squadre;
     }
 
-    public void setSquadre(Set<SquadraResponse> squadre) {
+    public void setSquadre(Set<SquadraModel> squadre) {
         this.squadre = squadre;
     }
 }
