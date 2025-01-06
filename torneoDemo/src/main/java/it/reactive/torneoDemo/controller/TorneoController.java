@@ -49,7 +49,7 @@ public class TorneoController {
     })
     @PutMapping("/addSquadraToTorneo/{idTorneo}/{idSquadra}")
     public ResponseEntity<TorneoResponse> censitaSquadraAlTorneo(@PathVariable @Min(0) @Max(10000) Integer idTorneo, @PathVariable @Min(0) @Max(10000) Integer idSquadra) throws SQLException {
-        return ResponseEntity.ok(torneoService.aggiungoSquadra(idSquadra,idTorneo));
+        return ResponseEntity.ok(torneoService.aggiungoSquadra(idTorneo,idSquadra));
     }
 
 
@@ -58,8 +58,8 @@ public class TorneoController {
             @ApiResponse(code = 200, message = "Tornei, squadre e traferimenti giocatori recuperato con sucesso"),
     })
     @GetMapping()
-    public ResponseEntity<List<TorneoResponse>> getTorneoEndSquadre(){
-        return ResponseEntity.ok(null);
+    public ResponseEntity<List<TorneoResponse>> getTorneoEndSquadre() throws SQLException {
+        return ResponseEntity.ok(torneoService.getAllTorneo());
     }
 
 
@@ -67,8 +67,9 @@ public class TorneoController {
     @ApiOperation(value = "Elimino il torneo con relative squadre assciare se non fanno parte di una altro torneo con relativi giocatori")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminaTorneoConSquadreAndGiocatori(@PathVariable @Min(0) @Max(10000)
-                                                                    @ApiParam("Id torneo")Integer id){
-        return ResponseEntity.ok(null);
+                                                                    @ApiParam("Id torneo")Integer id) throws SQLException {
+        torneoService.removeTorneo(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

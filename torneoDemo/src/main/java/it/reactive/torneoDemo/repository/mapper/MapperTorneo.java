@@ -12,14 +12,32 @@ import java.util.Set;
 
 public class MapperTorneo {
 
-    public static TorneoModel rsToModel (ResultSet rs) throws SQLException {
+    public static TorneoModel rsToModelWithSquadra(ResultSet rs) throws SQLException {
+        TorneoModel torneoModel = new TorneoModel();
+        torneoModel.setNomeTorneo(rs.getString("nome_torneo"));
+        torneoModel.setIdTorneo(rs.getInt("id"));
+        Set<SquadraModel> squadraModelSet = new HashSet<>();
+        do {
+            SquadraModel squadraModel = new SquadraModel();
+            squadraModel.setIdSquadra(rs.getInt("squadra_id"));
+            squadraModel.setNome(rs.getString("nome_squadra"));
+            squadraModel.setColoriSociali(rs.getString("colori_sociali"));
+            squadraModelSet.add(squadraModel);
+        } while (rs.next());
+        torneoModel.setSquadre(squadraModelSet);
+
+        return torneoModel;
+    }
+
+    public static  TorneoModel rsToModel(ResultSet rs) throws SQLException {
         TorneoModel torneoModel = new TorneoModel();
         torneoModel.setNomeTorneo(rs.getString("nome_torneo"));
         torneoModel.setIdTorneo(rs.getInt("id"));
         return torneoModel;
     }
 
-    public static TorneoResponse modelToResponde(TorneoModel torneoModel){
+
+    public static TorneoResponse modelToResponse(TorneoModel torneoModel){
         TorneoResponse torneoResponse = new TorneoResponse();
         torneoResponse.setIdTorneo(torneoModel.getIdTorneo());
         torneoResponse.setNomeTorneo(torneoModel.getNomeTorneo());

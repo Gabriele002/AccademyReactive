@@ -3,11 +3,14 @@ package it.reactive.torneoDemo.dto.resource;
 public class Trasferimenti {
 
     private Integer anno;
-    private String nomeSquadraStorica;
+    private String squadra;
 
     public Trasferimenti(Integer anno, String squadra) {
         this.anno = anno;
-        this.nomeSquadraStorica = squadra;
+        this.squadra = squadra;
+    }
+
+    public Trasferimenti() {
     }
 
     public Integer getAnno() {
@@ -18,11 +21,11 @@ public class Trasferimenti {
         this.anno = anno;
     }
 
-    public String getNomeSquadraStorica() {
-        return nomeSquadraStorica;
+    public String getSquadra() {
+        return squadra;
     }
 
-    public void setNomeSquadraStorica(String nomeSquadraStorica) {
-        this.nomeSquadraStorica = nomeSquadraStorica;
+    public void setSquadra(String squadra) {
+        this.squadra = squadra;
     }
 }

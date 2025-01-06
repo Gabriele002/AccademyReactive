@@ -2,6 +2,7 @@ package it.reactive.torneoDemo.repository.dao.implement.Statment;
 
 import it.reactive.torneoDemo.configuration.ConnesioneDb;
 import it.reactive.torneoDemo.dto.in.GiocatoreDTO;
+import it.reactive.torneoDemo.dto.resource.Trasferimenti;
 import it.reactive.torneoDemo.model.GiocatoriModel;
 import it.reactive.torneoDemo.repository.dao.DaoGiocatori;
 import it.reactive.torneoDemo.repository.mapper.MapperGiocatore;
@@ -10,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 public class GiocatoreImpStat implements DaoGiocatori {
 
@@ -49,6 +52,11 @@ public class GiocatoreImpStat implements DaoGiocatori {
     @Override
     public void incrementaAmmonizioni(int id) throws SQLException {
 
+    }
+
+    @Override
+    public Set<Trasferimenti> trasferimenti(String nome) {
+        return Collections.emptySet();
     }
 
 }

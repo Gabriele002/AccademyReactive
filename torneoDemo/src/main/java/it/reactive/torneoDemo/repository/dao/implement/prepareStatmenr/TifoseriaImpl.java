@@ -64,21 +64,33 @@ public class TifoseriaImpl implements DaoTifoseria {
 
     @Override
     public TifoseriaModel update(TifoseriaDTO tifoseriaDTO, int idSquadra) throws SQLException {
-        String queryUpdate = "update tifoseria SET nome_tifoseria = ? WHERE id_squadra = ?";
+        String queryUpdate = "UPDATE tifoseria SET nome_tifoseria = ? WHERE id_squadra = ?";
+        String querySelect = "SELECT * FROM tifoseria WHERE id_squadra = ?";
         Connection connection = cn.init();
         try {
             PreparedStatement prUpdate = connection.prepareStatement(queryUpdate);
             prUpdate.setString(1, tifoseriaDTO.getNomeTifoseria());
             prUpdate.setInt(2, idSquadra);
             prUpdate.executeUpdate();
-            ResultSet rs = prUpdate.getResultSet();
-            TifoseriaModel tifoseriaModel = MapperTifoseria.rsToModel(rs);
+
+            PreparedStatement prSelect = connection.prepareStatement(querySelect);
+            prSelect.setInt(1, idSquadra);
+            ResultSet rs = prSelect.executeQuery();
+
+            TifoseriaModel tifoseriaModel = null;
+            if (rs.next()) {
+                tifoseriaModel = MapperTifoseria.rsToModel(rs);
+            }
             connection.commit();
+
             return tifoseriaModel;
         } catch (SQLException e) {
             connection.rollback();
             throw new SQLException(e);
+        } finally {
+            connection.setAutoCommit(true);
         }
     }
+
 
 }

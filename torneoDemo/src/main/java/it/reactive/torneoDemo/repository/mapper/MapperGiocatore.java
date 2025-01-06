@@ -5,6 +5,7 @@ import it.reactive.torneoDemo.model.GiocatoriModel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
+import java.util.Set;
 
 public class MapperGiocatore {
 
@@ -16,14 +17,13 @@ public class MapperGiocatore {
         return giocatoriModel;
     }
 
-    public static HashSet<GiocatoreResponse> modelToRs(HashSet<GiocatoriModel> giocatoriModel) {
-        HashSet<GiocatoreResponse> giocatoreResponseHashSet = new HashSet<>();
+    public static Set<GiocatoreResponse> modelToRs(Set<GiocatoriModel> giocatoriModel) {
+        Set<GiocatoreResponse> giocatoreResponseHashSet = new HashSet<>();
         giocatoriModel.forEach(giocatore -> {
             GiocatoreResponse giocatoreResponse = new GiocatoreResponse();
             giocatoreResponse.setNomeCognome(giocatore.getNomeCognome());
             giocatoreResponse.setNumeroAmmonizioni(giocatore.getNumeroAmmonizioni());
             giocatoreResponse.setIdGiocatore(giocatore.getIdGiocatore());
-
             giocatoreResponseHashSet.add(giocatoreResponse);
         });
         return giocatoreResponseHashSet;

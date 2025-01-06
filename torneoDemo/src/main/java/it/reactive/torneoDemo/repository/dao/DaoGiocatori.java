@@ -1,9 +1,11 @@
 package it.reactive.torneoDemo.repository.dao;
 
 import it.reactive.torneoDemo.dto.in.GiocatoreDTO;
+import it.reactive.torneoDemo.dto.resource.Trasferimenti;
 import it.reactive.torneoDemo.model.GiocatoriModel;
 
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -13,4 +15,5 @@ public interface DaoGiocatori {
     Optional<GiocatoriModel> readForName(String nome);
     Optional<GiocatoriModel> readForId(int id);
     void incrementaAmmonizioni(int id) throws SQLException;
+    Set<Trasferimenti>trasferimenti(String nome);
 }

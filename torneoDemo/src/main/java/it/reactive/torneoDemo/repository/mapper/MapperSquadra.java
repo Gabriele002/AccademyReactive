@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class MapperSquadra {
 
-    public static SquadraModel rsToModel(ResultSet rs) throws SQLException {
+    public static SquadraModel rsToModelWithTifoseria(ResultSet rs) throws SQLException {
         SquadraModel squadraModel = new SquadraModel();
         squadraModel.setIdSquadra(rs.getInt("id"));
         squadraModel.setNome(rs.getString("nome"));
@@ -24,6 +24,14 @@ public class MapperSquadra {
         tifoseriaModel.setNomeTifoseria(rs.getString("nome_tifoseria"));
         tifoseriaModel.setIdTifoseria(rs.getInt("id_tifoseria"));
         squadraModel.setTifoseria(tifoseriaModel);
+        return squadraModel;
+    }
+
+    public static SquadraModel rsToModel(ResultSet rs) throws SQLException {
+        SquadraModel squadraModel = new SquadraModel();
+        squadraModel.setIdSquadra(rs.getInt("id"));
+        squadraModel.setNome(rs.getString("nome"));
+        squadraModel.setColoriSociali(rs.getString("colori_sociali"));
         return squadraModel;
     }
 
@@ -64,5 +72,18 @@ public class MapperSquadra {
         });
         squadraResponse.setGiocatori(giocatoreResponseHashSet);
         return squadraResponse;
+    }
+
+    public static SquadraModel rsToModelIdSquadra(ResultSet rs) throws SQLException {
+        SquadraModel squadraModel = new SquadraModel();
+        squadraModel.setIdSquadra(rs.getInt("id_squadra"));
+        squadraModel.setNome(rs.getString("nome"));
+        squadraModel.setColoriSociali(rs.getString("colori_sociali"));
+        TifoseriaModel tifoseriaModel = new TifoseriaModel();
+        tifoseriaModel.setSquadra(squadraModel);
+        tifoseriaModel.setNomeTifoseria(rs.getString("nome_tifoseria"));
+        tifoseriaModel.setIdTifoseria(rs.getInt("id_tifoseria"));
+        squadraModel.setTifoseria(tifoseriaModel);
+        return squadraModel;
     }
 }

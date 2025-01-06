@@ -6,6 +6,7 @@ import it.reactive.torneoDemo.dto.in.SquadreDiGiocatoriDTO;
 import it.reactive.torneoDemo.dto.in.TifoseriaDTO;
 import it.reactive.torneoDemo.dto.resource.SquadraResponse;
 import it.reactive.torneoDemo.dto.resource.TifoseriaResponse;
+import it.reactive.torneoDemo.dto.resource.Trasferimenti;
 import it.reactive.torneoDemo.exception.CodiceErrori;
 import it.reactive.torneoDemo.exception.GiocatoreDuplicatoException;
 import it.reactive.torneoDemo.exception.SquadraDuplicataException;
@@ -23,10 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class SquadraService {
@@ -64,7 +62,17 @@ public class SquadraService {
         List<SquadraResponse> squadraResponses = new ArrayList<>();
         for (SquadraModel squadraModel : squadraModels) {
             SquadraResponse squadraResponse = MapperSquadra.modelToResponse(squadraModel);
+            if (squadraResponse.getGiocatori() == null){
+                squadraResponse.setGiocatori(new HashSet<>());
+            }else {
+                squadraResponse.getGiocatori().forEach(g -> {
+                    String nome = g.getNomeCognome();
+                    Set<Trasferimenti> trasferimenti = daoGiocatori.trasferimenti(nome);
+                    g.setTrasferimenti(trasferimenti);
+                });
+            }
             squadraResponses.add(squadraResponse);
+
         }
         return squadraResponses;
     }

@@ -1,7 +1,5 @@
 package it.reactive.torneoDemo.model;
 
-import it.reactive.torneoDemo.dto.resource.TorneoResponse;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,7 +10,7 @@ public class SquadraModel {
     private String coloriSociali;
     private Set<GiocatoriModel> giocatori = new HashSet<>();
     private TifoseriaModel tifoseria;
-    private Set<TorneoResponse> tornei;
+    private Set<TorneoModel> tornei;
 
     public Integer getIdSquadra() {
         return idSquadra;
@@ -55,11 +53,11 @@ public class SquadraModel {
         this.tifoseria = tifoseria;
     }
 
-    public Set<TorneoResponse> getTornei() {
+    public Set<TorneoModel> getTornei() {
         return tornei;
     }
 
-    public void setTornei(Set<TorneoResponse> tornei) {
+    public void setTornei(Set<TorneoModel> tornei) {
         this.tornei = tornei;
     }
 }

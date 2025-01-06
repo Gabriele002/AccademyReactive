@@ -2,19 +2,24 @@ package it.reactive.torneoDemo.repository.dao.implement.prepareStatmenr;
 
 import it.reactive.torneoDemo.configuration.ConnesioneDb;
 import it.reactive.torneoDemo.dto.in.GiocatoreDTO;
+import it.reactive.torneoDemo.dto.resource.Trasferimenti;
 import it.reactive.torneoDemo.model.GiocatoriModel;
 import it.reactive.torneoDemo.repository.dao.DaoGiocatori;
 import it.reactive.torneoDemo.repository.mapper.MapperGiocatore;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public class GiocatoreImpl implements DaoGiocatori {
@@ -119,4 +124,20 @@ public class GiocatoreImpl implements DaoGiocatori {
             throw new SQLException(e);
         }
     }
+
+    @Override
+    public Set<Trasferimenti> trasferimenti(String nome) {
+        String url = "http://85.235.148.177:8872/transfer/" + nome;
+        RestTemplate restTemplate = new RestTemplate();
+        Set<Trasferimenti> trasferimentiSet = new HashSet<>();
+
+        Trasferimenti[] trasferimentiArray = restTemplate.getForObject(url, Trasferimenti[].class);
+
+        if (trasferimentiArray != null) {
+            Collections.addAll(trasferimentiSet, trasferimentiArray);
+        }
+
+        return trasferimentiSet;
+    }
+
 }

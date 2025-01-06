@@ -12,8 +12,13 @@ import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class SquadraImpl implements DaoSquadra {
@@ -87,7 +92,7 @@ public class SquadraImpl implements DaoSquadra {
             throw new RuntimeException(e);
         }
 
-        String deleteSquadraQuery = "delete from" + dbCostanti.SQUADRA_TABLE + "where" + dbCostanti.SQUADRA_ID_COL + "= ?";
+        String deleteSquadraQuery = "delete from " + dbCostanti.SQUADRA_TABLE + " where " + dbCostanti.SQUADRA_ID_COL + " = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(deleteSquadraQuery);
             preparedStatement.setInt(1, id);
@@ -101,7 +106,7 @@ public class SquadraImpl implements DaoSquadra {
 
     @Override
     public Optional<SquadraModel> findById(int id) {
-        String query = "select s.*,t.*, t.id as id_tifoseria from squadra s join tifoseria t on s.id = t.id_squadra where s.id = ?";
+        String query = "select s.* from squadra s where s.id = ?";
         Connection connection = cn.init();
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, id);
@@ -126,7 +131,7 @@ public class SquadraImpl implements DaoSquadra {
         PreparedStatement pr = connection.prepareStatement(querySquadreTifoseria);
         ResultSet rs = pr.executeQuery();
         while (rs.next()) {
-            SquadraModel squadraModel = MapperSquadra.rsToModel(rs);
+            SquadraModel squadraModel = MapperSquadra.rsToModelWithTifoseria(rs);
             if (listaGiocatori) {
                 String queryGiocatori = "select g.nome_cognome, g.id, g.numero_ammonizioni from giocatore g where g.id_squadra = ?";
                 PreparedStatement ps = connection.prepareStatement(queryGiocatori);
@@ -151,7 +156,7 @@ public class SquadraImpl implements DaoSquadra {
             ps.setString(1, nome);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                SquadraModel squadraModel = MapperSquadra.rsToModel(rs);
+                SquadraModel squadraModel = MapperSquadra.rsToModelWithTifoseria(rs);
                 return Optional.of(squadraModel);
             } else {
                 return Optional.empty();
@@ -160,5 +165,6 @@ public class SquadraImpl implements DaoSquadra {
             throw new RuntimeException(e);
         }
     }
+
 
 }
