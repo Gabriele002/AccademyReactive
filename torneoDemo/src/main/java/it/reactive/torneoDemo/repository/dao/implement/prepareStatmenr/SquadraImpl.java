@@ -159,7 +159,7 @@ public class SquadraImpl implements DaoSquadra {
             ps.setString(1, nome);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                SquadraModel squadraModel = MapperSquadra.rsToModelWithTifoseria(rs);
+                SquadraModel squadraModel = MapperSquadra.rsToModel(rs);
                 return Optional.of(squadraModel);
             } else {
                 return Optional.empty();

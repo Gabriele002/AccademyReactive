@@ -1,4 +1,4 @@
-package it.reactive.torneoDemo.repository.dao.implement.Statment;
+package it.reactive.torneoDemo.repository.dao.implement.statment;
 
 import it.reactive.torneoDemo.configuration.ConnesioneDb;
 import it.reactive.torneoDemo.dto.in.SquadraDTO;
@@ -150,7 +150,7 @@ public class SquadraStat implements DaoSquadra {
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                SquadraModel squadraModel = MapperSquadra.rsToModelWithTifoseria(rs);
+                SquadraModel squadraModel = MapperSquadra.rsToModel(rs);
                 return Optional.of(squadraModel);
             } else {
                 return Optional.empty();

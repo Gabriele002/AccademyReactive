@@ -1,9 +1,16 @@
 package it.reactive.torneoDemo.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+@Entity
 public class GiocatoriModel {
+    @Id
     private Integer idGiocatore;
     private String nomeCognome;
     private Integer numeroAmmonizioni;
+    @ManyToOne
     private SquadraModel squadra;
 
     public Integer getIdGiocatore() {

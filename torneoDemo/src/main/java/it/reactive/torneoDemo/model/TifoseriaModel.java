@@ -1,11 +1,16 @@
 package it.reactive.torneoDemo.model;
 
-import it.reactive.torneoDemo.dto.resource.SquadraResponse;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
+@Entity
 public class TifoseriaModel {
 
+    @Id
     private Integer idTifoseria;
     private String nomeTifoseria;
+    @ManyToOne
     private SquadraModel squadra;
 
     public Integer getIdTifoseria() {

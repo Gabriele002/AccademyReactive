@@ -1,16 +1,27 @@
 package it.reactive.torneoDemo.model;
 
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@Entity
 public class SquadraModel {
 
+    @Id
     private Integer idSquadra;
+
     private String nome;
     private String coloriSociali;
+
+    @OneToMany(mappedBy = "squadra")
     private Set<GiocatoriModel> giocatori = new HashSet<>();
+
+    @OneToOne(mappedBy = "squadra")
     private TifoseriaModel tifoseria;
-    private Set<TorneoModel> tornei;
+
+
+    @ManyToMany(mappedBy = "squadre")
+    private Set<TorneoModel> tornei = new HashSet<>();
 
     public Integer getIdSquadra() {
         return idSquadra;

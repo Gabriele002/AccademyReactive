@@ -5,7 +5,6 @@ import it.reactive.torneoDemo.dto.resource.Trasferimenti;
 import it.reactive.torneoDemo.model.GiocatoriModel;
 
 import java.sql.SQLException;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 

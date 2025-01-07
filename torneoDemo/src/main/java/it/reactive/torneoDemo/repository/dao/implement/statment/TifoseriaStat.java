@@ -1,4 +1,4 @@
-package it.reactive.torneoDemo.repository.dao.implement.Statment;
+package it.reactive.torneoDemo.repository.dao.implement.statment;
 
 import it.reactive.torneoDemo.configuration.ConnesioneDb;
 import it.reactive.torneoDemo.dto.in.TifoseriaDTO;

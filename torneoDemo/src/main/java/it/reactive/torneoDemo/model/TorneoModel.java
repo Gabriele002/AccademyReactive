@@ -1,12 +1,18 @@
 package it.reactive.torneoDemo.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import java.util.HashSet;
 import java.util.Set;
 
+@Entity
 public class TorneoModel {
 
+    @Id
     private Integer idTorneo;
     private String nomeTorneo;
+    @ManyToMany
     private Set<SquadraModel> squadre = new HashSet<>();
 
     public Integer getIdTorneo() {

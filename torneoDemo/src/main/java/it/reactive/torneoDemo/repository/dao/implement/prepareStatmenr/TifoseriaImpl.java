@@ -28,9 +28,9 @@ public class TifoseriaImpl implements DaoTifoseria {
     public TifoseriaModel create(TifoseriaDTO tifoseriaDTO, int id) throws SQLException {
         Connection co = cn.init();
         TifoseriaModel tifoseriaModel = new TifoseriaModel();
-        String createGiocatore = "insert into tifoseria (nome_tifoseria,id_squadra) values (?, ?)";
+        String createTifoseria = "insert into tifoseria (nome_tifoseria,id_squadra) values (?, ?)";
         try {
-            PreparedStatement ps = co.prepareStatement(createGiocatore, PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = co.prepareStatement(createTifoseria, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setString(1, Utility.formattaStringaPerDb(tifoseriaDTO.getNomeTifoseria()));
             ps.setInt(2, id);
             ps.executeUpdate();
@@ -89,8 +89,6 @@ public class TifoseriaImpl implements DaoTifoseria {
         } catch (SQLException e) {
             connection.rollback();
             throw new SQLException(e);
-        } finally {
-            connection.setAutoCommit(true);
         }
     }
 
