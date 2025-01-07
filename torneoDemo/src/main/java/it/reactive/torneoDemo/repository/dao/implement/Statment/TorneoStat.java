@@ -1,4 +1,4 @@
-package it.reactive.torneoDemo.repository.dao.implement.prepareStatmenr;
+package it.reactive.torneoDemo.repository.dao.implement.Statment;
 
 import it.reactive.torneoDemo.configuration.ConnesioneDb;
 import it.reactive.torneoDemo.dto.in.TorneoDTO;
@@ -20,8 +20,8 @@ import java.sql.SQLException;
 import java.util.*;
 
 @Repository
-@Profile(DbProfile.TORNEO_DAO_JDBC_PREPAREDSTATEMENT)
-public class TorneoImpl implements DaoTorneo {
+@Profile(DbProfile.TORNEO_DAO_JDBC_STATEMENT)
+public class TorneoStat implements DaoTorneo {
 
     @Autowired
     DbCostanti db;
@@ -32,11 +32,13 @@ public class TorneoImpl implements DaoTorneo {
 
     @Override
     public TorneoModel create(TorneoDTO torneoDTO) throws SQLException {
-        String querryTorneo = "insert into " + db.TORNEO_TABLE + " (" + db.TORNEO_NOME_TORNEO_COL + ") " + "values(?)";
+        // Concatenazione della query SQL
+        String querryTorneo = "insert into " + db.TORNEO_TABLE + " (" + db.TORNEO_NOME_TORNEO_COL + ") values('"
+                + torneoDTO.getNomeTorneo() + "')";
+
         Connection cn = connesioneDb.init();
         try {
             PreparedStatement pr = cn.prepareStatement(querryTorneo, PreparedStatement.RETURN_GENERATED_KEYS);
-            pr.setString(1, torneoDTO.getNomeTorneo());
             TorneoModel torneoModel = new TorneoModel();
             pr.executeUpdate();
             ResultSet generatedKeys = pr.getGeneratedKeys();
@@ -53,17 +55,16 @@ public class TorneoImpl implements DaoTorneo {
         }
     }
 
-
     @Override
     public void delete(int id) throws SQLException {
-        String querryDeleteSquadraTorneo = "delete from squadra_torneo where id_torneo = ?";
-        String querryDelete = "delete from torneo where id= ?";
+        // Concatenazione delle query SQL
+        String querryDeleteSquadraTorneo = "delete from squadra_torneo where id_torneo = " + id;
+        String querryDelete = "delete from torneo where id = " + id;
+
         Connection con = connesioneDb.init();
         try {
             PreparedStatement pr = con.prepareStatement(querryDelete);
             PreparedStatement prSt = con.prepareStatement(querryDeleteSquadraTorneo);
-            prSt.setInt(1, id);
-            pr.setInt(1, id);
             prSt.executeUpdate();
             pr.executeUpdate();
             con.commit();
@@ -71,12 +72,17 @@ public class TorneoImpl implements DaoTorneo {
             con.rollback();
             throw new RuntimeException(e);
         }
-
     }
 
     @Override
     public TorneoModel findByIdWithSquadra(int id) throws SQLException {
-        String querryFind = "select t.*, s.id as squadra_id, s.nome as nome_squadra, s.colori_sociali from torneo t join squadra_torneo st on t.id = st.id_torneo join squadra s on st.id_squadra = s.id where t.id = ?";
+        // Concatenazione della query SQL
+        String querryFind = "select t.*, s.id as squadra_id, s.nome as nome_squadra, s.colori_sociali " +
+                "from torneo t " +
+                "join squadra_torneo st on t.id = st.id_torneo " +
+                "join squadra s on st.id_squadra = s.id " +
+                "where t.id = " + id;
+
         Connection con = connesioneDb.init();
         try (PreparedStatement ps = con.prepareStatement(querryFind)) {
             ps.setInt(1, id);
@@ -94,32 +100,31 @@ public class TorneoImpl implements DaoTorneo {
 
     @Override
     public Optional<TorneoModel> findById(int id) {
-        String querryFind = "select t.* from torneo t where t.id = ?";
+        // Concatenazione della query SQL
+        String querryFind = "select t.* from torneo t where t.id = " + id;
+
         Connection con = connesioneDb.init();
         try (PreparedStatement ps = con.prepareStatement(querryFind)) {
-            ps.setInt(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    TorneoModel torneoModel = MapperTorneo.rsToModel(rs);
-                    return Optional.of(torneoModel);
-                } else {
-                    return Optional.empty();
-                }
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                TorneoModel torneoModel = MapperTorneo.rsToModel(rs);
+                return Optional.of(torneoModel);
+            } else {
+                return Optional.empty();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-
     @Override
     public void aggiungoSquadraAlTorneo(int idSquadra, int idTorneo) throws SQLException {
-        String querryInsert = "insert into squadra_torneo (id_squadra , id_torneo) values (?, ?)";
+        // Concatenazione della query SQL
+        String querryInsert = "insert into squadra_torneo (id_squadra , id_torneo) values(" + idSquadra + ", " + idTorneo + ")";
+
         Connection cn = connesioneDb.init();
         try {
             PreparedStatement pr = cn.prepareStatement(querryInsert);
-            pr.setInt(1, idSquadra);
-            pr.setInt(2, idTorneo);
             pr.executeUpdate();
             cn.commit();
         } catch (SQLException e) {
@@ -130,6 +135,7 @@ public class TorneoImpl implements DaoTorneo {
 
     @Override
     public List<TorneoModel> getAllTorneo() throws SQLException {
+        // Concatenazione della query SQL
         String querryFind = "select t.*, s.id as id_squadra, s.nome, s.colori_sociali, tf.nome_tifoseria, tf.id as id_tifoseria " +
                 "from torneo t " +
                 "left join squadra_torneo st on t.id = st.id_torneo " +
@@ -156,18 +162,18 @@ public class TorneoImpl implements DaoTorneo {
         return new ArrayList<>(torneoMap.values());
     }
 
-
     @Override
     public List<Integer> readTorniSquadra(int idTorneo) {
+        // Concatenazione della query SQL
         String querry = "SELECT s.id " +
                 "FROM squadra s " +
                 "JOIN squadra_torneo st ON s.id = st.id_squadra " +
                 "JOIN torneo t ON t.id = st.id_torneo " +
-                "WHERE t.id = ?";
+                "WHERE t.id = " + idTorneo;
+
         Connection con = connesioneDb.init();
         try {
             PreparedStatement pr = con.prepareStatement(querry);
-            pr.setInt(1, idTorneo);
             ResultSet rs = pr.executeQuery();
 
             List<Integer> squadreList = new ArrayList<>();
@@ -179,6 +185,4 @@ public class TorneoImpl implements DaoTorneo {
             throw new RuntimeException(e);
         }
     }
-
-
 }

@@ -106,7 +106,7 @@ public class TorneoService {
         TorneoModel torneoModel = daoTorneo.findById(idTorneo)
                 .orElseThrow(() -> new TorneoNonTrovatoException(CodiceErrori.ERRORE_TORNERONONTROVATO));
 
-        List<Integer> idSquadre = daoTorneo.readTorneriSquadra(idTorneo);
+        List<Integer> idSquadre = daoTorneo.readTorniSquadra(idTorneo);
 
         if (idSquadre.isEmpty()){
             daoTorneo.delete(idTorneo);

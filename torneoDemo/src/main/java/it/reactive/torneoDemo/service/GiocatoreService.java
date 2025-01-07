@@ -1,6 +1,5 @@
 package it.reactive.torneoDemo.service;
 
-import it.reactive.torneoDemo.dto.in.GiocatoreDTO;
 import it.reactive.torneoDemo.dto.resource.GiocatoreResponse;
 import it.reactive.torneoDemo.dto.resource.Trasferimenti;
 import it.reactive.torneoDemo.model.GiocatoriModel;

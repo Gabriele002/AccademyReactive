@@ -12,8 +12,6 @@ public interface DaoTorneo {
 
     Optional<TorneoModel> findById(int id);
 
-    TorneoModel update(int id, TorneoDTO torneoDTO);
-
     void delete(int id) throws SQLException;
 
     TorneoModel findByIdWithSquadra(int id) throws SQLException;
@@ -22,5 +20,5 @@ public interface DaoTorneo {
 
     List<TorneoModel> getAllTorneo() throws SQLException;
 
-    List<Integer> readTorneriSquadra(int idTorneo);
+    List<Integer> readTorniSquadra(int idTorneo);
 }

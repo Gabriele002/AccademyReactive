@@ -17,15 +17,14 @@ public class MapperTorneo {
         torneoModel.setNomeTorneo(rs.getString("nome_torneo"));
         torneoModel.setIdTorneo(rs.getInt("id"));
         Set<SquadraModel> squadraModelSet = new HashSet<>();
-        do {
+        while (rs.next()){
             SquadraModel squadraModel = new SquadraModel();
             squadraModel.setIdSquadra(rs.getInt("squadra_id"));
             squadraModel.setNome(rs.getString("nome_squadra"));
             squadraModel.setColoriSociali(rs.getString("colori_sociali"));
             squadraModelSet.add(squadraModel);
-        } while (rs.next());
+        };
         torneoModel.setSquadre(squadraModelSet);
-
         return torneoModel;
     }
 

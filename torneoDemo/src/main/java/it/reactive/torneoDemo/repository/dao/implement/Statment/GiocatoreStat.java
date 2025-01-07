@@ -1,4 +1,4 @@
-package it.reactive.torneoDemo.repository.dao.implement.prepareStatmenr;
+package it.reactive.torneoDemo.repository.dao.implement.Statment;
 
 import it.reactive.torneoDemo.configuration.ConnesioneDb;
 import it.reactive.torneoDemo.dto.in.GiocatoreDTO;
@@ -13,20 +13,15 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-
-
 @Repository
-@Profile(DbProfile.TORNEO_DAO_JDBC_PREPAREDSTATEMENT)
-public class GiocatoreImpl implements DaoGiocatori {
+@Profile(DbProfile.TORNEO_DAO_JDBC_STATEMENT)
+public class GiocatoreStat implements DaoGiocatori {
 
     @Autowired
     ConnesioneDb cn;
@@ -35,12 +30,13 @@ public class GiocatoreImpl implements DaoGiocatori {
     public GiocatoriModel create(GiocatoreDTO giocatoreDTO, int id) throws SQLException {
         Connection co = cn.init();
         GiocatoriModel giocatoriModel = new GiocatoriModel();
-        String createGiocatore = "insert into giocatore (nome_cognome,id_squadra) values (?, ?)";
+
+        String createGiocatore = "insert into giocatore (nome_cognome,id_squadra) values ('"
+                + Utility.formattaStringaPerDb(giocatoreDTO.getNomeCognome())
+                + "', " + id + ")";
+
         try {
             PreparedStatement ps = co.prepareStatement(createGiocatore, PreparedStatement.RETURN_GENERATED_KEYS);
-            ps.setString(1, Utility.formattaStringaPerDb(giocatoreDTO.getNomeCognome()));
-            ps.setInt(2, id);
-
             ps.executeUpdate();
 
             ResultSet generatedKeys = ps.getGeneratedKeys();
@@ -62,11 +58,10 @@ public class GiocatoreImpl implements DaoGiocatori {
     public HashSet<GiocatoriModel> readGiocatoriWithIdSquadra(int id) {
         HashSet<GiocatoriModel> giocatori = new HashSet<>();
         GiocatoriModel giocatore;
-        String query = "select g.*, s.nome from giocatore g join squadra s on g.id_squadra = s.id where g.id_squadra =?";
+        String query = "select g.*, s.nome from giocatore g join squadra s on g.id_squadra = s.id where g.id_squadra = " + id;
         PreparedStatement ps = null;
         try {
             ps = cn.init().prepareStatement(query);
-            ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 giocatore = MapperGiocatore.rsToModel(rs);
@@ -80,10 +75,9 @@ public class GiocatoreImpl implements DaoGiocatori {
 
     @Override
     public Optional<GiocatoriModel> readForName(String nome) {
-        String query = "select * from giocatore where nome_cognome = ?";
+        String query = "select * from giocatore where nome_cognome = '" + nome + "'";
         Connection connection = cn.init();
         try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setString(1, nome);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 GiocatoriModel giocatoriModel = MapperGiocatore.rsToModel(rs);
@@ -98,10 +92,9 @@ public class GiocatoreImpl implements DaoGiocatori {
 
     @Override
     public Optional<GiocatoriModel> readForId(int id) {
-        String query = "select * from giocatore where id = ?";
+        String query = "select * from giocatore where id = " + id;
         Connection connection = cn.init();
         try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 GiocatoriModel giocatoriModel = MapperGiocatore.rsToModel(rs);
@@ -116,11 +109,11 @@ public class GiocatoreImpl implements DaoGiocatori {
 
     @Override
     public void incrementaAmmonizioni(int idGiocatore) throws SQLException {
+        String query = "update giocatore set numero_ammonizioni = numero_ammonizioni + 1 where id = " + idGiocatore;
+
         Connection connection = cn.init();
-        String query = "update giocatore set numero_ammonizioni = numero_ammonizioni + 1 where id = ?";
-        try{
+        try {
             PreparedStatement pr = connection.prepareStatement(query);
-            pr.setInt(1, idGiocatore);
             pr.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
@@ -132,6 +125,7 @@ public class GiocatoreImpl implements DaoGiocatori {
     @Override
     public Set<Trasferimenti> trasferimenti(String nome) {
         String url = "http://85.235.148.177:8872/transfer/" + nome;
+
         RestTemplate restTemplate = new RestTemplate();
         Set<Trasferimenti> trasferimentiSet = new HashSet<>();
 
