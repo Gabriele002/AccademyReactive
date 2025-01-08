@@ -32,9 +32,6 @@ public class SquadraJdbc implements DaoSquadra {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    private DbCostanti dbCostanti;
-
     @Override
     public SquadraModel create(SquadraDTO squadraDTO) throws SQLException {
         String query = "insert into squadra (nome , colori_sociali) values(?, ?)";

@@ -40,8 +40,10 @@ public class SquadraService {
 
     public SquadraResponse createSquadra(SquadraDTO squadraDTO) throws Exception {
         String nomeSquadra = Utility.formattaStringaPerDb(squadraDTO.getNome());
-        SquadraModel squadraModel = daoSquadra.readForName(nomeSquadra)
-                .orElseThrow(() -> new SquadraDuplicataException(CodiceErrori.ERRORE_SQUADRADUPLICATA));
+        Optional<SquadraModel> squadraModelOptional= daoSquadra.readForName(nomeSquadra);
+        if (squadraModelOptional.isPresent()){
+            throw new SquadraDuplicataException(CodiceErrori.ERRORE_SQUADRADUPLICATA);
+        }
         SquadraModel createSquadra = daoSquadra.create(squadraDTO);
         return MapperSquadra.modelToResponse(createSquadra);
     }

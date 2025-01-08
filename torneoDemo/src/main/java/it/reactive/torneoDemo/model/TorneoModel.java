@@ -1,18 +1,21 @@
 package it.reactive.torneoDemo.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
+@Entity(name = "torneo")
 public class TorneoModel {
 
     @Id
     private Integer idTorneo;
     private String nomeTorneo;
     @ManyToMany
+    @JoinTable(
+            name = "squadra_torneo",
+            joinColumns = @JoinColumn(name = "id_squadra"),
+            inverseJoinColumns = @JoinColumn(name = "id_torneo")
+    )
     private Set<SquadraModel> squadre = new HashSet<>();
 
     public Integer getIdTorneo() {

@@ -1,16 +1,16 @@
 package it.reactive.torneoDemo.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
-@Entity
+@Entity(name = "tifoseria")
 public class TifoseriaModel {
 
     @Id
+    @Column(name = "id")
     private Integer idTifoseria;
     private String nomeTifoseria;
     @ManyToOne
+    @JoinColumn(name = "id_squadra")
     private SquadraModel squadra;
 
     public Integer getIdTifoseria() {

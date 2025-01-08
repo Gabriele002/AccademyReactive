@@ -1,16 +1,17 @@
 package it.reactive.torneoDemo.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.util.Objects;
 
-@Entity
+@Entity(name = "giocatore")
 public class GiocatoriModel {
     @Id
+    @Column(name = "id")
     private Integer idGiocatore;
     private String nomeCognome;
     private Integer numeroAmmonizioni;
     @ManyToOne
+    @JoinColumn(name = "id_squadra")
     private SquadraModel squadra;
 
     public Integer getIdGiocatore() {
@@ -53,5 +54,18 @@ public class GiocatoriModel {
                 ", numeroAmmonizioni=" + numeroAmmonizioni +
                 ", squadra=" + squadra +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GiocatoriModel that = (GiocatoriModel) o;
+        return Objects.equals(idGiocatore, that.idGiocatore) && Objects.equals(nomeCognome, that.nomeCognome) && Objects.equals(numeroAmmonizioni, that.numeroAmmonizioni) && Objects.equals(squadra, that.squadra);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idGiocatore, nomeCognome, numeroAmmonizioni, squadra);
     }
 }

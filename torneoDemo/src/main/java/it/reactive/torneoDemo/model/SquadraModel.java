@@ -2,12 +2,15 @@ package it.reactive.torneoDemo.model;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-@Entity
+@Entity(name = "squadra")
 public class SquadraModel {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer idSquadra;
 
     private String nome;
@@ -70,5 +73,19 @@ public class SquadraModel {
 
     public void setTornei(Set<TorneoModel> tornei) {
         this.tornei = tornei;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SquadraModel that = (SquadraModel) o;
+        return Objects.equals(idSquadra, that.idSquadra) && Objects.equals(nome, that.nome) && Objects.equals(coloriSociali, that.coloriSociali);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idSquadra, nome, coloriSociali, giocatori, tifoseria, tornei);
     }
 }

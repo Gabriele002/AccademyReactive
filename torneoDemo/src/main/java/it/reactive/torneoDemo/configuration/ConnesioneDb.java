@@ -12,7 +12,7 @@ import java.sql.SQLException;
 @Configuration
 public class ConnesioneDb {
 
-    @Value("${profilo}")
+    @Value("${user}")
     private String user;
 
     @Value("${psw}")
@@ -34,5 +34,4 @@ public class ConnesioneDb {
         }
         return con;
     }
-
 }
