@@ -22,6 +22,7 @@ import it.reactive.torneoDemo.repository.mapper.MapperTifoseria;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -38,6 +39,10 @@ public class SquadraService {
     @Autowired
     DaoTifoseria daoTifoseria;
 
+    @Autowired
+    TrasferimentiService trasferimentiService;
+
+    @Transactional
     public SquadraResponse createSquadra(SquadraDTO squadraDTO) throws Exception {
         String nomeSquadra = Utility.formattaStringaPerDb(squadraDTO.getNome());
         Optional<SquadraModel> squadraModelOptional= daoSquadra.readForName(nomeSquadra);
@@ -46,6 +51,7 @@ public class SquadraService {
         }
         SquadraModel createSquadra = daoSquadra.create(squadraDTO);
         return MapperSquadra.modelToResponse(createSquadra);
+
     }
 
     public void deleteSquadra(int id) throws SQLException {
@@ -67,7 +73,7 @@ public class SquadraService {
             }else {
                 squadraResponse.getGiocatori().forEach(g -> {
                     String nome = g.getNomeCognome();
-                    Set<Trasferimenti> trasferimenti = daoGiocatori.trasferimenti(nome);
+                    Set<Trasferimenti> trasferimenti = trasferimentiService.trasferimenti(nome);
                     g.setTrasferimenti(trasferimenti);
                 });
             }
@@ -76,6 +82,7 @@ public class SquadraService {
         return squadraResponses;
     }
 
+    @Transactional
     public SquadraResponse aggiungiGiocatore(GiocatoreDTO giocatoreDTO, int id) throws SQLException {
         Optional<SquadraModel> squadraModel = daoSquadra.findById(id);
         GiocatoriModel giocatoriModel;
@@ -94,6 +101,7 @@ public class SquadraService {
         return MapperSquadra.modelToResponse(squadraModel.get());
     }
 
+    @Transactional
     public SquadraResponse aggiungiTifoseria(TifoseriaDTO tifoseriaDTO, int id) throws Exception {
         Optional<SquadraModel> squadraModel = daoSquadra.findById(id);
         if (squadraModel.isPresent()) {
@@ -117,17 +125,23 @@ public class SquadraService {
     }
 
 
+    @Transactional
     public SquadraResponse aggiungoSquadraGiocatori(SquadreDiGiocatoriDTO squadreDiGiocatoriDTO) throws SQLException {
         SquadraDTO squadraDTO = new SquadraDTO();
-        squadraDTO.setNome(squadreDiGiocatoriDTO.getNome());
+        squadraDTO.setNome(Utility.formattaStringaPerDb(squadreDiGiocatoriDTO.getNome()));
         squadraDTO.setColoriSociali(squadreDiGiocatoriDTO.getColoriSociali());
-        SquadraModel squadraModel = daoSquadra.create(squadraDTO);
-        HashSet<GiocatoriModel> giocatoriModels = new HashSet<>();
-        for (GiocatoreDTO giocatoreDTO : squadreDiGiocatoriDTO.getListaGiocatori()) {
-            GiocatoriModel giocatoriModel = daoGiocatori.create(giocatoreDTO, squadraModel.getIdSquadra());
-            giocatoriModels.add(giocatoriModel);
+        Optional<SquadraModel> squadraModelOptional = daoSquadra.readForName(squadraDTO.getNome());
+        if (squadraModelOptional.isPresent()){
+            throw new SquadraDuplicataException(CodiceErrori.ERRORE_SQUADRADUPLICATA);
+        }else {
+            SquadraModel squadraModel = daoSquadra.create(squadraDTO);
+            Set<GiocatoriModel> giocatoriModels = new HashSet<>();
+            for (GiocatoreDTO giocatoreDTO : squadreDiGiocatoriDTO.getListaGiocatori()) {
+                GiocatoriModel giocatoriModel = daoGiocatori.create(giocatoreDTO, squadraModel.getIdSquadra());
+                giocatoriModels.add(giocatoriModel);
+            }
+            return MapperSquadra.sgToResponse(squadraModel, giocatoriModels);
         }
-        return MapperSquadra.sgToResponse(squadraModel, giocatoriModels);
     }
 
 }

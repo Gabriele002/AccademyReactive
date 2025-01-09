@@ -36,4 +36,5 @@ public class TifoseriaModel {
     public void setSquadra(SquadraModel squadra) {
         this.squadra = squadra;
     }
+
 }

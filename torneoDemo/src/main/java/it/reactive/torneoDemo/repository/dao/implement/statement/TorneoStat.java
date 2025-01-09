@@ -1,4 +1,4 @@
-package it.reactive.torneoDemo.repository.dao.implement.statment;
+package it.reactive.torneoDemo.repository.dao.implement.statement;
 
 import it.reactive.torneoDemo.configuration.ConnesioneDb;
 import it.reactive.torneoDemo.dto.in.TorneoDTO;
@@ -8,10 +8,11 @@ import it.reactive.torneoDemo.repository.dao.DaoTorneo;
 import it.reactive.torneoDemo.repository.mapper.MapperSquadra;
 import it.reactive.torneoDemo.repository.mapper.MapperTorneo;
 import it.reactive.torneoDemo.utility.DbCostanti;
-import it.reactive.torneoDemo.utility.DbProfile;
+import it.reactive.torneoDemo.utility.DaoProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,20 +21,18 @@ import java.sql.SQLException;
 import java.util.*;
 
 @Repository
-@Profile(DbProfile.TORNEO_DAO_JDBC_STATEMENT)
+@Profile(DaoProfile.TORNEO_DAO_JDBC_STATEMENT)
 public class TorneoStat implements DaoTorneo {
-
-    @Autowired
-    DbCostanti db;
 
     @Autowired
     ConnesioneDb connesioneDb;
 
+    @Autowired
+    PlatformTransactionManager transactionManager;
 
     @Override
     public TorneoModel create(TorneoDTO torneoDTO) throws SQLException {
-        // Concatenazione della query SQL
-        String querryTorneo = "insert into " + db.TORNEO_TABLE + " (" + db.TORNEO_NOME_TORNEO_COL + ") values('"
+        String querryTorneo = "insert into torneo (nome_torneo) values('"
                 + torneoDTO.getNomeTorneo() + "')";
 
         Connection cn = connesioneDb.init();
@@ -57,7 +56,6 @@ public class TorneoStat implements DaoTorneo {
 
     @Override
     public void delete(int id) throws SQLException {
-        // Concatenazione delle query SQL
         String querryDeleteSquadraTorneo = "delete from squadra_torneo where id_torneo = " + id;
         String querryDelete = "delete from torneo where id = " + id;
 
@@ -76,7 +74,6 @@ public class TorneoStat implements DaoTorneo {
 
     @Override
     public TorneoModel findByIdWithSquadra(int id) throws SQLException {
-        // Concatenazione della query SQL
         String querryFind = "select t.*, s.id as squadra_id, s.nome as nome_squadra, s.colori_sociali " +
                 "from torneo t " +
                 "join squadra_torneo st on t.id = st.id_torneo " +
@@ -100,7 +97,6 @@ public class TorneoStat implements DaoTorneo {
 
     @Override
     public Optional<TorneoModel> findById(int id) {
-        // Concatenazione della query SQL
         String querryFind = "select t.* from torneo t where t.id = " + id;
 
         Connection con = connesioneDb.init();
@@ -119,7 +115,6 @@ public class TorneoStat implements DaoTorneo {
 
     @Override
     public void aggiungoSquadraAlTorneo(int idSquadra, int idTorneo) throws SQLException {
-        // Concatenazione della query SQL
         String querryInsert = "insert into squadra_torneo (id_squadra , id_torneo) values(" + idSquadra + ", " + idTorneo + ")";
 
         Connection cn = connesioneDb.init();
@@ -135,7 +130,6 @@ public class TorneoStat implements DaoTorneo {
 
     @Override
     public List<TorneoModel> getAllTorneo() throws SQLException {
-        // Concatenazione della query SQL
         String querryFind = "select t.*, s.id as id_squadra, s.nome, s.colori_sociali, tf.nome_tifoseria, tf.id as id_tifoseria " +
                 "from torneo t " +
                 "left join squadra_torneo st on t.id = st.id_torneo " +
@@ -164,7 +158,6 @@ public class TorneoStat implements DaoTorneo {
 
     @Override
     public List<Integer> readTorniSquadra(int idTorneo) {
-        // Concatenazione della query SQL
         String querry = "SELECT s.id " +
                 "FROM squadra s " +
                 "JOIN squadra_torneo st ON s.id = st.id_squadra " +

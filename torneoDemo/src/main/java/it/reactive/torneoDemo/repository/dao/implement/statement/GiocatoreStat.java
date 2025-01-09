@@ -1,30 +1,31 @@
-package it.reactive.torneoDemo.repository.dao.implement.statment;
+package it.reactive.torneoDemo.repository.dao.implement.statement;
 
 import it.reactive.torneoDemo.configuration.ConnesioneDb;
 import it.reactive.torneoDemo.dto.in.GiocatoreDTO;
-import it.reactive.torneoDemo.dto.resource.Trasferimenti;
 import it.reactive.torneoDemo.model.GiocatoriModel;
 import it.reactive.torneoDemo.repository.dao.DaoGiocatori;
 import it.reactive.torneoDemo.repository.mapper.MapperGiocatore;
-import it.reactive.torneoDemo.utility.DbProfile;
+import it.reactive.torneoDemo.utility.DaoProfile;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import java.sql.*;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 @Repository
-@Profile(DbProfile.TORNEO_DAO_JDBC_STATEMENT)
+@Profile(DaoProfile.TORNEO_DAO_JDBC_STATEMENT)
 public class GiocatoreStat implements DaoGiocatori {
 
     @Autowired
     ConnesioneDb cn;
+
+    @Autowired
+    PlatformTransactionManager transactionManager;
+
 
     @Override
     public GiocatoriModel create(GiocatoreDTO giocatoreDTO, int id) throws SQLException {
@@ -122,20 +123,6 @@ public class GiocatoreStat implements DaoGiocatori {
         }
     }
 
-    @Override
-    public Set<Trasferimenti> trasferimenti(String nome) {
-        String url = "http://85.235.148.177:8872/transfer/" + nome;
 
-        RestTemplate restTemplate = new RestTemplate();
-        Set<Trasferimenti> trasferimentiSet = new HashSet<>();
-
-        Trasferimenti[] trasferimentiArray = restTemplate.getForObject(url, Trasferimenti[].class);
-
-        if (trasferimentiArray != null) {
-            Collections.addAll(trasferimentiSet, trasferimentiArray);
-        }
-
-        return trasferimentiSet;
-    }
 
 }

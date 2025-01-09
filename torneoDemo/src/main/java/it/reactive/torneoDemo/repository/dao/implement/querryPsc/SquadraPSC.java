@@ -6,8 +6,7 @@ import it.reactive.torneoDemo.model.SquadraModel;
 import it.reactive.torneoDemo.repository.dao.DaoSquadra;
 import it.reactive.torneoDemo.repository.mapper.MapperGiocatore;
 import it.reactive.torneoDemo.repository.mapper.MapperSquadra;
-import it.reactive.torneoDemo.utility.DbCostanti;
-import it.reactive.torneoDemo.utility.DbProfile;
+import it.reactive.torneoDemo.utility.DaoProfile;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -17,20 +16,19 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Profile(DbProfile.TORNEO_DAO_SPRING_JDBC_QUERY_PSC)
-public class SquadraJdbc implements DaoSquadra {
+@Profile(DaoProfile.TORNEO_DAO_SPRING_JDBC_QUERY_PSC)
+public class SquadraPSC implements DaoSquadra {
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    JdbcTemplate jdbcTemplate;
 
     @Override
     public SquadraModel create(SquadraDTO squadraDTO) throws SQLException {
@@ -38,15 +36,16 @@ public class SquadraJdbc implements DaoSquadra {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
+
             PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, Utility.formattaStringaPerDb(squadraDTO.getNome()));
             ps.setString(2, Utility.formattaStringaPerDb(squadraDTO.getColoriSociali()));
             return ps;
         }, keyHolder);
 
-        int generatedId = keyHolder.getKey().intValue();
+        int generateId = (int) keyHolder.getKeys().get("id");
         SquadraModel squadra = new SquadraModel();
-        squadra.setIdSquadra(generatedId);
+        squadra.setIdSquadra(generateId);
         squadra.setColoriSociali(squadraDTO.getColoriSociali());
         squadra.setNome(squadraDTO.getNome());
 
@@ -54,6 +53,7 @@ public class SquadraJdbc implements DaoSquadra {
     }
 
     @Override
+    @Transactional
     public void delete(int id) throws SQLException {
         String deleteTifoseriaQuery = "delete from tifoseria where id_squadra = ?";
         jdbcTemplate.update(deleteTifoseriaQuery, id);
@@ -64,7 +64,7 @@ public class SquadraJdbc implements DaoSquadra {
         String deleteSquadraTorneoQuery = "delete from squadra_torneo where id_squadra = ?";
         jdbcTemplate.update(deleteSquadraTorneoQuery, id);
 
-        String deleteSquadraQuery = "delete from squadra where squadra_id = ?";
+        String deleteSquadraQuery = "delete from squadra where id = ?";
         jdbcTemplate.update(deleteSquadraQuery, id);
     }
 

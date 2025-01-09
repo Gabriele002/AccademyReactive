@@ -18,12 +18,15 @@ public class GiocatoreService {
     @Autowired
     DaoGiocatori daoGiocatori;
 
+    @Autowired
+    TrasferimentiService trasferimentiService;
+
     public HashSet<GiocatoreResponse> giocatore(int id) throws Exception {
         HashSet<GiocatoriModel> giocatoriModels = (HashSet<GiocatoriModel>) daoGiocatori.readGiocatoriWithIdSquadra(id);
         HashSet<GiocatoreResponse> giocatoreResponseSet = new HashSet<>();
         giocatoriModels.forEach(g -> {
             String nome = g.getNomeCognome();
-            Set<Trasferimenti> trasferimentis = daoGiocatori.trasferimenti(nome);
+            Set<Trasferimenti> trasferimentis = trasferimentiService.trasferimenti(nome);
             GiocatoreResponse giocatoreResponse = MapperGiocatore.modelToResponse(g);
             giocatoreResponse.setTrasferimenti(trasferimentis);
             giocatoreResponseSet.add(giocatoreResponse);

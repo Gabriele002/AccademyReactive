@@ -4,7 +4,7 @@ import it.reactive.torneoDemo.dto.in.TifoseriaDTO;
 import it.reactive.torneoDemo.model.TifoseriaModel;
 import it.reactive.torneoDemo.repository.dao.DaoTifoseria;
 import it.reactive.torneoDemo.repository.mapper.MapperTifoseria;
-import it.reactive.torneoDemo.utility.DbProfile;
+import it.reactive.torneoDemo.utility.DaoProfile;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -21,8 +21,8 @@ import java.sql.Statement;
 import java.util.Optional;
 
 @Repository
-@Profile(DbProfile.TORNEO_DAO_SPRING_JDBC_QUERY_PSC)
-public class TifoseriaJdbc implements DaoTifoseria {
+@Profile(DaoProfile.TORNEO_DAO_SPRING_JDBC_QUERY_PSC)
+public class TifoseriaPSC implements DaoTifoseria {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -38,7 +38,7 @@ public class TifoseriaJdbc implements DaoTifoseria {
             return ps;
         }, keyHolder);
 
-        int generatedId = keyHolder.getKey().intValue();
+        Integer generatedId = (Integer) keyHolder.getKeys().get("id");
         TifoseriaModel tifoseria = new TifoseriaModel();
         tifoseria.setIdTifoseria(generatedId);
         tifoseria.setNomeTifoseria(tifoseriaDTO.getNomeTifoseria());
@@ -66,7 +66,7 @@ public class TifoseriaJdbc implements DaoTifoseria {
 
     @Override
     public TifoseriaModel update(TifoseriaDTO tifoseriaDTO, int idSquadra) throws SQLException {
-        String queryUpdate = "UPDATE tifoseria SET nome_tifoseria = ? WHERE id_squadra = ?";
+        String queryUpdate = "update tifoseria set nome_tifoseria = ? where id_squadra = ?";
         PreparedStatementCreator pscUpdate = connection -> {
             PreparedStatement ps = connection.prepareStatement(queryUpdate);
             ps.setString(1, tifoseriaDTO.getNomeTifoseria());
@@ -74,14 +74,13 @@ public class TifoseriaJdbc implements DaoTifoseria {
             return ps;
         };
 
-        String querySelect = "SELECT * FROM tifoseria WHERE id_squadra = ?";
+        String querySelect = "select * from tifoseria where id_squadra = ?";
 
         PreparedStatementCreator pscSelect = connection -> {
             PreparedStatement ps = connection.prepareStatement(querySelect);
             ps.setInt(1, idSquadra);
             return ps;
         };
-
         ResultSetExtractor<TifoseriaModel> rse = rs -> {
             if (rs.next()) {
                 return MapperTifoseria.rsToModel(rs);
@@ -89,7 +88,6 @@ public class TifoseriaJdbc implements DaoTifoseria {
             return null;
         };
         jdbcTemplate.update(pscUpdate);
-
         return jdbcTemplate.query(pscSelect, rse);
 
     }

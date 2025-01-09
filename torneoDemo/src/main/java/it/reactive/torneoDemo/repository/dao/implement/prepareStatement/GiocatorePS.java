@@ -1,58 +1,62 @@
-package it.reactive.torneoDemo.repository.dao.implement.prepareStatmenr;
+package it.reactive.torneoDemo.repository.dao.implement.prepareStatement;
 
 import it.reactive.torneoDemo.configuration.ConnesioneDb;
 import it.reactive.torneoDemo.dto.in.GiocatoreDTO;
-import it.reactive.torneoDemo.dto.resource.Trasferimenti;
 import it.reactive.torneoDemo.model.GiocatoriModel;
 import it.reactive.torneoDemo.repository.dao.DaoGiocatori;
 import it.reactive.torneoDemo.repository.mapper.MapperGiocatore;
-import it.reactive.torneoDemo.utility.DbProfile;
+import it.reactive.torneoDemo.utility.DaoProfile;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 
 
 @Repository
-@Profile(DbProfile.TORNEO_DAO_JDBC_PREPAREDSTATEMENT)
-public class GiocatoreImpl implements DaoGiocatori {
+@Profile(DaoProfile.TORNEO_DAO_JDBC_PREPAREDSTATEMENT)
+public class GiocatorePS implements DaoGiocatori {
 
     @Autowired
     ConnesioneDb cn;
 
+    @Autowired
+    PlatformTransactionManager transactionManager;
+
     @Override
     public GiocatoriModel create(GiocatoreDTO giocatoreDTO, int id) throws SQLException {
-        Connection co = cn.init();
         GiocatoriModel giocatoriModel = new GiocatoriModel();
+        ResultSet rs;
+        Connection connection;
+        PreparedStatement statement;
         String createGiocatore = "insert into giocatore (nome_cognome,id_squadra) values (?, ?)";
         try {
-            PreparedStatement ps = co.prepareStatement(createGiocatore, PreparedStatement.RETURN_GENERATED_KEYS);
-            ps.setString(1, Utility.formattaStringaPerDb(giocatoreDTO.getNomeCognome()));
-            ps.setInt(2, id);
-
-            ps.executeUpdate();
-
-            ResultSet generatedKeys = ps.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                int generatedId = generatedKeys.getInt(1);
+            connection = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
+            statement = connection.prepareStatement(createGiocatore, PreparedStatement.RETURN_GENERATED_KEYS);
+            statement.setString(1, Utility.formattaStringaPerDb(giocatoreDTO.getNomeCognome()));
+            statement.setInt(2, id);
+            statement.executeUpdate();
+             rs = statement.getGeneratedKeys();
+            if (rs.next()) {
+                int generatedId = rs.getInt(1);
                 giocatoriModel.setIdGiocatore(generatedId);
                 giocatoriModel.setNomeCognome(giocatoreDTO.getNomeCognome());
                 giocatoriModel.setNumeroAmmonizioni(0);
             }
-            co.commit();
+            if (connection != null){
+                DataSourceUtils.releaseConnection(connection, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
         } catch (SQLException e) {
-            co.rollback();
             throw new RuntimeException(e);
         }
         return giocatoriModel;
@@ -116,32 +120,24 @@ public class GiocatoreImpl implements DaoGiocatori {
 
     @Override
     public void incrementaAmmonizioni(int idGiocatore) throws SQLException {
-        Connection connection = cn.init();
+        ResultSet rs;
+        Connection connection;
+        PreparedStatement pr;
+
         String query = "update giocatore set numero_ammonizioni = numero_ammonizioni + 1 where id = ?";
         try{
-            PreparedStatement pr = connection.prepareStatement(query);
+            connection = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
+            pr = connection.prepareStatement(query);
             pr.setInt(1, idGiocatore);
             pr.executeUpdate();
-            connection.commit();
+            if (connection != null){
+                DataSourceUtils.releaseConnection(connection, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
         } catch (SQLException e) {
-            connection.rollback();
             throw new SQLException(e);
         }
+
     }
 
-    @Override
-    public Set<Trasferimenti> trasferimenti(String nome) {
-        String url = "http://85.235.148.177:8872/transfer/" + nome;
-        RestTemplate restTemplate = new RestTemplate();
-        Set<Trasferimenti> trasferimentiSet = new HashSet<>();
-
-        Trasferimenti[] trasferimentiArray = restTemplate.getForObject(url, Trasferimenti[].class);
-
-        if (trasferimentiArray != null) {
-            Collections.addAll(trasferimentiSet, trasferimentiArray);
-        }
-
-        return trasferimentiSet;
-    }
 
 }

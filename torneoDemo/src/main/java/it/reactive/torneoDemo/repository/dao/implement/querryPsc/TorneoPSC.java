@@ -1,11 +1,12 @@
 package it.reactive.torneoDemo.repository.dao.implement.querryPsc;
 
 import it.reactive.torneoDemo.dto.in.TorneoDTO;
+import it.reactive.torneoDemo.model.SquadraModel;
 import it.reactive.torneoDemo.model.TorneoModel;
 import it.reactive.torneoDemo.repository.dao.DaoTorneo;
+import it.reactive.torneoDemo.repository.mapper.MapperSquadra;
 import it.reactive.torneoDemo.repository.mapper.MapperTorneo;
-import it.reactive.torneoDemo.utility.DbCostanti;
-import it.reactive.torneoDemo.utility.DbProfile;
+import it.reactive.torneoDemo.utility.DaoProfile;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -15,27 +16,23 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
-@Profile(DbProfile.TORNEO_DAO_SPRING_JDBC_QUERY_PSC)
-public class TorneoJdbc implements DaoTorneo {
+@Profile(DaoProfile.TORNEO_DAO_SPRING_JDBC_QUERY_PSC)
+public class TorneoPSC implements DaoTorneo {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    DbCostanti db;
 
     @Override
     public TorneoModel create(TorneoDTO torneoDTO) throws SQLException {
-        String queryTorneo = "insert into " + db.TORNEO_TABLE + " (" + db.TORNEO_NOME_TORNEO_COL + ") " + "values(?)";
+        String queryTorneo = "insert into torneo ( nome_torneo) values(?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(queryTorneo, Statement.RETURN_GENERATED_KEYS);
@@ -43,10 +40,10 @@ public class TorneoJdbc implements DaoTorneo {
             return ps;
         }, keyHolder);
 
-        int generatedId = keyHolder.getKey().intValue();
+        Integer generateId = (Integer) keyHolder.getKeys().get("id");
         TorneoModel torneoModel = new TorneoModel();
-        torneoModel.setIdTorneo(generatedId);
-        torneoModel.setNomeTorneo(torneoModel.getNomeTorneo());
+        torneoModel.setIdTorneo(generateId);
+        torneoModel.setNomeTorneo(torneoDTO.getNomeTorneo());
         return torneoModel;
     }
 
@@ -69,8 +66,12 @@ public class TorneoJdbc implements DaoTorneo {
     }
 
     @Override
+    @Transactional
     public void delete(int id) throws SQLException {
-
+        String querryDeleteSquadraTorneo = "delete from squadra_torneo where id_torneo = ?";
+        jdbcTemplate.update(querryDeleteSquadraTorneo, id);
+        String querryDelete = "delete from torneo where id= ?";
+        jdbcTemplate.update(querryDelete, id);
     }
 
     @Override
@@ -94,12 +95,46 @@ public class TorneoJdbc implements DaoTorneo {
 
     @Override
     public void aggiungoSquadraAlTorneo(int idSquadra, int idTorneo) throws SQLException {
-
+        String querryInsert = "insert into squadra_torneo (id_squadra , id_torneo) values (?, ?)";
+        PreparedStatementCreator prc = con -> {
+            PreparedStatement pr = con.prepareStatement(querryInsert);
+            pr.setInt(1, idSquadra);
+            pr.setInt(2, idTorneo);
+            return pr;
+        };
+        jdbcTemplate.update(prc);
     }
 
     @Override
     public List<TorneoModel> getAllTorneo() throws SQLException {
-        return Collections.emptyList();
+        String querryFind = "select t.*, s.id as id_squadra, s.nome, s.colori_sociali, tf.nome_tifoseria, tf.id as id_tifoseria " +
+                "from torneo t " +
+                "left join squadra_torneo st on t.id = st.id_torneo " +
+                "left join squadra s on st.id_squadra = s.id " +
+                "left join tifoseria tf on tf.id_squadra = s.id";
+
+        PreparedStatementCreator prc = con -> {
+            PreparedStatement pr = con.prepareStatement(querryFind);
+            return pr;
+        };
+
+        Map<Integer, TorneoModel> torneoMap = new HashMap<>();
+
+        ResultSetExtractor<List<TorneoModel>>rse = rs -> {
+            while (rs.next()){
+                TorneoModel torneoModel = MapperTorneo.rsToModel(rs);
+
+                if (!torneoMap.containsKey(torneoModel.getIdTorneo())) {
+                    torneoMap.put(torneoModel.getIdTorneo(), torneoModel);
+                }
+
+                SquadraModel squadraModel = MapperSquadra.rsToModelIdSquadra(rs);
+                torneoMap.get(torneoModel.getIdTorneo()).getSquadre().add(squadraModel);
+            }
+            ArrayList<TorneoModel> torneiList =  new ArrayList<>(torneoMap.values());
+            return torneiList;
+        };
+        return jdbcTemplate.query(prc, rse);
     }
 
     @Override

@@ -1,11 +1,10 @@
 package it.reactive.torneoDemo.repository.dao.implement.querryPsc;
 
 import it.reactive.torneoDemo.dto.in.GiocatoreDTO;
-import it.reactive.torneoDemo.dto.resource.Trasferimenti;
 import it.reactive.torneoDemo.model.GiocatoriModel;
 import it.reactive.torneoDemo.repository.dao.DaoGiocatori;
 import it.reactive.torneoDemo.repository.mapper.MapperGiocatore;
-import it.reactive.torneoDemo.utility.DbProfile;
+import it.reactive.torneoDemo.utility.DaoProfile;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -15,21 +14,18 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.client.RestTemplate;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 @Repository
-@Profile(DbProfile.TORNEO_DAO_SPRING_JDBC_QUERY_PSC)
-public class GiocatoreJdbc implements DaoGiocatori {
+@Profile(DaoProfile.TORNEO_DAO_SPRING_JDBC_QUERY_PSC)
+public class GiocatorePSC implements DaoGiocatori {
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    JdbcTemplate jdbcTemplate;
 
     @Override
     public GiocatoriModel create(GiocatoreDTO giocatoreDTO, int id) throws SQLException {
@@ -41,9 +37,9 @@ public class GiocatoreJdbc implements DaoGiocatori {
             ps.setInt(2, id);
             return ps;
         }, keyHolder);
-        Integer generatedId = keyHolder.getKey().intValue();
+        Integer generateId = (Integer) keyHolder.getKeys().get("id");
         GiocatoriModel giocatoriModel = new GiocatoriModel();
-        giocatoriModel.setIdGiocatore(generatedId);
+        giocatoriModel.setIdGiocatore(generateId);
         giocatoriModel.setNomeCognome(giocatoreDTO.getNomeCognome());
         giocatoriModel.setNumeroAmmonizioni(0);
         return giocatoriModel;
@@ -114,16 +110,5 @@ public class GiocatoreJdbc implements DaoGiocatori {
         jdbcTemplate.update(query, idGiocatore);
     }
 
-    @Override
-    public Set<Trasferimenti> trasferimenti(String nome) {
-        String url = "http://85.235.148.177:8872/transfer/" + nome;
-        RestTemplate restTemplate = new RestTemplate();
-        Set<Trasferimenti> trasferimentiSet = new HashSet<>();
-        Trasferimenti[] trasferimentiArray = restTemplate.getForObject(url, Trasferimenti[].class);
-        if (trasferimentiArray != null) {
-            Collections.addAll(trasferimentiSet, trasferimentiArray);
-        }
-        return trasferimentiSet;
-    }
 }
 

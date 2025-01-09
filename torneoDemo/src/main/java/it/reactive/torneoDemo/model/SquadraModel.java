@@ -88,4 +88,16 @@ public class SquadraModel {
     public int hashCode() {
         return Objects.hash(idSquadra, nome, coloriSociali, giocatori, tifoseria, tornei);
     }
+
+    @Override
+    public String toString() {
+        return "SquadraModel{" +
+                "idSquadra=" + idSquadra +
+                ", nome='" + nome + '\'' +
+                ", coloriSociali='" + coloriSociali + '\'' +
+                ", giocatori=" + giocatori +
+                ", tifoseria=" + tifoseria +
+                ", tornei=" + tornei +
+                '}';
+    }
 }

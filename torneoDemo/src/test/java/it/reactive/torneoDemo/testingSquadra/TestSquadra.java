@@ -1,4 +1,4 @@
-package it.reactive.torneoDemo;
+package it.reactive.torneoDemo.testingSquadra;
 
 import it.reactive.torneoDemo.dto.in.SquadraDTO;
 import it.reactive.torneoDemo.exception.SquadraDuplicataException;
@@ -6,20 +6,18 @@ import it.reactive.torneoDemo.model.GiocatoriModel;
 import it.reactive.torneoDemo.model.SquadraModel;
 import it.reactive.torneoDemo.repository.dao.DaoSquadra;
 import it.reactive.torneoDemo.service.SquadraService;
-import it.reactive.torneoDemo.utility.DbProfile;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.sql.SQLException;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-@ActiveProfiles(DbProfile.TORNEO_DAO_SPRING_JDBC_QUERY_PSC)
-public class TestSquadra {
+public abstract class TestSquadra {
 
     @Autowired
     DaoSquadra daoSquadra;
@@ -103,4 +101,11 @@ public class TestSquadra {
         assertEquals(new HashSet<GiocatoriModel>(), squadraModels.get(0).getGiocatori());
     }
 
+    @Test
+    void delete () throws SQLException {
+        daoSquadra.delete(5);
+        int[]numeroSquadre = new int[4];
+        List<SquadraModel> squadraModels = daoSquadra.readAll(false);
+        assertEquals(numeroSquadre.length, squadraModels.size());
+    }
 }

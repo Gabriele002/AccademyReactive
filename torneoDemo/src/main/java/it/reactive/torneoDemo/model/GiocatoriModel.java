@@ -47,16 +47,6 @@ public class GiocatoriModel {
     }
 
     @Override
-    public String toString() {
-        return "GiocatoriModel{" +
-                "idGiocatore=" + idGiocatore +
-                ", nomeCognome='" + nomeCognome + '\'' +
-                ", numeroAmmonizioni=" + numeroAmmonizioni +
-                ", squadra=" + squadra +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -68,4 +58,6 @@ public class GiocatoriModel {
     public int hashCode() {
         return Objects.hash(idGiocatore, nomeCognome, numeroAmmonizioni, squadra);
     }
+
+
 }

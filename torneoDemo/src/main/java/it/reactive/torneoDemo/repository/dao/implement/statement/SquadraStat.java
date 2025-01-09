@@ -1,4 +1,4 @@
-package it.reactive.torneoDemo.repository.dao.implement.prepareStatmenr;
+package it.reactive.torneoDemo.repository.dao.implement.statement;
 
 import it.reactive.torneoDemo.configuration.ConnesioneDb;
 import it.reactive.torneoDemo.dto.in.SquadraDTO;
@@ -8,11 +8,12 @@ import it.reactive.torneoDemo.repository.dao.DaoSquadra;
 import it.reactive.torneoDemo.repository.mapper.MapperGiocatore;
 import it.reactive.torneoDemo.repository.mapper.MapperSquadra;
 import it.reactive.torneoDemo.utility.DbCostanti;
-import it.reactive.torneoDemo.utility.DbProfile;
+import it.reactive.torneoDemo.utility.DaoProfile;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,28 +24,29 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Profile(DbProfile.TORNEO_DAO_JDBC_PREPAREDSTATEMENT)
-public class SquadraImpl implements DaoSquadra {
-
+@Profile(DaoProfile.TORNEO_DAO_JDBC_STATEMENT)
+public class SquadraStat implements DaoSquadra {
     @Autowired
     ConnesioneDb cn;
 
     @Autowired
     DbCostanti dbCostanti;
 
+    @Autowired
+    PlatformTransactionManager transactionManager;
+
+
     @Override
     public SquadraModel create(SquadraDTO squadraDTO) throws SQLException {
         Connection connection = cn.init();
         SquadraModel squadra = new SquadraModel();
-        String query = "insert into " + dbCostanti.SQUADRA_TABLE +
-                " (" + dbCostanti.SQUADRA_NOME_COL + "," + dbCostanti.SQUADRA_COLORI_SOCIALI_COL + ") "
-                + " values(?, ?)";
+        String query = "insert into squadra(" + dbCostanti.SQUADRA_NOME_COL + "," + dbCostanti.SQUADRA_COLORI_SOCIALI_COL + ") "
+                + " values('" + Utility.formattaStringaPerDb(squadraDTO.getNome()) + "', '"
+                + Utility.formattaStringaPerDb(squadraDTO.getColoriSociali()) + "')";
+
         PreparedStatement ps;
         try {
             ps = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
-            ps.setString(1, Utility.formattaStringaPerDb(squadraDTO.getNome()));
-            ps.setString(2, Utility.formattaStringaPerDb(squadraDTO.getColoriSociali()));
-
             ps.executeUpdate();
             ResultSet generatedKeys = ps.getGeneratedKeys();
             if (generatedKeys.next()) {
@@ -65,9 +67,8 @@ public class SquadraImpl implements DaoSquadra {
     public void delete(int id) throws SQLException {
         Connection connection = cn.init();
 
-        String deleteTifoseriaQuery = "delete from tifoseria where id_squadra = ?";
+        String deleteTifoseriaQuery = "delete from tifoseria where id_squadra = " + id;
         try (PreparedStatement ps = connection.prepareStatement(deleteTifoseriaQuery)) {
-            ps.setInt(1, id);
             ps.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
@@ -75,9 +76,8 @@ public class SquadraImpl implements DaoSquadra {
             throw new RuntimeException(e);
         }
 
-        String deleteGiocatoreQuery = "delete from giocatore where id_squadra = ?";
+        String deleteGiocatoreQuery = "delete from giocatore where id_squadra = " + id;
         try (PreparedStatement ps = connection.prepareStatement(deleteGiocatoreQuery)) {
-            ps.setInt(1, id);
             ps.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
@@ -85,9 +85,8 @@ public class SquadraImpl implements DaoSquadra {
             throw new RuntimeException(e);
         }
 
-        String deleteSquadraTorneoQuery = "delete from squadra_torneo where id_squadra = ?";
+        String deleteSquadraTorneoQuery = "delete from squadra_torneo where id_squadra = " + id;
         try (PreparedStatement ps = connection.prepareStatement(deleteSquadraTorneoQuery)) {
-            ps.setInt(1, id);
             ps.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
@@ -95,10 +94,9 @@ public class SquadraImpl implements DaoSquadra {
             throw new RuntimeException(e);
         }
 
-        String deleteSquadraQuery = "delete from " + dbCostanti.SQUADRA_TABLE + " where " + dbCostanti.SQUADRA_ID_COL + " = ?";
+        String deleteSquadraQuery = "delete from squadra where id = " + id;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(deleteSquadraQuery);
-            preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
@@ -109,17 +107,15 @@ public class SquadraImpl implements DaoSquadra {
 
     @Override
     public Optional<SquadraModel> findById(int id) {
-        String query = "select s.* from squadra s where s.id = ?";
+        String query = "select s.* from squadra s where s.id = " + id;
         Connection connection = cn.init();
         try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setInt(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    SquadraModel squadraModel = MapperSquadra.rsToModel(rs);
-                    return Optional.of(squadraModel);
-                } else {
-                    return Optional.empty();
-                }
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                SquadraModel squadraModel = MapperSquadra.rsToModel(rs);
+                return Optional.of(squadraModel);
+            } else {
+                return Optional.empty();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -130,15 +126,15 @@ public class SquadraImpl implements DaoSquadra {
     public List<SquadraModel> readAll(boolean listaGiocatori) throws SQLException {
         Connection connection = cn.init();
         List<SquadraModel> squadre = new ArrayList<>();
+
         String querySquadreTifoseria = "select s.*, t.*, t.id as id_tifoseria FROM squadra s LEFT JOIN tifoseria t ON t.id_squadra = s.id";
         PreparedStatement pr = connection.prepareStatement(querySquadreTifoseria);
         ResultSet rs = pr.executeQuery();
         while (rs.next()) {
             SquadraModel squadraModel = MapperSquadra.rsToModelWithTifoseria(rs);
             if (listaGiocatori) {
-                String queryGiocatori = "select g.nome_cognome, g.id, g.numero_ammonizioni from giocatore g where g.id_squadra = ?";
+                String queryGiocatori = "select g.nome_cognome, g.id, g.numero_ammonizioni from giocatore g where g.id_squadra = " + squadraModel.getIdSquadra();
                 PreparedStatement ps = connection.prepareStatement(queryGiocatori);
-                ps.setInt(1, squadraModel.getIdSquadra());
                 try (ResultSet rsGiocatori = ps.executeQuery()) {
                     while (rsGiocatori.next()) {
                         GiocatoriModel giocatoriModel = MapperGiocatore.rsToModel(rsGiocatori);
@@ -153,10 +149,9 @@ public class SquadraImpl implements DaoSquadra {
 
     @Override
     public Optional<SquadraModel> readForName(String nome) {
-        String query = "select * from squadra where " + dbCostanti.SQUADRA_NOME_COL + "= ?";
+        String query = "select * from squadra where nome = '" + nome + "'";
         Connection connection = cn.init();
         try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setString(1, nome);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 SquadraModel squadraModel = MapperSquadra.rsToModel(rs);
@@ -168,6 +163,4 @@ public class SquadraImpl implements DaoSquadra {
             throw new RuntimeException(e);
         }
     }
-
-
 }

@@ -1,4 +1,4 @@
-package it.reactive.torneoDemo.repository.dao.implement.prepareStatmenr;
+package it.reactive.torneoDemo.repository.dao.implement.prepareStatement;
 
 import it.reactive.torneoDemo.configuration.ConnesioneDb;
 import it.reactive.torneoDemo.dto.in.TorneoDTO;
@@ -7,8 +7,7 @@ import it.reactive.torneoDemo.model.TorneoModel;
 import it.reactive.torneoDemo.repository.dao.DaoTorneo;
 import it.reactive.torneoDemo.repository.mapper.MapperSquadra;
 import it.reactive.torneoDemo.repository.mapper.MapperTorneo;
-import it.reactive.torneoDemo.utility.DbCostanti;
-import it.reactive.torneoDemo.utility.DbProfile;
+import it.reactive.torneoDemo.utility.DaoProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
@@ -20,11 +19,9 @@ import java.sql.SQLException;
 import java.util.*;
 
 @Repository
-@Profile(DbProfile.TORNEO_DAO_JDBC_PREPAREDSTATEMENT)
-public class TorneoImpl implements DaoTorneo {
+@Profile(DaoProfile.TORNEO_DAO_JDBC_PREPAREDSTATEMENT)
+public class TorneoPS implements DaoTorneo {
 
-    @Autowired
-    DbCostanti db;
 
     @Autowired
     ConnesioneDb connesioneDb;
@@ -32,7 +29,7 @@ public class TorneoImpl implements DaoTorneo {
 
     @Override
     public TorneoModel create(TorneoDTO torneoDTO) throws SQLException {
-        String querryTorneo = "insert into " + db.TORNEO_TABLE + " (" + db.TORNEO_NOME_TORNEO_COL + ") " + "values(?)";
+        String querryTorneo = "insert into torneo (nome) values(?)";
         Connection cn = connesioneDb.init();
         try {
             PreparedStatement pr = cn.prepareStatement(querryTorneo, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -155,7 +152,6 @@ public class TorneoImpl implements DaoTorneo {
 
         return new ArrayList<>(torneoMap.values());
     }
-
 
     @Override
     public List<Integer> readTorniSquadra(int idTorneo) {

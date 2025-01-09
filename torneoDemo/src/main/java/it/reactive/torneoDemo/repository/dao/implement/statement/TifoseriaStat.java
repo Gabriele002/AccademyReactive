@@ -1,15 +1,16 @@
-package it.reactive.torneoDemo.repository.dao.implement.statment;
+package it.reactive.torneoDemo.repository.dao.implement.statement;
 
 import it.reactive.torneoDemo.configuration.ConnesioneDb;
 import it.reactive.torneoDemo.dto.in.TifoseriaDTO;
 import it.reactive.torneoDemo.model.TifoseriaModel;
 import it.reactive.torneoDemo.repository.dao.DaoTifoseria;
 import it.reactive.torneoDemo.repository.mapper.MapperTifoseria;
-import it.reactive.torneoDemo.utility.DbProfile;
+import it.reactive.torneoDemo.utility.DaoProfile;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,11 +20,14 @@ import java.util.Optional;
 
 
 @Repository
-@Profile(DbProfile.TORNEO_DAO_JDBC_STATEMENT)
+@Profile(DaoProfile.TORNEO_DAO_JDBC_STATEMENT)
 public class TifoseriaStat implements DaoTifoseria {
 
     @Autowired
     ConnesioneDb cn;
+
+    @Autowired
+    PlatformTransactionManager transactionManager;
 
     @Override
     public TifoseriaModel create(TifoseriaDTO tifoseriaDTO, int id) throws SQLException {

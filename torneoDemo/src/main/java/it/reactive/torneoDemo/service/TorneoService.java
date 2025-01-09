@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -40,6 +41,9 @@ public class TorneoService {
     @Autowired
     DaoTifoseria daoTifoseria;
 
+    @Autowired
+    TrasferimentiService trasferimentiService;
+
     public TorneoResponse createTorneo(TorneoDTO torneoDTO) throws SQLException {
         TorneoModel torneoModel = daoTorneo.create(torneoDTO);
         return MapperTorneo.modelToResponse(torneoModel);
@@ -56,12 +60,13 @@ public class TorneoService {
 
         daoTorneo.aggiungoSquadraAlTorneo(idSquadra, idTorneo);
         TorneoModel torneoModel = daoTorneo.findByIdWithSquadra(idTorneo);
-
+        Set<SquadraModel> squadraModelSet = new HashSet<>();
+        squadraModelSet.add(squadraModel);
+        torneoModel.setSquadre(squadraModelSet);
             torneoModel.getSquadre().forEach(s -> {
                         int idSquadraModle = s.getIdSquadra();
                         try {
                             Set<GiocatoriModel> giocatoriModels = daoGiocatori.readGiocatoriWithIdSquadra(idSquadraModle);
-
                             Optional<TifoseriaModel> tifoseriaModel = daoTifoseria.readForIdSquadra(idSquadraModle);
                             tifoseriaModel.ifPresent(s::setTifoseria);
                             s.setGiocatori(giocatoriModels);
@@ -71,7 +76,6 @@ public class TorneoService {
                     }
 
             );
-
         return MapperTorneo.modelToResponse(torneoModel);
     }
 
@@ -95,7 +99,7 @@ public class TorneoService {
 
                 squadraResponse.getGiocatori().forEach(g -> {
                     String nomeGiocatore = g.getNomeCognome();
-                    g.setTrasferimenti(daoGiocatori.trasferimenti(nomeGiocatore));
+                    g.setTrasferimenti(trasferimentiService.trasferimenti(nomeGiocatore));
                 });
             });
         });
@@ -108,9 +112,9 @@ public class TorneoService {
 
         List<Integer> idSquadre = daoTorneo.readTorniSquadra(idTorneo);
 
-        if (idSquadre.isEmpty()){
+        if (idSquadre.size() != 1){
             daoTorneo.delete(idTorneo);
-        } else if (idSquadre.size() == 1) {
+        } else {
             daoTorneo.delete(idTorneo);
             daoSquadra.delete(idSquadre.get(0));
         }
