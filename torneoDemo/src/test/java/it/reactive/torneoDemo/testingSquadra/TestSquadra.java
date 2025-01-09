@@ -104,8 +104,31 @@ public abstract class TestSquadra {
     @Test
     void delete () throws SQLException {
         daoSquadra.delete(5);
-        int[]numeroSquadre = new int[4];
+        List<SquadraModel> squadraModelList = new ArrayList<>();
+        SquadraModel squadraModel = new SquadraModel();
+        squadraModel.setIdSquadra(1);
+        squadraModel.setNome("Pompei");
+        squadraModel.setColoriSociali("Bianco e Nero");
+        SquadraModel squadraModel1 = new SquadraModel();
+        squadraModel1.setIdSquadra(2);
+        squadraModel1.setNome("Inter");
+        squadraModel1.setColoriSociali("Nero e Azzurro");
+        SquadraModel squadraModel2 = new SquadraModel();
+        squadraModel2.setIdSquadra(3);
+        squadraModel2.setNome("Milan");
+        squadraModel2.setColoriSociali("Rosso e Nero");
+        SquadraModel squadraModel3 = new SquadraModel();
+        squadraModel3.setIdSquadra(4);
+        squadraModel3.setNome("Roma");
+        squadraModel3.setColoriSociali("Giallo e Rosso");
+        squadraModelList.add(squadraModel);
+        squadraModelList.add(squadraModel1);
+        squadraModelList.add(squadraModel2);
+        squadraModelList.add(squadraModel3);
         List<SquadraModel> squadraModels = daoSquadra.readAll(false);
-        assertEquals(numeroSquadre.length, squadraModels.size());
+        squadraModels.forEach(System.out::println);
+        System.out.println("_________________");
+        squadraModelList.forEach(System.out::println);
+        assertEquals(squadraModelList, squadraModels);
     }
 }

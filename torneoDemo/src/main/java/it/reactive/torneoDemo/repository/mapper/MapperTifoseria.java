@@ -19,6 +19,7 @@ public class MapperTifoseria {
     public static TifoseriaModel rsToModel(ResultSet rs) throws SQLException {
         TifoseriaModel tifoseriaModel = new TifoseriaModel();
         tifoseriaModel.setNomeTifoseria(rs.getString("nome_tifoseria"));
+        tifoseriaModel.setIdTifoseria(rs.getInt("id"));
         return tifoseriaModel;
     }
 }
