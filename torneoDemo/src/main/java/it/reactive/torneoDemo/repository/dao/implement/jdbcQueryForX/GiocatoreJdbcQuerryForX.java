@@ -1,41 +1,30 @@
-package it.reactive.torneoDemo.repository.dao.implement.jdbcQuerry;
+package it.reactive.torneoDemo.repository.dao.implement.jdbcQueryForX;
 
 import it.reactive.torneoDemo.dto.in.GiocatoreDTO;
 import it.reactive.torneoDemo.model.GiocatoriModel;
-import it.reactive.torneoDemo.model.SquadraModel;
 import it.reactive.torneoDemo.repository.dao.DaoGiocatori;
 import it.reactive.torneoDemo.repository.dao.implement.jdbcQuerry.rowMapper.CustomRowMapperGiocatore;
-import it.reactive.torneoDemo.repository.dao.implement.jdbcQuerry.rowMapper.CustomRowMapperSquadra;
-import it.reactive.torneoDemo.repository.mapper.MapperGiocatore;
 import it.reactive.torneoDemo.utility.DaoProfile;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
-@Profile(DaoProfile.TORNEO_DAO_SPRING_JDBC_QUERY)
-public class GiocatoreJdbcQuerry implements DaoGiocatori {
+@Profile(DaoProfile.TORNEO_DAO_SPRING_JDBC_QUERY_FOR_X)
+public class GiocatoreJdbcQuerryForX implements DaoGiocatori {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
     public GiocatoriModel create(GiocatoreDTO giocatoreDTO, int id) throws SQLException {
@@ -59,37 +48,46 @@ public class GiocatoreJdbcQuerry implements DaoGiocatori {
     @Override
     public HashSet<GiocatoriModel> readGiocatoriWithIdSquadra(int id) {
         String query = "select g.*, s.nome from giocatore g join squadra s on g.id_squadra = s.id where g.id_squadra = ?";
-        List<GiocatoriModel> giocatoriModelList =
-                jdbcTemplate.query(query, new CustomRowMapperGiocatore(), id);
-        return new HashSet<>(giocatoriModelList);
+        List<Map<String, Object>> mapGiocatori = jdbcTemplate.queryForList(query,id);
+        HashSet<GiocatoriModel> giocatori = new HashSet<>();
+        mapGiocatori.forEach(stringObjectMap -> {
+            GiocatoriModel giocatoriModel = new GiocatoriModel();
+            giocatoriModel.setIdGiocatore((Integer) stringObjectMap.get("id"));
+            giocatoriModel.setNomeCognome((String) stringObjectMap.get("nome_cognome"));
+            giocatoriModel.setNumeroAmmonizioni((Integer) stringObjectMap.get("numero_ammonizioni"));
+            giocatori.add(giocatoriModel);
+        });
+        return giocatori;
     }
-
 
     @Override
     public Optional<GiocatoriModel> readForName(String nome) {
-        String query = "select * from giocatore where nome_cognome = :nomeGiocatore";
-        MapSqlParameterSource par = new MapSqlParameterSource();
-        par.addValue("nomeGiocatore", nome);
-        List<GiocatoriModel> giocatoriModelList = namedParameterJdbcTemplate.query(query,par, new CustomRowMapperGiocatore());
-        if (giocatoriModelList.isEmpty()){
-            return  Optional.empty();
+        String query = "select * from giocatore where nome_cognome = ?";
+        try {
+            Map<String, Object> giocatoreMap = jdbcTemplate.queryForMap(query, new Object[]{nome});
+            GiocatoriModel giocatoriModel = new GiocatoriModel();
+            giocatoriModel.setIdGiocatore((Integer) giocatoreMap.get("id"));
+            giocatoriModel.setNumeroAmmonizioni((Integer) giocatoreMap.get("numero_ammonizioni"));
+            giocatoriModel.setNomeCognome((String) giocatoreMap.get("nome_cognome"));
+            return Optional.of(giocatoriModel);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
         }
-        GiocatoriModel giocatoriModel = giocatoriModelList.get(0);
-        return Optional.of(giocatoriModel);
-
     }
 
     @Override
     public Optional<GiocatoriModel> readForId(int id) {
-        String query = "select * from giocatore where id = :idGiocatore";
-        MapSqlParameterSource par = new MapSqlParameterSource();
-        par.addValue("idGiocatore", id);
-        List<GiocatoriModel> giocatoriModelList = namedParameterJdbcTemplate.query(query,par, new CustomRowMapperGiocatore());
-        if (giocatoriModelList.isEmpty()){
-            return  Optional.empty();
+        String query = "select * from giocatore where id = ?";
+        try {
+            Map<String, Object> giocatoreMap = jdbcTemplate.queryForMap(query, new Object[]{id});
+            GiocatoriModel giocatoriModel = new GiocatoriModel();
+            giocatoriModel.setIdGiocatore((Integer) giocatoreMap.get("id"));
+            giocatoriModel.setNumeroAmmonizioni((Integer) giocatoreMap.get("numero_ammonizioni"));
+            giocatoriModel.setNomeCognome((String) giocatoreMap.get("nome_cognome"));
+            return Optional.of(giocatoriModel);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
         }
-        GiocatoriModel giocatoriModel = giocatoriModelList.get(0);
-        return Optional.of(giocatoriModel);
     }
 
     @Override

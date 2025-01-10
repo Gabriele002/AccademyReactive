@@ -1,6 +1,7 @@
 package it.reactive.torneoDemo.dto.resource;
 
 
+import java.util.Objects;
 import java.util.Set;
 
 public class SquadraResponse {
@@ -55,5 +56,18 @@ public class SquadraResponse {
         this.tifoseria = tifoseria;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SquadraResponse that = (SquadraResponse) o;
+        return Objects.equals(idSquadra, that.idSquadra) && Objects.equals(nome, that.nome) && Objects.equals(coloriSociali, that.coloriSociali) && Objects.equals(tifoseria, that.tifoseria);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idSquadra, nome, coloriSociali, tifoseria);
+    }
 }
 

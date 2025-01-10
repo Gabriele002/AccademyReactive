@@ -1,13 +1,11 @@
-package it.reactive.torneoDemo.repository.dao.implement.jdbcQuerry;
+package it.reactive.torneoDemo.repository.dao.implement.jdbcQueryForX;
 
 import it.reactive.torneoDemo.dto.in.TorneoDTO;
 import it.reactive.torneoDemo.model.SquadraModel;
 import it.reactive.torneoDemo.model.TorneoModel;
 import it.reactive.torneoDemo.repository.dao.DaoTorneo;
-import it.reactive.torneoDemo.repository.dao.implement.jdbcQuerry.rowMapper.CustomRowMapperGiocatore;
 import it.reactive.torneoDemo.repository.dao.implement.jdbcQuerry.rowMapper.CustomRowMapperSquadra;
 import it.reactive.torneoDemo.repository.dao.implement.jdbcQuerry.rowMapper.CustomRowMapperTorneo;
-import it.reactive.torneoDemo.repository.mapper.MapperSquadra;
 import it.reactive.torneoDemo.repository.mapper.MapperTorneo;
 import it.reactive.torneoDemo.utility.DaoProfile;
 import it.reactive.torneoDemo.utility.Utility;
@@ -26,11 +24,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
-@Profile(DaoProfile.TORNEO_DAO_SPRING_JDBC_QUERY)
-public class TorneoJdbcQuerry implements DaoTorneo {
+@Profile(DaoProfile.TORNEO_DAO_SPRING_JDBC_QUERY_FOR_X)
+public class TorneoJdbcQuerryForX implements DaoTorneo {
     @Autowired
     JdbcTemplate jdbcTemplate;
 

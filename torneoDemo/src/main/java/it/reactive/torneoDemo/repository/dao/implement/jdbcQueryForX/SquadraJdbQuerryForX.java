@@ -1,4 +1,4 @@
-package it.reactive.torneoDemo.repository.dao.implement.jdbcQuerry;
+package it.reactive.torneoDemo.repository.dao.implement.jdbcQueryForX;
 
 import it.reactive.torneoDemo.dto.in.SquadraDTO;
 import it.reactive.torneoDemo.model.GiocatoriModel;
@@ -13,6 +13,7 @@ import it.reactive.torneoDemo.utility.DaoProfile;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -29,8 +30,8 @@ import java.sql.Statement;
 import java.util.*;
 
 @Repository
-@Profile(DaoProfile.TORNEO_DAO_SPRING_JDBC_QUERY)
-public class SquadraJdbQuerry implements DaoSquadra {
+@Profile(DaoProfile.TORNEO_DAO_SPRING_JDBC_QUERY_FOR_X)
+public class SquadraJdbQuerryForX implements DaoSquadra {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -78,51 +79,64 @@ public class SquadraJdbQuerry implements DaoSquadra {
     @Override
     public Optional<SquadraModel> findById(int id) throws SQLException {
         String query = "select * from squadra where id = ?";
-        PreparedStatementCreator psc = con -> {
-            PreparedStatement pr = con.prepareStatement(query);
-            pr.setInt(1, id);
-            return pr;
-        };
-        ResultSetExtractor<Optional<SquadraModel>> rse = rs -> {
-            if (rs.next()) {
-                SquadraModel squadraModel = MapperSquadra.rsToModel(rs);
-                return Optional.of(squadraModel);
-            }
+        try {
+            Map<String, Object> squadraMap = jdbcTemplate.queryForMap(query, new Object[]{id});
+            SquadraModel squadraModel = new SquadraModel();
+            squadraModel.setIdSquadra(((Integer) squadraMap.get("id")));
+            squadraModel.setNome(((String) squadraMap.get("nome")));
+            squadraModel.setColoriSociali((String) squadraMap.get("colori_sociali"));
+            return Optional.of(squadraModel);
+        } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
-        };
-        return jdbcTemplate.query(psc, rse);
+        }
     }
 
     @Override
     public List<SquadraModel> readAll(boolean listaGiocatori) throws SQLException {
         String querySquadreTifoseria = "select s.*, t.*, t.id as id_tifoseria FROM squadra s LEFT JOIN tifoseria t ON t.id_squadra = s.id";
-        List<SquadraModel> squadraModelList = jdbcTemplate.query(querySquadreTifoseria, new CustomerMapRowSquadraWithTifoseria());
-        squadraModelList.forEach(s -> {
-                    if (listaGiocatori) {
-                        String queryGiocatori = "select g.nome_cognome, g.id, g.numero_ammonizioni from giocatore g where g.id_squadra = :idSquadra";
-                        MapSqlParameterSource par = new MapSqlParameterSource();
-                        par.addValue("idSquadra", s.getIdSquadra());
-                        List<GiocatoriModel> giocatoriModelsList = namedParameterJdbcTemplate.query(queryGiocatori,par,new CustomRowMapperGiocatore());
-                        //List<GiocatoriModel> giocatoriModels = jdbcTemplate.query(queryGiocatori, new CustomRowMapperGiocatore(), namedParameterJdbcTemplate.s.getIdSquadra());
-                        Set<GiocatoriModel> giocatoriModelsSet = new HashSet<>(giocatoriModelsList);
-                        s.setGiocatori(giocatoriModelsSet);
-                    }
-
-                }
-        );
-        return squadraModelList;
+        List<Map<String, Object>> mapSquadra = jdbcTemplate.queryForList(querySquadreTifoseria);
+        List<SquadraModel> squadraModels = new ArrayList<>();
+        mapSquadra.forEach(stringObjectMap -> {
+            SquadraModel squadraModel = new SquadraModel();
+            squadraModel.setIdSquadra((Integer) stringObjectMap.get("id"));
+            squadraModel.setNome((String) stringObjectMap.get("nome"));
+            squadraModel.setColoriSociali((String) stringObjectMap.get("colori_sociali"));
+            TifoseriaModel tifoseriaModel = new TifoseriaModel();
+            tifoseriaModel.setIdTifoseria((Integer) stringObjectMap.get("id_tifoseria"));
+            tifoseriaModel.setNomeTifoseria((String) stringObjectMap.get("nome_tifoseria"));
+            squadraModel.setTifoseria(tifoseriaModel);
+            squadraModels.add(squadraModel);
+        });
+        squadraModels.forEach(s -> {
+            if (listaGiocatori) {
+                String queryGiocatori = "select g.nome_cognome, g.id, g.numero_ammonizioni from giocatore g where g.id_squadra = ?";
+                List<Map<String, Object>> giocatoriList = jdbcTemplate.queryForList(queryGiocatori, s.getIdSquadra());
+                Set<GiocatoriModel> giocatoriModelSet = new HashSet<>();
+                giocatoriList.forEach(giocatoreMap -> {
+                    GiocatoriModel giocatoriModel = new GiocatoriModel();
+                    giocatoriModel.setNumeroAmmonizioni((Integer) giocatoreMap.get("numero_ammonizioni"));
+                    giocatoriModel.setIdGiocatore((Integer) giocatoreMap.get("id"));
+                    giocatoriModel.setNomeCognome((String) giocatoreMap.get("nome_cognome"));
+                    giocatoriModelSet.add(giocatoriModel);
+                });
+                s.setGiocatori(giocatoriModelSet);
+            }
+        });
+        return squadraModels;
     }
 
     @Override
     public Optional<SquadraModel> readForName(String nome) {
         String query = "select * from squadra where nome = :nomeSquadra";
-        MapSqlParameterSource par = new MapSqlParameterSource();
-        par.addValue("nomeSquadra", nome);
-        List<SquadraModel> squadraModelList = namedParameterJdbcTemplate.query(query, par, new CustomRowMapperSquadra());
-        if (squadraModelList.isEmpty()) {
+        try {
+            Map<String, Object> squadraMap = jdbcTemplate.queryForMap(query, new Object[]{nome});
+            SquadraModel squadraModel = new SquadraModel();
+            squadraModel.setIdSquadra(((Integer) squadraMap.get("id")));
+            squadraModel.setNome(((String) squadraMap.get("nome")));
+            squadraModel.setColoriSociali((String) squadraMap.get("colori_sociali"));
+            return Optional.of(squadraModel);
+        } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
-        SquadraModel squadraModel = squadraModelList.get(0);
-        return Optional.of(squadraModel);
     }
 }

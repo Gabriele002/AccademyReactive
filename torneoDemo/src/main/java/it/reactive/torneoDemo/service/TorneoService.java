@@ -109,9 +109,7 @@ public class TorneoService {
     public void removeTorneo(int idTorneo) throws SQLException {
         TorneoModel torneoModel = daoTorneo.findById(idTorneo)
                 .orElseThrow(() -> new TorneoNonTrovatoException(CodiceErrori.ERRORE_TORNERONONTROVATO));
-
         List<Integer> idSquadre = daoTorneo.readTorniSquadra(idTorneo);
-
         if (idSquadre.size() != 1){
             daoTorneo.delete(idTorneo);
         } else {

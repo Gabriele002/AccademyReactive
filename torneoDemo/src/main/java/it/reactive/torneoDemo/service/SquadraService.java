@@ -48,10 +48,10 @@ public class SquadraService {
         Optional<SquadraModel> squadraModelOptional= daoSquadra.readForName(nomeSquadra);
         if (squadraModelOptional.isPresent()){
             throw new SquadraDuplicataException(CodiceErrori.ERRORE_SQUADRADUPLICATA);
+        }else {
+            SquadraModel createSquadra = daoSquadra.create(squadraDTO);
+            return MapperSquadra.modelToResponse(createSquadra);
         }
-        SquadraModel createSquadra = daoSquadra.create(squadraDTO);
-        return MapperSquadra.modelToResponse(createSquadra);
-
     }
 
     public void deleteSquadra(int id) throws SQLException {
@@ -83,7 +83,7 @@ public class SquadraService {
     }
 
     @Transactional
-    public SquadraResponse aggiungiGiocatore(GiocatoreDTO giocatoreDTO, int id) throws SQLException {
+    public SquadraResponse aggiungiGiocatore(GiocatoreDTO giocatoreDTO, int id) throws Exception {
         Optional<SquadraModel> squadraModel = daoSquadra.findById(id);
         GiocatoriModel giocatoriModel;
         if (squadraModel.isPresent()) {
@@ -94,7 +94,10 @@ public class SquadraService {
             }
             giocatoriModel = daoGiocatori.create(giocatoreDTO, id);
             giocatoriModel.setSquadra(squadraModel.get());
-            squadraModel.get().getGiocatori().add(giocatoriModel);
+            Set<GiocatoriModel> giocatoriModels = daoGiocatori.readGiocatoriWithIdSquadra(id);
+            squadraModel.get().setGiocatori(giocatoriModels);
+            Optional<TifoseriaModel> tifoseriaModelOptional = daoTifoseria.readForIdSquadra(id);
+            tifoseriaModelOptional.ifPresent(tifoseriaModel -> squadraModel.get().setTifoseria(tifoseriaModel));
         } else {
             throw new SquadraNonPresenteException(CodiceErrori.ERRORE_SQUADRANONPRESENTE);
         }

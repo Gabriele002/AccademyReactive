@@ -1,6 +1,7 @@
 package it.reactive.torneoDemo.model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity(name = "tifoseria")
 public class TifoseriaModel {
@@ -37,4 +38,16 @@ public class TifoseriaModel {
         this.squadra = squadra;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TifoseriaModel that = (TifoseriaModel) o;
+        return Objects.equals(idTifoseria, that.idTifoseria);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(idTifoseria);
+    }
 }

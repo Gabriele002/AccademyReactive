@@ -1,6 +1,7 @@
 package it.reactive.torneoDemo.dto.resource;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class GiocatoreResponse {
@@ -48,6 +49,19 @@ public class GiocatoreResponse {
 
     public void setTrasferimenti(Set<Trasferimenti> trasferimenti) {
         this.trasferimenti = trasferimenti;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GiocatoreResponse that = (GiocatoreResponse) o;
+        return Objects.equals(idGiocatore, that.idGiocatore) && Objects.equals(nomeCognome, that.nomeCognome);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idGiocatore, nomeCognome);
     }
 }
 

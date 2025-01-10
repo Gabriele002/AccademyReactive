@@ -7,7 +7,9 @@ import java.util.Objects;
 public class GiocatoriModel {
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idGiocatore;
+
     private String nomeCognome;
     private Integer numeroAmmonizioni;
     @ManyToOne

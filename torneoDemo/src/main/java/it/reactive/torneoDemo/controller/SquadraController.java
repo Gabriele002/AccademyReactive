@@ -81,7 +81,7 @@ public class SquadraController {
             @ApiResponse(code = 500, message = "errore di server")})
     @PutMapping("/addGiocatore/{id}")
     public ResponseEntity<SquadraResponse> aggiungiGiocatore(@PathVariable @Min (0) @Max (10000)@ApiParam(value = "id squadra") Integer id,
-                                                             @RequestBody @ApiParam(value = "giocatoreDTO", required = true) @Valid GiocatoreDTO giocatoreDTO) throws SQLException {
+                                                             @RequestBody @ApiParam(value = "giocatoreDTO", required = true) @Valid GiocatoreDTO giocatoreDTO) throws Exception {
         SquadraResponse squadraResponse =squadraService.aggiungiGiocatore(giocatoreDTO, id);
         return ResponseEntity.ok(squadraResponse);
     }
