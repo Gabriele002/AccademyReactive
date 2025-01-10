@@ -11,6 +11,8 @@ import it.reactive.torneoDemo.utility.DaoProfile;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -26,6 +28,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -56,14 +59,13 @@ public class TorneoJdbcQuerryForX implements DaoTorneo {
 
     @Override
     public Optional<TorneoModel> findById(int id) {
-        String query = "select * from torneo where id = :idTorneo";
-        MapSqlParameterSource par = new MapSqlParameterSource();
-        par.addValue("idTorneo", id);
-        List<TorneoModel> torneoModelList = namedParameterJdbcTemplate.query(query, par, new CustomRowMapperTorneo() );
-        if (torneoModelList.isEmpty()){
+        String query = "select * from torneo where id = ?";
+        try {
+            TorneoModel torneoModel = jdbcTemplate.queryForObject(query, new CustomRowMapperTorneo(), new Object[]{id});
+            return Optional.of(torneoModel);
+        } catch (IncorrectResultSizeDataAccessException e) {
             return Optional.empty();
         }
-        return Optional.of(torneoModelList.get(0));
     }
 
     @Override

@@ -14,6 +14,7 @@ import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -86,7 +87,7 @@ public class SquadraJdbQuerryForX implements DaoSquadra {
             squadraModel.setNome(((String) squadraMap.get("nome")));
             squadraModel.setColoriSociali((String) squadraMap.get("colori_sociali"));
             return Optional.of(squadraModel);
-        } catch (EmptyResultDataAccessException e) {
+        } catch (IncorrectResultSizeDataAccessException e) {
             return Optional.empty();
         }
     }
@@ -135,7 +136,7 @@ public class SquadraJdbQuerryForX implements DaoSquadra {
             squadraModel.setNome(((String) squadraMap.get("nome")));
             squadraModel.setColoriSociali((String) squadraMap.get("colori_sociali"));
             return Optional.of(squadraModel);
-        } catch (EmptyResultDataAccessException e) {
+        } catch (IncorrectResultSizeDataAccessException e) {
             return Optional.empty();
         }
     }

@@ -83,5 +83,4 @@ public class TifoseriaJdbcQuerryForX implements DaoTifoseria {
         return jdbcTemplate.query(pscSelect, rse);
 
     }
-
 }

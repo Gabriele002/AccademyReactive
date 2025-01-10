@@ -9,6 +9,7 @@ import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -70,7 +71,7 @@ public class GiocatoreJdbcQuerryForX implements DaoGiocatori {
             giocatoriModel.setNumeroAmmonizioni((Integer) giocatoreMap.get("numero_ammonizioni"));
             giocatoriModel.setNomeCognome((String) giocatoreMap.get("nome_cognome"));
             return Optional.of(giocatoriModel);
-        } catch (EmptyResultDataAccessException e) {
+        } catch (IncorrectResultSizeDataAccessException e) {
             return Optional.empty();
         }
     }
@@ -85,7 +86,7 @@ public class GiocatoreJdbcQuerryForX implements DaoGiocatori {
             giocatoriModel.setNumeroAmmonizioni((Integer) giocatoreMap.get("numero_ammonizioni"));
             giocatoriModel.setNomeCognome((String) giocatoreMap.get("nome_cognome"));
             return Optional.of(giocatoriModel);
-        } catch (EmptyResultDataAccessException e) {
+        } catch (IncorrectResultSizeDataAccessException e) {
             return Optional.empty();
         }
     }
