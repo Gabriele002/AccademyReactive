@@ -59,7 +59,7 @@ public class TorneoService {
                 new TorneoNonTrovatoException(CodiceErrori.ERRORE_TORNERONONTROVATO));
 
         daoTorneo.aggiungoSquadraAlTorneo(idSquadra, idTorneo);
-        TorneoModel torneoModel = daoTorneo.findByIdWithSquadra(idTorneo);
+        TorneoModel torneoModel = daoTorneo.findByIdWithSquadre(idTorneo);
         Set<SquadraModel> squadraModelSet = new HashSet<>();
         squadraModelSet.add(squadraModel);
         torneoModel.setSquadre(squadraModelSet);

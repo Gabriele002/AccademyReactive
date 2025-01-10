@@ -73,7 +73,7 @@ public class TorneoStat implements DaoTorneo {
     }
 
     @Override
-    public TorneoModel findByIdWithSquadra(int id) throws SQLException {
+    public TorneoModel findByIdWithSquadre(int id) throws SQLException {
         String querryFind = "select t.*, s.id as squadra_id, s.nome as nome_squadra, s.colori_sociali " +
                 "from torneo t " +
                 "join squadra_torneo st on t.id = st.id_torneo " +

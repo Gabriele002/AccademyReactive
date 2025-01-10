@@ -6,16 +6,12 @@ import it.reactive.torneoDemo.model.TorneoModel;
 import it.reactive.torneoDemo.repository.dao.DaoTorneo;
 import it.reactive.torneoDemo.repository.dao.implement.jdbcQuerry.rowMapper.CustomRowMapperSquadra;
 import it.reactive.torneoDemo.repository.dao.implement.jdbcQuerry.rowMapper.CustomRowMapperTorneo;
-import it.reactive.torneoDemo.repository.mapper.MapperTorneo;
 import it.reactive.torneoDemo.utility.DaoProfile;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -26,10 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 @Profile(DaoProfile.TORNEO_DAO_SPRING_JDBC_QUERY_FOR_X)
@@ -78,22 +71,13 @@ public class TorneoJdbcQuerryForX implements DaoTorneo {
     }
 
     @Override
-    public TorneoModel findByIdWithSquadra(int id) throws SQLException {
-        String querryFind = "select t.*, s.id as squadra_id, s.nome as nome_squadra, s.colori_sociali from torneo t join squadra_torneo st on t.id = st.id_torneo join squadra s on st.id_squadra = s.id where t.id = ?";
-        PreparedStatementCreator psc = con -> {
-            PreparedStatement pr = con.prepareStatement(querryFind);
-            pr.setInt(1, id);
-            return pr;
-        };
-
-        ResultSetExtractor<TorneoModel> rse = rs -> {
-            TorneoModel torneoModel = null;
-            if (rs.next()) {
-                torneoModel = MapperTorneo.rsToModelWithSquadra(rs);
-            }
-            return torneoModel;
-        };
-        return jdbcTemplate.query(psc, rse);
+    public TorneoModel findByIdWithSquadre(int id) throws SQLException {
+        String querryFind = "select t.*, s.id as squadra_id, s.nome as nome_squadra, s.colori_sociali " +
+                "from torneo t " +
+                "join squadra_torneo st on t.id = st.id_torneo " +
+                "join squadra s on st.id_squadra = s.id " +
+                "where t.id = ?";
+        return jdbcTemplate.queryForObject(querryFind, new CustomRowMapperTorneo(), new Object[]{id});
     }
 
     @Override
@@ -110,7 +94,27 @@ public class TorneoJdbcQuerryForX implements DaoTorneo {
                 "left join squadra s on st.id_squadra = s.id " +
                 "left join tifoseria tf on tf.id_squadra = s.id";
 
-        return namedParameterJdbcTemplate.query(querryFind, new CustomRowMapperTorneo());
+        List<Map<String, Object>> mapTornei = jdbcTemplate.queryForList(querryFind);
+        Map<Integer, TorneoModel> torneoMap = new HashMap<>();
+        mapTornei.forEach(stringObjectMap -> {
+            Integer torneoId = (Integer) stringObjectMap.get("id");
+
+            TorneoModel torneoModel = torneoMap.get(torneoId);
+            if (torneoModel == null) {
+                torneoModel = new TorneoModel();
+                torneoModel.setNomeTorneo((String) stringObjectMap.get("nome_torneo"));
+                torneoModel.setIdTorneo(torneoId);
+                torneoModel.setSquadre(new HashSet<>());
+                torneoMap.put(torneoId, torneoModel);
+            }
+
+            SquadraModel squadraModel = new SquadraModel();
+            squadraModel.setIdSquadra((Integer) stringObjectMap.get("id_squadra"));
+            squadraModel.setNome((String) stringObjectMap.get("nome"));
+            squadraModel.setColoriSociali((String) stringObjectMap.get("colori_sociali"));
+            torneoModel.getSquadre().add(squadraModel);
+        });
+        return new ArrayList<>(torneoMap.values());
     }
 
     @Override

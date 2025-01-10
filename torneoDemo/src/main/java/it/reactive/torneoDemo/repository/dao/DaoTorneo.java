@@ -14,7 +14,7 @@ public interface DaoTorneo {
 
     void delete(int id) throws SQLException;
 
-    TorneoModel findByIdWithSquadra(int id) throws SQLException;
+    TorneoModel findByIdWithSquadre(int id) throws SQLException;
 
     void aggiungoSquadraAlTorneo (int idSquadra, int idTorneo) throws SQLException;
 
