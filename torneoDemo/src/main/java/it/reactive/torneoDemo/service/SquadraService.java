@@ -39,8 +39,6 @@ public class SquadraService {
     @Autowired
     DaoTifoseria daoTifoseria;
 
-    @Autowired
-    TrasferimentiService trasferimentiService;
 
     @Transactional
     public SquadraResponse createSquadra(SquadraDTO squadraDTO) throws Exception {
@@ -63,19 +61,14 @@ public class SquadraService {
         }
     }
 
+    @Transactional
     public List<SquadraResponse> returnSquadre(boolean giocatori) throws SQLException {
-        List<SquadraModel> squadraModels = daoSquadra.readAll(giocatori);
+        List<SquadraModel> squadraModelList = daoSquadra.readAll(giocatori);
         List<SquadraResponse> squadraResponses = new ArrayList<>();
-        for (SquadraModel squadraModel : squadraModels) {
-            SquadraResponse squadraResponse = MapperSquadra.modelToResponse(squadraModel);
+        for (SquadraModel squadraModel : squadraModelList) {
+            SquadraResponse squadraResponse = MapperSquadra.modelToResponse(squadraModel, giocatori);
             if (squadraResponse.getGiocatori() == null){
                 squadraResponse.setGiocatori(new HashSet<>());
-            }else {
-                squadraResponse.getGiocatori().forEach(g -> {
-                    String nome = g.getNomeCognome();
-                    Set<Trasferimenti> trasferimenti = trasferimentiService.trasferimenti(nome);
-                    g.setTrasferimenti(trasferimenti);
-                });
             }
             squadraResponses.add(squadraResponse);
         }

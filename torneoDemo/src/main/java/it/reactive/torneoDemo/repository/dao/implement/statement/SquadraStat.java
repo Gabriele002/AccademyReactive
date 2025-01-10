@@ -7,13 +7,12 @@ import it.reactive.torneoDemo.model.SquadraModel;
 import it.reactive.torneoDemo.repository.dao.DaoSquadra;
 import it.reactive.torneoDemo.repository.mapper.MapperGiocatore;
 import it.reactive.torneoDemo.repository.mapper.MapperSquadra;
-import it.reactive.torneoDemo.utility.DbCostanti;
 import it.reactive.torneoDemo.utility.DaoProfile;
+import it.reactive.torneoDemo.utility.DbCostanti;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -33,7 +32,10 @@ public class SquadraStat implements DaoSquadra {
     DbCostanti dbCostanti;
 
     @Autowired
-    PlatformTransactionManager transactionManager;
+    TifoseriaStat tifoseriaStat;
+
+    @Autowired
+    GiocatoreStat giocatoreStat;
 
 
     @Override
@@ -66,24 +68,8 @@ public class SquadraStat implements DaoSquadra {
     @Override
     public void delete(int id) throws SQLException {
         Connection connection = cn.init();
-
-        String deleteTifoseriaQuery = "delete from tifoseria where id_squadra = " + id;
-        try (PreparedStatement ps = connection.prepareStatement(deleteTifoseriaQuery)) {
-            ps.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            connection.rollback();
-            throw new RuntimeException(e);
-        }
-
-        String deleteGiocatoreQuery = "delete from giocatore where id_squadra = " + id;
-        try (PreparedStatement ps = connection.prepareStatement(deleteGiocatoreQuery)) {
-            ps.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            connection.rollback();
-            throw new RuntimeException(e);
-        }
+        tifoseriaStat.delete(id);
+        giocatoreStat.delete(id);
 
         String deleteSquadraTorneoQuery = "delete from squadra_torneo where id_squadra = " + id;
         try (PreparedStatement ps = connection.prepareStatement(deleteSquadraTorneoQuery)) {
@@ -93,7 +79,6 @@ public class SquadraStat implements DaoSquadra {
             connection.rollback();
             throw new RuntimeException(e);
         }
-
         String deleteSquadraQuery = "delete from squadra where id = " + id;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(deleteSquadraQuery);

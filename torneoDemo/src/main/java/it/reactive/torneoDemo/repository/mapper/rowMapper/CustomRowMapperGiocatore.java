@@ -1,4 +1,4 @@
-package it.reactive.torneoDemo.repository.dao.implement.jdbcQuerry.rowMapper;
+package it.reactive.torneoDemo.repository.mapper.rowMapper;
 
 import it.reactive.torneoDemo.model.GiocatoriModel;
 import org.springframework.jdbc.core.RowMapper;

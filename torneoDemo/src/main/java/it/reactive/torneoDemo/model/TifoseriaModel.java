@@ -8,8 +8,12 @@ public class TifoseriaModel {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idTifoseria;
+
+    @Column(name = "nome_tifoseria")
     private String nomeTifoseria;
+
     @ManyToOne
     @JoinColumn(name = "id_squadra")
     private SquadraModel squadra;
@@ -49,5 +53,15 @@ public class TifoseriaModel {
     @Override
     public int hashCode() {
         return Objects.hashCode(idTifoseria);
+    }
+
+
+    @Override
+    public String toString() {
+        return "TifoseriaModel{" +
+                "idTifoseria=" + idTifoseria +
+                ", nomeTifoseria='" + nomeTifoseria + '\'' +
+                ", squadra=" + squadra +
+                '}';
     }
 }

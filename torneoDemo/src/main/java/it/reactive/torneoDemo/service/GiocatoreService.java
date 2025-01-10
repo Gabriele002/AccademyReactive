@@ -42,7 +42,6 @@ public class GiocatoreService {
         }
         GiocatoriModel giocatoriModel = daoGiocatori.readForId(id).
                 orElseThrow(() -> new RuntimeException("Giocatore non trovato"));
-
         return MapperGiocatore.modelToResponse(giocatoriModel);
     }
 }

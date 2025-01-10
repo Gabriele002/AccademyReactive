@@ -9,16 +9,10 @@ import java.util.Optional;
 
 public interface DaoTorneo {
     TorneoModel create(TorneoDTO torneoDTO) throws SQLException;
-
     Optional<TorneoModel> findById(int id);
-
     void delete(int id) throws SQLException;
-
     TorneoModel findByIdWithSquadre(int id) throws SQLException;
-
     void aggiungoSquadraAlTorneo (int idSquadra, int idTorneo) throws SQLException;
-
     List<TorneoModel> getAllTorneo() throws SQLException;
-
     List<Integer> readTorniSquadra(int idTorneo);
 }

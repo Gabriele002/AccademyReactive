@@ -92,4 +92,11 @@ public class TifoseriaPSC implements DaoTifoseria {
 
     }
 
+    @Override
+    public void delete(int id) {
+        String deleteTifoseria = "delete from tifoseria where id_squadra = ?";
+        jdbcTemplate.update(deleteTifoseria, id);
+
+    }
+
 }

@@ -110,5 +110,11 @@ public class GiocatorePSC implements DaoGiocatori {
         jdbcTemplate.update(query, idGiocatore);
     }
 
+    @Override
+    public void delete(int id) {
+        String deleteGiocatoreQuery = "delete from giocatore where id_squadra = ?";
+        jdbcTemplate.update(deleteGiocatoreQuery, id);
+    }
+
 }
 

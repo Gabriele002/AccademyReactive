@@ -5,10 +5,6 @@ import it.reactive.torneoDemo.model.GiocatoriModel;
 import it.reactive.torneoDemo.model.SquadraModel;
 import it.reactive.torneoDemo.model.TifoseriaModel;
 import it.reactive.torneoDemo.repository.dao.DaoSquadra;
-import it.reactive.torneoDemo.repository.dao.implement.jdbcQuerry.rowMapper.CustomRowMapperGiocatore;
-import it.reactive.torneoDemo.repository.dao.implement.jdbcQuerry.rowMapper.CustomRowMapperSquadra;
-import it.reactive.torneoDemo.repository.dao.implement.jdbcQuerry.rowMapper.CustomerMapRowSquadraWithTifoseria;
-import it.reactive.torneoDemo.repository.mapper.MapperSquadra;
 import it.reactive.torneoDemo.utility.DaoProfile;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +12,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -38,7 +31,10 @@ public class SquadraJdbQuerryForX implements DaoSquadra {
     JdbcTemplate jdbcTemplate;
 
     @Autowired
-    NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    GiocatoreJdbcQuerryForX giocatoreJdbcQuerryForX;
+
+    @Autowired
+    TifoseriaJdbcQuerryForX tifoseriaJdbcQuerryForX;
 
 
     @Override
@@ -64,11 +60,8 @@ public class SquadraJdbQuerryForX implements DaoSquadra {
     @Override
     @Transactional
     public void delete(int id) throws SQLException {
-        String deleteTifoseriaQuery = "delete from tifoseria where id_squadra = ?";
-        jdbcTemplate.update(deleteTifoseriaQuery, id);
-
-        String deleteGiocatoreQuery = "delete from giocatore where id_squadra = ?";
-        jdbcTemplate.update(deleteGiocatoreQuery, id);
+        tifoseriaJdbcQuerryForX.delete(id);
+        giocatoreJdbcQuerryForX.delete(id);
 
         String deleteSquadraTorneoQuery = "delete from squadra_torneo where id_squadra = ?";
         jdbcTemplate.update(deleteSquadraTorneoQuery, id);
@@ -128,7 +121,7 @@ public class SquadraJdbQuerryForX implements DaoSquadra {
 
     @Override
     public Optional<SquadraModel> readForName(String nome) {
-        String query = "select * from squadra where nome = :nomeSquadra";
+        String query = "select * from squadra where nome = ?";
         try {
             Map<String, Object> squadraMap = jdbcTemplate.queryForMap(query, new Object[]{nome});
             SquadraModel squadraModel = new SquadraModel();
@@ -136,7 +129,7 @@ public class SquadraJdbQuerryForX implements DaoSquadra {
             squadraModel.setNome(((String) squadraMap.get("nome")));
             squadraModel.setColoriSociali((String) squadraMap.get("colori_sociali"));
             return Optional.of(squadraModel);
-        } catch (IncorrectResultSizeDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
     }

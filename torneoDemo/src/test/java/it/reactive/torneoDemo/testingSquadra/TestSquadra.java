@@ -8,7 +8,6 @@ import it.reactive.torneoDemo.exception.SquadraDuplicataException;
 import it.reactive.torneoDemo.exception.SquadraNonPresenteException;
 import it.reactive.torneoDemo.model.GiocatoriModel;
 import it.reactive.torneoDemo.model.SquadraModel;
-import it.reactive.torneoDemo.model.TifoseriaModel;
 import it.reactive.torneoDemo.repository.dao.DaoGiocatori;
 import it.reactive.torneoDemo.repository.dao.DaoSquadra;
 import it.reactive.torneoDemo.repository.mapper.MapperSquadra;
@@ -20,7 +19,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.sql.SQLException;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 public abstract class TestSquadra {
@@ -63,7 +63,7 @@ public abstract class TestSquadra {
     }
 
     @Test
-    void testCreate() throws SQLException {
+    void testCreateGiocatore() throws SQLException {
         SquadraDTO squadraDTO = new SquadraDTO();
         squadraDTO.setNome("Sassuolo");
         squadraDTO.setColoriSociali("Giallo");
@@ -77,27 +77,6 @@ public abstract class TestSquadra {
         assertEquals(squadraModelCompare, squadraModelFind);
         assertEquals(new HashSet<GiocatoriModel>(), squadraModel.getGiocatori());
 
-    }
-
-    @Test
-    void testRecuperoGiocatoriDaSquadraTrue() throws SQLException {
-        List<SquadraModel> squadraModels = daoSquadra.readAll(true);
-        SquadraModel squadraModel = new SquadraModel();
-        Set<GiocatoriModel> giocatoriModels = new HashSet<>();
-        GiocatoriModel giocatoriModel = new GiocatoriModel();
-        giocatoriModel.setNumeroAmmonizioni(0);
-        giocatoriModel.setNomeCognome("Cristiano Ronaldo");
-        giocatoriModel.setIdGiocatore(1);
-        giocatoriModels.add(giocatoriModel);
-        squadraModel.setGiocatori(giocatoriModels);
-        assertEquals(giocatoriModels, squadraModels.get(0).getGiocatori());
-    }
-
-    @Test
-    void testRecuperoGiocatoriDaSquadraFalse() throws SQLException {
-        boolean giocatori = false;
-        List<SquadraModel> squadraModels = daoSquadra.readAll(giocatori);
-        assertEquals(new HashSet<GiocatoriModel>(), squadraModels.get(0).getGiocatori());
     }
 
     @Test

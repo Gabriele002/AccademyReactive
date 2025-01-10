@@ -35,12 +35,37 @@ public class MapperSquadra {
         return squadraModel;
     }
 
+    public static SquadraResponse modelToResponse(SquadraModel squadraModel, boolean listaGiocatori) {
+        SquadraResponse squadraResponse = new SquadraResponse();
+        squadraResponse.setNome(squadraModel.getNome());
+        squadraResponse.setColoriSociali(squadraModel.getColoriSociali());
+        squadraResponse.setIdSquadra(squadraModel.getIdSquadra());
+        if (squadraModel.getTifoseria() != null) {
+            TifoseriaResponse tifoseriaResponse = new TifoseriaResponse();
+            tifoseriaResponse.setNomeTifoseria(squadraModel.getTifoseria().getNomeTifoseria());
+            tifoseriaResponse.setSquadra(squadraModel.getNome());
+            tifoseriaResponse.setIdTifoseria(squadraModel.getTifoseria().getIdTifoseria());
+            squadraResponse.setTifoseria(tifoseriaResponse);
+        }
+        Set<GiocatoreResponse> giocatoriResponseList = new HashSet<>();
+        if (listaGiocatori) {
+            if (squadraModel.getGiocatori() != null && !squadraModel.getGiocatori().isEmpty()) {
+                for (GiocatoriModel giocatoriModel : squadraModel.getGiocatori()) {
+                    GiocatoreResponse giocatoreResponse = MapperGiocatore.modelToResponse(giocatoriModel);
+                    giocatoriResponseList.add(giocatoreResponse);
+                }
+            }
+        }
+        squadraResponse.setGiocatori(giocatoriResponseList);
+        return squadraResponse;
+    }
+
     public static SquadraResponse modelToResponse(SquadraModel squadraModel) {
         SquadraResponse squadraResponse = new SquadraResponse();
         squadraResponse.setNome(squadraModel.getNome());
         squadraResponse.setColoriSociali(squadraModel.getColoriSociali());
         squadraResponse.setIdSquadra(squadraModel.getIdSquadra());
-        if (squadraModel.getTifoseria() != null){
+        if (squadraModel.getTifoseria() != null) {
             TifoseriaResponse tifoseriaResponse = new TifoseriaResponse();
             tifoseriaResponse.setNomeTifoseria(squadraModel.getTifoseria().getNomeTifoseria());
             tifoseriaResponse.setSquadra(squadraModel.getNome());
@@ -58,7 +83,7 @@ public class MapperSquadra {
         return squadraResponse;
     }
 
-    public static SquadraResponse sgToResponse(SquadraModel squadraModel, Set<GiocatoriModel> giocatoriModels){
+    public static SquadraResponse sgToResponse(SquadraModel squadraModel, Set<GiocatoriModel> giocatoriModels) {
         SquadraResponse squadraResponse = new SquadraResponse();
         squadraResponse.setNome(squadraModel.getNome());
         squadraResponse.setColoriSociali(squadraModel.getColoriSociali());

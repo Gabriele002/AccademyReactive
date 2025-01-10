@@ -83,4 +83,10 @@ public class TifoseriaJdbcQuerryForX implements DaoTifoseria {
         return jdbcTemplate.query(pscSelect, rse);
 
     }
+
+    @Override
+    public void delete(int id) {
+        String deleteTifoseriaQuery = "delete from tifoseria where id_squadra = ?";
+        jdbcTemplate.update(deleteTifoseriaQuery, id);
+    }
 }

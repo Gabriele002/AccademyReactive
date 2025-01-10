@@ -49,7 +49,6 @@ public class GiocatoreStat implements DaoGiocatori {
             }
             co.commit();
         } catch (SQLException e) {
-            co.rollback();
             throw new RuntimeException(e);
         }
         return giocatoriModel;
@@ -118,11 +117,19 @@ public class GiocatoreStat implements DaoGiocatori {
             pr.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
-            connection.rollback();
             throw new SQLException(e);
         }
     }
 
-
-
+    @Override
+    public void delete(int id) {
+        Connection connection = cn.init();
+        String deleteGiocatoreQuery = "delete from giocatore where id_squadra = " + id;
+        try (PreparedStatement ps = connection.prepareStatement(deleteGiocatoreQuery)) {
+            ps.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

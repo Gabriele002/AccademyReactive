@@ -139,5 +139,23 @@ public class GiocatorePS implements DaoGiocatori {
 
     }
 
+    @Override
+    public void delete(int id) {
+        Connection connection = cn.init();
+        String deleteGiocatoreQuery = "delete from giocatore where id_squadra = ?";
+        try (PreparedStatement ps = connection.prepareStatement(deleteGiocatoreQuery)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }

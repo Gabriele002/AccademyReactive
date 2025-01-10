@@ -30,6 +30,12 @@ public class SquadraPSC implements DaoSquadra {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    GiocatorePSC giocatorePSC;
+
+    @Autowired
+    TifoseriaPSC tifoseriaPSC;
+
     @Override
     public SquadraModel create(SquadraDTO squadraDTO) throws SQLException {
         String query = "insert into squadra (nome , colori_sociali) values(?, ?)";
@@ -55,11 +61,8 @@ public class SquadraPSC implements DaoSquadra {
     @Override
     @Transactional
     public void delete(int id) throws SQLException {
-        String deleteTifoseriaQuery = "delete from tifoseria where id_squadra = ?";
-        jdbcTemplate.update(deleteTifoseriaQuery, id);
-
-        String deleteGiocatoreQuery = "delete from giocatore where id_squadra = ?";
-        jdbcTemplate.update(deleteGiocatoreQuery, id);
+        tifoseriaPSC.delete(id);
+        giocatorePSC.delete(id);
 
         String deleteSquadraTorneoQuery = "delete from squadra_torneo where id_squadra = ?";
         jdbcTemplate.update(deleteSquadraTorneoQuery, id);

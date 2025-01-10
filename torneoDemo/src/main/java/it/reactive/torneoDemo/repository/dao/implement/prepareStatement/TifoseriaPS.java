@@ -102,5 +102,18 @@ public class TifoseriaPS implements DaoTifoseria {
         }
     }
 
+    @Override
+    public void delete(int id) {
+        Connection connection = cn.init();
+        String deleteTifoseriaQuery = "delete from tifoseria where id_squadra = ?";
+        try (PreparedStatement ps = connection.prepareStatement(deleteTifoseriaQuery)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }

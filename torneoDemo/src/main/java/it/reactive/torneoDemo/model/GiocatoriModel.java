@@ -10,11 +10,17 @@ public class GiocatoriModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idGiocatore;
 
+    @Column(name = "nome_cognome")
     private String nomeCognome;
     private Integer numeroAmmonizioni;
+
     @ManyToOne
     @JoinColumn(name = "id_squadra")
     private SquadraModel squadra;
+
+
+    public GiocatoriModel() {
+    }
 
     public Integer getIdGiocatore() {
         return idGiocatore;
@@ -61,5 +67,8 @@ public class GiocatoriModel {
         return Objects.hash(idGiocatore, nomeCognome, numeroAmmonizioni, squadra);
     }
 
-
+    @Override
+    public String toString() {
+        return "";
+    }
 }

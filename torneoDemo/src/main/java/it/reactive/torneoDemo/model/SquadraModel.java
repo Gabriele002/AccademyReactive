@@ -14,12 +14,14 @@ public class SquadraModel {
     private Integer idSquadra;
 
     private String nome;
+
+
     private String coloriSociali;
 
-    @OneToMany(mappedBy = "squadra")
+    @OneToMany(mappedBy = "squadra", cascade = CascadeType.ALL)
     private Set<GiocatoriModel> giocatori = new HashSet<>();
 
-    @OneToOne(mappedBy = "squadra")
+    @OneToOne(mappedBy = "squadra", optional = true, cascade = CascadeType.ALL)
     private TifoseriaModel tifoseria;
 
 
@@ -81,23 +83,17 @@ public class SquadraModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SquadraModel that = (SquadraModel) o;
-        return Objects.equals(idSquadra, that.idSquadra) && Objects.equals(nome, that.nome) && Objects.equals(coloriSociali, that.coloriSociali);
+        return Objects.equals(idSquadra, that.idSquadra);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idSquadra, nome, coloriSociali, giocatori, tifoseria, tornei);
+        return Objects.hash(idSquadra);
     }
+
 
     @Override
     public String toString() {
-        return "SquadraModel{" +
-                "idSquadra=" + idSquadra +
-                ", nome='" + nome + '\'' +
-                ", coloriSociali='" + coloriSociali + '\'' +
-                ", giocatori=" + giocatori +
-                ", tifoseria=" + tifoseria +
-                ", tornei=" + tornei +
-                '}';
+        return "";
     }
 }

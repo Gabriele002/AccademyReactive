@@ -10,4 +10,5 @@ public interface DaoTifoseria {
     TifoseriaModel create(TifoseriaDTO tifoseriaDTO, int id) throws SQLException;
     Optional<TifoseriaModel> readForIdSquadra(int idSquadra) throws SQLException;
     TifoseriaModel update(TifoseriaDTO tifoseriaDTO, int id) throws SQLException;
+    void delete(int id);
 }

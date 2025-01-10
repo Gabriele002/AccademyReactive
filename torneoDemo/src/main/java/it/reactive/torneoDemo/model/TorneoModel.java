@@ -8,13 +8,19 @@ import java.util.Set;
 public class TorneoModel {
 
     @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idTorneo;
+
+    @Column(name = "nome_torneo")
     private String nomeTorneo;
-    @ManyToMany
+
+
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "squadra_torneo",
-            joinColumns = @JoinColumn(name = "id_squadra"),
-            inverseJoinColumns = @JoinColumn(name = "id_torneo")
+            joinColumns = @JoinColumn(name = "id_torneo"),
+            inverseJoinColumns = @JoinColumn(name = "id_squadra")
     )
     private Set<SquadraModel> squadre = new HashSet<>();
 
@@ -34,11 +40,22 @@ public class TorneoModel {
         this.nomeTorneo = nomeTorneo;
     }
 
+
+
     public Set<SquadraModel> getSquadre() {
         return squadre;
     }
 
     public void setSquadre(Set<SquadraModel> squadre) {
         this.squadre = squadre;
+    }
+
+
+    @Override
+    public String toString() {
+        return "TorneoModel{" +
+                "idTorneo=" + idTorneo +
+                ", nomeTorneo='" + nomeTorneo +
+                '}';
     }
 }

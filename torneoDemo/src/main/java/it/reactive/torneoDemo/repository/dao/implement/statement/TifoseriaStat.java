@@ -99,4 +99,21 @@ public class TifoseriaStat implements DaoTifoseria {
             connection.setAutoCommit(true);
         }
     }
+
+    @Override
+    public void delete(int id) {
+        Connection connection = cn.init();
+        String deleteTifoseriaQuery = "delete from tifoseria where id_squadra = " + id;
+        try (PreparedStatement ps = connection.prepareStatement(deleteTifoseriaQuery)) {
+            ps.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+            throw new RuntimeException(e);
+        }
+    }
 }

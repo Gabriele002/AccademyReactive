@@ -3,11 +3,10 @@ package it.reactive.torneoDemo.repository.dao.implement.jdbcQuerry;
 import it.reactive.torneoDemo.dto.in.SquadraDTO;
 import it.reactive.torneoDemo.model.GiocatoriModel;
 import it.reactive.torneoDemo.model.SquadraModel;
-import it.reactive.torneoDemo.model.TifoseriaModel;
 import it.reactive.torneoDemo.repository.dao.DaoSquadra;
-import it.reactive.torneoDemo.repository.dao.implement.jdbcQuerry.rowMapper.CustomRowMapperGiocatore;
-import it.reactive.torneoDemo.repository.dao.implement.jdbcQuerry.rowMapper.CustomRowMapperSquadra;
-import it.reactive.torneoDemo.repository.dao.implement.jdbcQuerry.rowMapper.CustomerMapRowSquadraWithTifoseria;
+import it.reactive.torneoDemo.repository.mapper.rowMapper.CustomRowMapperGiocatore;
+import it.reactive.torneoDemo.repository.mapper.rowMapper.CustomRowMapperSquadra;
+import it.reactive.torneoDemo.repository.mapper.rowMapper.CustomerMapRowSquadraWithTifoseria;
 import it.reactive.torneoDemo.repository.mapper.MapperSquadra;
 import it.reactive.torneoDemo.utility.DaoProfile;
 import it.reactive.torneoDemo.utility.Utility;
@@ -38,6 +37,12 @@ public class SquadraJdbQuerry implements DaoSquadra {
     @Autowired
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    @Autowired
+    TifoseriaJdbcQuerry tifoseriaJdbcQuerry;
+
+    @Autowired
+    GiocatoreJdbcQuerry giocatoreJdbcQuerry;
+
 
     @Override
     public SquadraModel create(SquadraDTO squadraDTO) throws SQLException {
@@ -62,11 +67,8 @@ public class SquadraJdbQuerry implements DaoSquadra {
     @Override
     @Transactional
     public void delete(int id) throws SQLException {
-        String deleteTifoseriaQuery = "delete from tifoseria where id_squadra = ?";
-        jdbcTemplate.update(deleteTifoseriaQuery, id);
-
-        String deleteGiocatoreQuery = "delete from giocatore where id_squadra = ?";
-        jdbcTemplate.update(deleteGiocatoreQuery, id);
+        tifoseriaJdbcQuerry.delete(id);
+        giocatoreJdbcQuerry.delete(id);
 
         String deleteSquadraTorneoQuery = "delete from squadra_torneo where id_squadra = ?";
         jdbcTemplate.update(deleteSquadraTorneoQuery, id);

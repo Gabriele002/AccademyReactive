@@ -13,4 +13,5 @@ public interface DaoGiocatori {
     Optional<GiocatoriModel> readForName(String nome);
     Optional<GiocatoriModel> readForId(int id);
     void incrementaAmmonizioni(int id) throws SQLException;
+    void delete(int id);
 }

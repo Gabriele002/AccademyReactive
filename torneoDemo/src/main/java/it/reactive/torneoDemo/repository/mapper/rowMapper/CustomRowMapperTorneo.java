@@ -1,4 +1,4 @@
-package it.reactive.torneoDemo.repository.dao.implement.jdbcQuerry.rowMapper;
+package it.reactive.torneoDemo.repository.mapper.rowMapper;
 
 import it.reactive.torneoDemo.model.SquadraModel;
 import it.reactive.torneoDemo.model.TorneoModel;

@@ -35,6 +35,12 @@ public class SquadraPS implements DaoSquadra {
     @Autowired
     PlatformTransactionManager transactionManager;
 
+    @Autowired
+    GiocatorePS giocatorePS;
+
+    @Autowired
+    TifoseriaPS tifoseriaPS;
+
     @Override
     public SquadraModel create(SquadraDTO squadraDTO) throws SQLException {
         SquadraModel squadra = new SquadraModel();
@@ -72,25 +78,8 @@ public class SquadraPS implements DaoSquadra {
     @Transactional
     public void delete(int id) throws SQLException {
         Connection connection = cn.init();
-
-        String deleteTifoseriaQuery = "delete from tifoseria where id_squadra = ?";
-        try (PreparedStatement ps = connection.prepareStatement(deleteTifoseriaQuery)) {
-            ps.setInt(1, id);
-            ps.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        String deleteGiocatoreQuery = "delete from giocatore where id_squadra = ?";
-        try (PreparedStatement ps = connection.prepareStatement(deleteGiocatoreQuery)) {
-            ps.setInt(1, id);
-            ps.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
+        tifoseriaPS.delete(id);
+        giocatorePS.delete(id);
         String deleteSquadraTorneoQuery = "delete from squadra_torneo where id_squadra = ?";
         try (PreparedStatement ps = connection.prepareStatement(deleteSquadraTorneoQuery)) {
             ps.setInt(1, id);
