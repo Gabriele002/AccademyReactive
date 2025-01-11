@@ -29,7 +29,7 @@ public class TorneoPS implements DaoTorneo {
 
     @Override
     public TorneoModel create(TorneoDTO torneoDTO) throws SQLException {
-        String querryTorneo = "insert into torneo (nome) values(?)";
+        String querryTorneo = "insert into torneo (nome_torneo) values(?)";
         Connection cn = connesioneDb.init();
         try {
             PreparedStatement pr = cn.prepareStatement(querryTorneo, PreparedStatement.RETURN_GENERATED_KEYS);

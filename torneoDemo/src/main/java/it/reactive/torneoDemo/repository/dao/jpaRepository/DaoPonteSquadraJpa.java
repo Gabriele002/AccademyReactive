@@ -2,6 +2,7 @@ package it.reactive.torneoDemo.repository.dao.jpaRepository;
 
 import it.reactive.torneoDemo.dto.in.SquadraDTO;
 import it.reactive.torneoDemo.model.SquadraModel;
+import it.reactive.torneoDemo.model.TorneoModel;
 import it.reactive.torneoDemo.repository.dao.DaoSquadra;
 import it.reactive.torneoDemo.repository.dao.jpaRepository.repoJpa.RepoSquadraJpa;
 import it.reactive.torneoDemo.utility.DaoProfile;
@@ -11,8 +12,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 @Profile(DaoProfile.TORNEO_DAO_SPRING_JPA_JPAREPOSITORY)
@@ -48,5 +48,16 @@ public class DaoPonteSquadraJpa implements DaoSquadra {
     @Override
     public Optional<SquadraModel> readForName(String nome) {
         return repoSquadraJpa.findByNome(nome);
+    }
+
+    @Override
+    public List<Integer> recuperoTornei(int idSquadra) {
+        SquadraModel squadraModel = repoSquadraJpa.findById(idSquadra).get();
+        Set<TorneoModel> torneoModelList = squadraModel.getTornei();
+        List<Integer> idTorneiAssociati = new ArrayList<>();
+        torneoModelList.forEach(torneoModel -> {
+            idTorneiAssociati.add(torneoModel.getIdTorneo());
+        });
+        return idTorneiAssociati;
     }
 }

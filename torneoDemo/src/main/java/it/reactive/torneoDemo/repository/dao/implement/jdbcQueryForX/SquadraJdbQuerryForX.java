@@ -5,6 +5,7 @@ import it.reactive.torneoDemo.model.GiocatoriModel;
 import it.reactive.torneoDemo.model.SquadraModel;
 import it.reactive.torneoDemo.model.TifoseriaModel;
 import it.reactive.torneoDemo.repository.dao.DaoSquadra;
+import it.reactive.torneoDemo.repository.mapper.rowMapper.CustomRowMapperSquadra;
 import it.reactive.torneoDemo.utility.DaoProfile;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -35,6 +37,9 @@ public class SquadraJdbQuerryForX implements DaoSquadra {
 
     @Autowired
     TifoseriaJdbcQuerryForX tifoseriaJdbcQuerryForX;
+
+    @Autowired
+    NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 
     @Override
@@ -132,5 +137,13 @@ public class SquadraJdbQuerryForX implements DaoSquadra {
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public List<Integer> recuperoTornei(int idSquadra) throws SQLException {
+        String query = "select t.id from torneo t join squadra_torneo st on t.id = st.id_torneo where st.id_squadra = ?";
+        MapSqlParameterSource par = new MapSqlParameterSource();
+        par.addValue("idSquadra", idSquadra);
+        return namedParameterJdbcTemplate.query(query, par, (rs, rowNum) -> rs.getInt("id_torneo"));
     }
 }

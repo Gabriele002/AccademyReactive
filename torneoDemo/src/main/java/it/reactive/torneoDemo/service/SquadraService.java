@@ -1,12 +1,12 @@
 package it.reactive.torneoDemo.service;
 
+import io.swagger.models.auth.In;
 import it.reactive.torneoDemo.dto.in.GiocatoreDTO;
 import it.reactive.torneoDemo.dto.in.SquadraDTO;
 import it.reactive.torneoDemo.dto.in.SquadreDiGiocatoriDTO;
 import it.reactive.torneoDemo.dto.in.TifoseriaDTO;
 import it.reactive.torneoDemo.dto.resource.SquadraResponse;
 import it.reactive.torneoDemo.dto.resource.TifoseriaResponse;
-import it.reactive.torneoDemo.dto.resource.Trasferimenti;
 import it.reactive.torneoDemo.exception.CodiceErrori;
 import it.reactive.torneoDemo.exception.GiocatoreDuplicatoException;
 import it.reactive.torneoDemo.exception.SquadraDuplicataException;

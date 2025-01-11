@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -35,7 +36,14 @@ public class DaoPonteGiocatoreJpa implements DaoGiocatori {
 
     @Override
     public Set<GiocatoriModel> readGiocatoriWithIdSquadra(int id){
-        return repoGiocatoreJpa.findByIdSquadra(id);
+        Set<GiocatoriModel> giocatoriModelSet = new HashSet<>();
+        Optional<GiocatoriModel> giocatoriModel = repoGiocatoreJpa.findById(id);
+        if (giocatoriModel.isPresent()){
+            SquadraModel squadraModel = giocatoriModel.get().getSquadra();
+            giocatoriModel.get().setSquadra(squadraModel);
+            giocatoriModelSet.add(giocatoriModel.get());
+        }
+        return giocatoriModelSet;
     }
 
     @Override

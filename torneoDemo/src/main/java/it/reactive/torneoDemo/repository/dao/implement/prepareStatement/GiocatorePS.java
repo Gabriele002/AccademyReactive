@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.Optional;
 
 
-
 @Repository
 @Profile(DaoProfile.TORNEO_DAO_JDBC_PREPAREDSTATEMENT)
 public class GiocatorePS implements DaoGiocatori {
@@ -46,14 +45,14 @@ public class GiocatorePS implements DaoGiocatori {
             statement.setString(1, Utility.formattaStringaPerDb(giocatoreDTO.getNomeCognome()));
             statement.setInt(2, id);
             statement.executeUpdate();
-             rs = statement.getGeneratedKeys();
+            rs = statement.getGeneratedKeys();
             if (rs.next()) {
                 int generatedId = rs.getInt(1);
                 giocatoriModel.setIdGiocatore(generatedId);
                 giocatoriModel.setNomeCognome(giocatoreDTO.getNomeCognome());
                 giocatoriModel.setNumeroAmmonizioni(0);
             }
-            if (connection != null){
+            if (connection != null) {
                 DataSourceUtils.releaseConnection(connection, ((DataSourceTransactionManager) transactionManager).getDataSource());
             }
         } catch (SQLException e) {
@@ -125,12 +124,12 @@ public class GiocatorePS implements DaoGiocatori {
         PreparedStatement pr;
 
         String query = "update giocatore set numero_ammonizioni = numero_ammonizioni + 1 where id = ?";
-        try{
+        try {
             connection = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
             pr = connection.prepareStatement(query);
             pr.setInt(1, idGiocatore);
             pr.executeUpdate();
-            if (connection != null){
+            if (connection != null) {
                 DataSourceUtils.releaseConnection(connection, ((DataSourceTransactionManager) transactionManager).getDataSource());
             }
         } catch (SQLException e) {
@@ -144,18 +143,13 @@ public class GiocatorePS implements DaoGiocatori {
         Connection connection = cn.init();
         String deleteGiocatoreQuery = "delete from giocatore where id_squadra = ?";
         try (PreparedStatement ps = connection.prepareStatement(deleteGiocatoreQuery)) {
-            ps.setInt(1, id);
+            ps.setInt(1,id);
             ps.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
             throw new RuntimeException(e);
         }
     }
-
-
 }
+
+

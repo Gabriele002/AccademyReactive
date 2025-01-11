@@ -20,10 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -109,13 +106,17 @@ public class TorneoService {
     public void removeTorneo(int idTorneo) throws SQLException {
         TorneoModel torneoModel = daoTorneo.findById(idTorneo)
                 .orElseThrow(() -> new TorneoNonTrovatoException(CodiceErrori.ERRORE_TORNERONONTROVATO));
+
         List<Integer> idSquadre = daoTorneo.readTorniSquadra(idTorneo);
-        if (idSquadre.size() != 1){
-            daoTorneo.delete(idTorneo);
-        } else {
-            daoTorneo.delete(idTorneo);
-            daoSquadra.delete(idSquadre.get(0));
+
+        for (Integer idSquadra : idSquadre) {
+            List<Integer> idTorneiAssociatiAllaSquadra = daoSquadra.recuperoTornei(idSquadra);
+            if (idTorneiAssociatiAllaSquadra.size() == 1) {
+                daoSquadra.delete(idSquadra);
+            }
         }
+
+        daoTorneo.delete(idTorneo);
     }
 
 }

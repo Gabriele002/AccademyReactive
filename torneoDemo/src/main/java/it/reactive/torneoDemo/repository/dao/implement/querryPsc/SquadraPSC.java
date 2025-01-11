@@ -1,5 +1,6 @@
 package it.reactive.torneoDemo.repository.dao.implement.querryPsc;
 
+import io.swagger.models.auth.In;
 import it.reactive.torneoDemo.dto.in.SquadraDTO;
 import it.reactive.torneoDemo.model.GiocatoriModel;
 import it.reactive.torneoDemo.model.SquadraModel;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -137,5 +139,25 @@ public class SquadraPSC implements DaoSquadra {
             return Optional.empty();
         };
         return jdbcTemplate.query(psc, rse);
+    }
+
+    @Override
+    public List<Integer> recuperoTornei(int idSquadra) throws SQLException {
+        List<Integer> idTonei = new ArrayList<>();
+        String query = "select t.id from torneo t join squadra_torneo st on t.id = st.id_torneo where st.id_squadra = ?";
+        PreparedStatementCreator psc = con -> {
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, idSquadra);
+            return ps;
+        };
+
+        ResultSetExtractor<List<Integer>> rse = rs -> {
+            List<Integer> tornei = new ArrayList<>();
+            while (rs.next()) {
+                tornei.add(rs.getInt("id_torneo"));
+            }
+            return tornei;
+        };
+        return idTonei;
     }
 }

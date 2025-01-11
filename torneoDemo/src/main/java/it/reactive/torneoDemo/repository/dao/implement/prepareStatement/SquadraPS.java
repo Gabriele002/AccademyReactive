@@ -65,7 +65,7 @@ public class SquadraPS implements DaoSquadra {
                 squadra.setColoriSociali(squadraDTO.getColoriSociali());
                 squadra.setNome(squadraDTO.getNome());
             }
-            if (con != null){
+            if (con != null) {
                 DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
             }
         } catch (SQLException e) {
@@ -160,5 +160,20 @@ public class SquadraPS implements DaoSquadra {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<Integer> recuperoTornei(int idSquadra) throws SQLException {
+        Connection connection = cn.init();
+        List<Integer> idTonei = new ArrayList<>();
+        String query = "select t.id from torneo t join squadra_torneo st on t.id = st.id_torneo where st.id_squadra = ?";
+        PreparedStatement ps = connection.prepareStatement(query);
+        ps.setInt(1, idSquadra);
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                idTonei.add(rs.getInt("id"));
+            }
+        }
+        return idTonei;
     }
 }

@@ -19,6 +19,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -147,5 +148,20 @@ public class SquadraStat implements DaoSquadra {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<Integer> recuperoTornei(int idSquadra) throws SQLException {
+        Connection connection = cn.init();
+        List<Integer> idTornei = new ArrayList<>();
+        String query = "select t.id from torneo t join squadra_torneo st on t.id = st.id_torneo where st.id_squadra = " + idSquadra;
+        PreparedStatement ps = connection.prepareStatement(query);
+        ps.setInt(1, idSquadra);
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                idTornei.add(rs.getInt("id_torneo"));
+            }
+        }
+        return idTornei;
     }
 }

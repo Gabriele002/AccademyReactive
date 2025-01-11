@@ -13,4 +13,5 @@ public interface DaoSquadra {
     Optional<SquadraModel> findById(int id) throws SQLException;
     List<SquadraModel> readAll (boolean listaGiocatori) throws SQLException;
     Optional<SquadraModel> readForName (String nome);
+    List<Integer> recuperoTornei(int idSquadra) throws SQLException;
 }
