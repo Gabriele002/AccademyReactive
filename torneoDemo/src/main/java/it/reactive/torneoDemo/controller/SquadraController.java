@@ -102,7 +102,7 @@ public class SquadraController {
     @ApiOperation(value = "Elimino squadra con relativi giocatori")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> rimuoviSquadra(@PathVariable @Min(0) @Max(10000)
-                                                   @ApiParam("id squadra")  Integer id) throws SQLException {
+                                                   @ApiParam("id squadra")  Integer id) throws Exception {
         squadraService.deleteSquadra(id);
         return ResponseEntity.noContent().build();
     }

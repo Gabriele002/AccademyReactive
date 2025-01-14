@@ -4,7 +4,12 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity(name = "torneo")
+@Entity
+@Table(name = "torneo")
+@NamedQuery(
+        name = "findAllTornei",
+        query = "select t from TorneoModel t"
+)
 public class TorneoModel {
 
     @Id
@@ -15,8 +20,7 @@ public class TorneoModel {
     @Column(name = "nome_torneo")
     private String nomeTorneo;
 
-
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "squadra_torneo",
             joinColumns = @JoinColumn(name = "id_torneo"),

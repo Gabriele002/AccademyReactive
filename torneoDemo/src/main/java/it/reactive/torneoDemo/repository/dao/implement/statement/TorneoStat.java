@@ -82,7 +82,6 @@ public class TorneoStat implements DaoTorneo {
 
         Connection con = connesioneDb.init();
         try (PreparedStatement ps = con.prepareStatement(querryFind)) {
-            ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 TorneoModel torneoModel = null;
                 if (rs.next()){

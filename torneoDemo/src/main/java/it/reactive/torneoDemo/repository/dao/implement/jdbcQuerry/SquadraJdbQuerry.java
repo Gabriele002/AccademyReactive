@@ -130,7 +130,7 @@ public class SquadraJdbQuerry implements DaoSquadra {
 
     @Override
     public List<Integer> recuperoTornei(int idSquadra) throws SQLException {
-        String query = "select t.id from torneo t join squadra_torneo st on t.id = st.id_torneo where st.id_squadra = ?";
+        String query = "select t.id from torneo t join squadra_torneo st on t.id = st.id_torneo where st.id_squadra = :idSquadra";
         MapSqlParameterSource par = new MapSqlParameterSource();
         par.addValue("idSquadra", idSquadra);
         return namedParameterJdbcTemplate.query(query, par, (rs, rowNum) -> rs.getInt("id_torneo"));

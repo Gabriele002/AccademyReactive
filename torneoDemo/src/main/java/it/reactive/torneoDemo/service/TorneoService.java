@@ -18,6 +18,7 @@ import it.reactive.torneoDemo.repository.mapper.MapperGiocatore;
 import it.reactive.torneoDemo.repository.mapper.MapperTorneo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -41,12 +42,14 @@ public class TorneoService {
     @Autowired
     TrasferimentiService trasferimentiService;
 
+    @Transactional
     public TorneoResponse createTorneo(TorneoDTO torneoDTO) throws SQLException {
         TorneoModel torneoModel = daoTorneo.create(torneoDTO);
         return MapperTorneo.modelToResponse(torneoModel);
     }
 
 
+    @Transactional
     public TorneoResponse aggiungoSquadra(int idTorneo, int idSquadra) throws SQLException {
 
         SquadraModel squadraModel = daoSquadra.findById(idSquadra)
@@ -103,7 +106,8 @@ public class TorneoService {
         return torneoResponses;
     }
 
-    public void removeTorneo(int idTorneo) throws SQLException {
+    @Transactional
+    public void removeTorneo(int idTorneo) throws Exception {
         TorneoModel torneoModel = daoTorneo.findById(idTorneo)
                 .orElseThrow(() -> new TorneoNonTrovatoException(CodiceErrori.ERRORE_TORNERONONTROVATO));
 
@@ -115,7 +119,6 @@ public class TorneoService {
                 daoSquadra.delete(idSquadra);
             }
         }
-
         daoTorneo.delete(idTorneo);
     }
 

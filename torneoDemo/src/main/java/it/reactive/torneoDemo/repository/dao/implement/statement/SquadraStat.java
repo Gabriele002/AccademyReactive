@@ -12,14 +12,16 @@ import it.reactive.torneoDemo.utility.DbCostanti;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,10 +40,16 @@ public class SquadraStat implements DaoSquadra {
     @Autowired
     GiocatoreStat giocatoreStat;
 
+    @Autowired
+    PlatformTransactionManager transactionManager;
+
 
     @Override
     public SquadraModel create(SquadraDTO squadraDTO) throws SQLException {
-        Connection connection = cn.init();
+        Connection connection;
+        ResultSet rs;
+        PreparedStatement statement;
+
         SquadraModel squadra = new SquadraModel();
         String query = "insert into squadra(" + dbCostanti.SQUADRA_NOME_COL + "," + dbCostanti.SQUADRA_COLORI_SOCIALI_COL + ") "
                 + " values('" + Utility.formattaStringaPerDb(squadraDTO.getNome()) + "', '"
@@ -49,6 +57,7 @@ public class SquadraStat implements DaoSquadra {
 
         PreparedStatement ps;
         try {
+            connection = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
             ps = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.executeUpdate();
             ResultSet generatedKeys = ps.getGeneratedKeys();
@@ -58,9 +67,10 @@ public class SquadraStat implements DaoSquadra {
                 squadra.setColoriSociali(squadraDTO.getColoriSociali());
                 squadra.setNome(squadraDTO.getNome());
             }
-            connection.commit();
+            if (connection != null) {
+                DataSourceUtils.releaseConnection(connection, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
         } catch (SQLException e) {
-            connection.rollback();
             throw new RuntimeException(e);
         }
         return squadra;
@@ -156,10 +166,9 @@ public class SquadraStat implements DaoSquadra {
         List<Integer> idTornei = new ArrayList<>();
         String query = "select t.id from torneo t join squadra_torneo st on t.id = st.id_torneo where st.id_squadra = " + idSquadra;
         PreparedStatement ps = connection.prepareStatement(query);
-        ps.setInt(1, idSquadra);
         try (ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                idTornei.add(rs.getInt("id_torneo"));
+                idTornei.add(rs.getInt("id"));
             }
         }
         return idTornei;

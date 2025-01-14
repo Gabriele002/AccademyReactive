@@ -15,6 +15,7 @@ import it.reactive.torneoDemo.service.SquadraService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -80,7 +81,8 @@ public abstract class TestSquadra {
     }
 
     @Test
-    void delete() throws SQLException {
+    @Transactional
+    void delete() throws Exception {
         daoSquadra.delete(4);
         List<SquadraModel> squadraModelList = new ArrayList<>();
         SquadraModel squadraModel = new SquadraModel();
@@ -118,7 +120,7 @@ public abstract class TestSquadra {
     }
 
     @Test
-    void deleteSquadraService() throws SQLException {
+    void deleteSquadraService() throws Exception {
         squadraService.deleteSquadra(5);
         List<SquadraModel> squadraModelList = new ArrayList<>();
         SquadraModel squadraModel = new SquadraModel();

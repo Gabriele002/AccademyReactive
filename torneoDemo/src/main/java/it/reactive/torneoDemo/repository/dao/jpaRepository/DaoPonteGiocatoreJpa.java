@@ -5,6 +5,7 @@ import it.reactive.torneoDemo.model.GiocatoriModel;
 import it.reactive.torneoDemo.model.SquadraModel;
 import it.reactive.torneoDemo.repository.dao.DaoGiocatori;
 import it.reactive.torneoDemo.repository.dao.jpaRepository.repoJpa.RepoGiocatoreJpa;
+import it.reactive.torneoDemo.repository.dao.jpaRepository.repoJpa.RepoSquadraJpa;
 import it.reactive.torneoDemo.utility.DaoProfile;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class DaoPonteGiocatoreJpa implements DaoGiocatori {
     @Autowired
     RepoGiocatoreJpa repoGiocatoreJpa;
 
+    @Autowired
+    RepoSquadraJpa repoSquadraJpa;
+
     @Override
     public GiocatoriModel create(GiocatoreDTO giocatoreDTO, int id) throws SQLException {
         GiocatoriModel giocatoriModel = new GiocatoriModel();
@@ -35,14 +39,14 @@ public class DaoPonteGiocatoreJpa implements DaoGiocatori {
     }
 
     @Override
-    public Set<GiocatoriModel> readGiocatoriWithIdSquadra(int id){
+    public Set<GiocatoriModel> readGiocatoriWithIdSquadra(int idSquadra) {
+        Optional<SquadraModel> squadraOptional = repoSquadraJpa.findById(idSquadra);
         Set<GiocatoriModel> giocatoriModelSet = new HashSet<>();
-        Optional<GiocatoriModel> giocatoriModel = repoGiocatoreJpa.findById(id);
-        if (giocatoriModel.isPresent()){
-            SquadraModel squadraModel = giocatoriModel.get().getSquadra();
-            giocatoriModel.get().setSquadra(squadraModel);
-            giocatoriModelSet.add(giocatoriModel.get());
+        if (squadraOptional.isPresent()) {
+            SquadraModel squadraModel = squadraOptional.get();
+            giocatoriModelSet = squadraModel.getGiocatori();
         }
+
         return giocatoriModelSet;
     }
 

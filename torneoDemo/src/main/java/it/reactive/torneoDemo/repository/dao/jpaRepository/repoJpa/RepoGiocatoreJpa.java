@@ -11,6 +11,6 @@ import java.util.Set;
 public interface RepoGiocatoreJpa extends JpaRepository<GiocatoriModel, Integer> {
     Optional<GiocatoriModel> findByNomeCognome(String nome);
 
-    @Query("select g from giocatore g where g.squadra.idSquadra = :id")
+    @Query("select g from GiocatoriModel g where g.squadra.idSquadra = :id")
     Set<GiocatoriModel> findByIdSquadra(@Param("id") int id);
 }

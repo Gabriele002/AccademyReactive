@@ -1,6 +1,5 @@
 package it.reactive.torneoDemo.service;
 
-import io.swagger.models.auth.In;
 import it.reactive.torneoDemo.dto.in.GiocatoreDTO;
 import it.reactive.torneoDemo.dto.in.SquadraDTO;
 import it.reactive.torneoDemo.dto.in.SquadreDiGiocatoriDTO;
@@ -52,7 +51,8 @@ public class SquadraService {
         }
     }
 
-    public void deleteSquadra(int id) throws SQLException {
+    @Transactional
+    public void deleteSquadra(int id) throws Exception {
         Optional<SquadraModel> squadraModel = daoSquadra.findById(id);
         if (squadraModel.isPresent()) {
             daoSquadra.delete(id);

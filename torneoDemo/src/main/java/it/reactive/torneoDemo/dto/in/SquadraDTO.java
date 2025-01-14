@@ -15,6 +15,11 @@ public class SquadraDTO {
     public SquadraDTO() {
     }
 
+    public SquadraDTO(String coloriSociali, String nome) {
+        this.coloriSociali = coloriSociali;
+        this.nome = nome;
+    }
+
     public @NotBlank String getColoriSociali() {
         return coloriSociali;
     }

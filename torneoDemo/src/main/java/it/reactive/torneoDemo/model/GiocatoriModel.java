@@ -3,7 +3,12 @@ package it.reactive.torneoDemo.model;
 import javax.persistence.*;
 import java.util.Objects;
 
-@Entity(name = "giocatore")
+@Entity
+@Table(name = "giocatore")
+@NamedQuery(
+        name = "findByNomeCognome",
+        query = "select g from GiocatoriModel g where g.nomeCognome = :nomeCognome"
+)
 public class GiocatoriModel {
     @Id
     @Column(name = "id")

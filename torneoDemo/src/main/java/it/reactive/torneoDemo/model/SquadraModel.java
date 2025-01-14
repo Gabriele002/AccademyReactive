@@ -5,7 +5,20 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@Entity(name = "squadra")
+@Entity
+@Table(name = "squadra")
+@NamedQuery(
+        name = "findAll",
+        query = "select s from SquadraModel s"
+)
+@NamedQuery(
+        name = "findByName",
+        query = "select s from SquadraModel s where nome = :nomeSquadra"
+)
+@NamedQuery(
+        name = "findTornei",
+        query = "select t.id from TorneoModel t join t.squadre s where s.id = :idSquadra"
+)
 public class SquadraModel {
 
     @Id
@@ -15,15 +28,13 @@ public class SquadraModel {
 
     private String nome;
 
-
     private String coloriSociali;
 
-    @OneToMany(mappedBy = "squadra", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "squadra")
     private Set<GiocatoriModel> giocatori = new HashSet<>();
 
-    @OneToOne(mappedBy = "squadra", optional = true, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "squadra", optional = true)
     private TifoseriaModel tifoseria;
-
 
     @ManyToMany(mappedBy = "squadre")
     private Set<TorneoModel> tornei = new HashSet<>();
@@ -34,6 +45,14 @@ public class SquadraModel {
 
     public void setIdSquadra(Integer idSquadra) {
         this.idSquadra = idSquadra;
+    }
+
+    public Set<TorneoModel> getTornei() {
+        return tornei;
+    }
+
+    public void setTornei(Set<TorneoModel> tornei) {
+        this.tornei = tornei;
     }
 
     public String getNome() {
@@ -69,13 +88,6 @@ public class SquadraModel {
         this.tifoseria = tifoseria;
     }
 
-    public Set<TorneoModel> getTornei() {
-        return tornei;
-    }
-
-    public void setTornei(Set<TorneoModel> tornei) {
-        this.tornei = tornei;
-    }
 
 
     @Override

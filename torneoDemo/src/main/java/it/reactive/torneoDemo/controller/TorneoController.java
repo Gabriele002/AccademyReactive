@@ -67,7 +67,7 @@ public class TorneoController {
     @ApiOperation(value = "Elimino il torneo con relative squadre assciare se non fanno parte di una altro torneo con relativi giocatori")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminaTorneoConSquadreAndGiocatori(@PathVariable @Min(0) @Max(10000)
-                                                                    @ApiParam("Id torneo")Integer id) throws SQLException {
+                                                                    @ApiParam("Id torneo")Integer id) throws Exception {
         torneoService.removeTorneo(id);
         return ResponseEntity.noContent().build();
     }
