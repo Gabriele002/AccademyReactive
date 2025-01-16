@@ -10,7 +10,10 @@ import it.reactive.torneoDemo.repository.mapper.MapperTorneo;
 import it.reactive.torneoDemo.utility.DaoProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,13 +29,16 @@ public class TorneoPS implements DaoTorneo {
     @Autowired
     ConnesioneDb connesioneDb;
 
+    @Autowired
+    PlatformTransactionManager transactionManager;
 
     @Override
     public TorneoModel create(TorneoDTO torneoDTO) throws SQLException {
         String querryTorneo = "insert into torneo (nome_torneo) values(?)";
-        Connection cn = connesioneDb.init();
+        Connection con = null;
         try {
-            PreparedStatement pr = cn.prepareStatement(querryTorneo, PreparedStatement.RETURN_GENERATED_KEYS);
+            con = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
+            PreparedStatement pr = con.prepareStatement(querryTorneo, PreparedStatement.RETURN_GENERATED_KEYS);
             pr.setString(1, torneoDTO.getNomeTorneo());
             TorneoModel torneoModel = new TorneoModel();
             pr.executeUpdate();
@@ -42,11 +48,13 @@ public class TorneoPS implements DaoTorneo {
                 torneoModel.setIdTorneo(generatedId);
                 torneoModel.setNomeTorneo(torneoDTO.getNomeTorneo());
             }
-            cn.commit();
             return torneoModel;
         } catch (SQLException e) {
-            cn.rollback();
             throw new RuntimeException(e);
+        } finally {
+            if (con != null) {
+                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
         }
     }
 
@@ -79,7 +87,7 @@ public class TorneoPS implements DaoTorneo {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 TorneoModel torneoModel = null;
-                if (rs.next()){
+                if (rs.next()) {
                     torneoModel = MapperTorneo.rsToModelWithSquadra(rs);
                 }
                 return torneoModel;
@@ -112,8 +120,9 @@ public class TorneoPS implements DaoTorneo {
     @Override
     public void aggiungoSquadraAlTorneo(int idSquadra, int idTorneo) throws SQLException {
         String querryInsert = "insert into squadra_torneo (id_squadra , id_torneo) values (?, ?)";
-        Connection cn = connesioneDb.init();
+        Connection cn = null;
         try {
+            cn = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
             PreparedStatement pr = cn.prepareStatement(querryInsert);
             pr.setInt(1, idSquadra);
             pr.setInt(2, idTorneo);
@@ -122,6 +131,10 @@ public class TorneoPS implements DaoTorneo {
         } catch (SQLException e) {
             cn.rollback();
             throw new RuntimeException(e);
+        }finally {
+            if (cn != null) {
+                DataSourceUtils.releaseConnection(cn, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
         }
     }
 
@@ -155,11 +168,11 @@ public class TorneoPS implements DaoTorneo {
 
     @Override
     public List<Integer> readTorniSquadra(int idTorneo) {
-        String querry = "SELECT s.id " +
-                "FROM squadra s " +
-                "JOIN squadra_torneo st ON s.id = st.id_squadra " +
-                "JOIN torneo t ON t.id = st.id_torneo " +
-                "WHERE t.id = ?";
+        String querry = "select s.id " +
+                "from squadra s " +
+                "join squadra_torneo st ON s.id = st.id_squadra " +
+                "join torneo t ON t.id = st.id_torneo " +
+                "where t.id = ?";
         Connection con = connesioneDb.init();
         try {
             PreparedStatement pr = con.prepareStatement(querry);
@@ -175,6 +188,4 @@ public class TorneoPS implements DaoTorneo {
             throw new RuntimeException(e);
         }
     }
-
-
 }

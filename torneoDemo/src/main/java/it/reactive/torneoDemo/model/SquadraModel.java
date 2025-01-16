@@ -30,7 +30,7 @@ public class SquadraModel {
 
     private String coloriSociali;
 
-    @OneToMany(mappedBy = "squadra")
+    @OneToMany(mappedBy = "squadra", fetch = FetchType.EAGER)
     private Set<GiocatoriModel> giocatori = new HashSet<>();
 
     @OneToOne(mappedBy = "squadra", optional = true)

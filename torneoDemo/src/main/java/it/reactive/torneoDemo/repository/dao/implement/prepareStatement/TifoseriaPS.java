@@ -34,7 +34,7 @@ public class TifoseriaPS implements DaoTifoseria {
     public TifoseriaModel create(TifoseriaDTO tifoseriaDTO, int id) throws SQLException {
         TifoseriaModel tifoseriaModel = new TifoseriaModel();
         ResultSet rs;
-        Connection con;
+        Connection con = null;
         PreparedStatement statement = null;
         String createTifoseria = "insert into tifoseria (nome_tifoseria,id_squadra) values (?, ?)";
         try {
@@ -43,18 +43,20 @@ public class TifoseriaPS implements DaoTifoseria {
             ps.setString(1, Utility.formattaStringaPerDb(tifoseriaDTO.getNomeTifoseria()));
             ps.setInt(2, id);
             ps.executeUpdate();
-           rs = ps.getGeneratedKeys();
+            rs = ps.getGeneratedKeys();
             if (rs.next()) {
                 int generatedId = rs.getInt(1);
                 tifoseriaModel.setIdTifoseria(generatedId);
                 tifoseriaModel.setNomeTifoseria(tifoseriaDTO.getNomeTifoseria());
             }
-            if (con != null){
-                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
-            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            if (con != null) {
+                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
         }
+
         return tifoseriaModel;
     }
 
@@ -78,8 +80,9 @@ public class TifoseriaPS implements DaoTifoseria {
     public TifoseriaModel update(TifoseriaDTO tifoseriaDTO, int idSquadra) throws SQLException {
         String queryUpdate = "UPDATE tifoseria SET nome_tifoseria = ? WHERE id_squadra = ?";
         String querySelect = "SELECT * FROM tifoseria WHERE id_squadra = ?";
-        Connection connection = cn.init();
+        Connection connection = null;
         try {
+            connection = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
             PreparedStatement prUpdate = connection.prepareStatement(queryUpdate);
             prUpdate.setString(1, tifoseriaDTO.getNomeTifoseria());
             prUpdate.setInt(2, idSquadra);
@@ -99,7 +102,12 @@ public class TifoseriaPS implements DaoTifoseria {
         } catch (SQLException e) {
             connection.rollback();
             throw new SQLException(e);
+        } finally {
+            if (connection != null) {
+                DataSourceUtils.releaseConnection(connection, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
         }
+
     }
 
     @Override
@@ -113,13 +121,12 @@ public class TifoseriaPS implements DaoTifoseria {
             ps = con.prepareStatement(deleteTifoseriaQuery);
             ps.setInt(1, id);
             ps.executeUpdate();
-            if (con != null){
-                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
-            }
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
+        } finally {
+            if (con != null) {
+                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
         }
     }
-
-
 }

@@ -6,6 +6,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import it.reactive.torneoDemo.dto.resource.ErrorResponse;
 import it.reactive.torneoDemo.dto.resource.GiocatoreResponse;
+import it.reactive.torneoDemo.model.TorneoModel;
+import it.reactive.torneoDemo.repository.dao.jpaRepository.repoJpa.RepoTorneoJpa;
 import it.reactive.torneoDemo.service.GiocatoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.HashSet;
+import java.util.List;
 
 @RestController
 @Validated
@@ -24,6 +27,9 @@ public class GiocatoreController {
 
     @Autowired
     GiocatoreService giocatoreService;
+
+    @Autowired
+    RepoTorneoJpa repoTorneoJpa;
 
     @ApiOperation(value = "Aggiorna ammonizione per un determinato giocatore", response = GiocatoreResponse.class)
     @ApiResponses(value = {
@@ -38,6 +44,7 @@ public class GiocatoreController {
 
     @GetMapping("{id}")
     public ResponseEntity<HashSet<GiocatoreResponse>> giocatore(@PathVariable Integer id) throws Exception {
+        List<TorneoModel> squadraModelList = repoTorneoJpa.findBySquadre_idSquadra(10);
         return ResponseEntity.ok(giocatoreService.giocatore(id));
     }
 

@@ -36,7 +36,7 @@ public class GiocatorePS implements DaoGiocatori {
     public GiocatoriModel create(GiocatoreDTO giocatoreDTO, int id) throws SQLException {
         GiocatoriModel giocatoriModel = new GiocatoriModel();
         ResultSet rs;
-        Connection connection;
+        Connection connection = null;
         PreparedStatement statement;
         String createGiocatore = "insert into giocatore (nome_cognome,id_squadra) values (?, ?)";
         try {
@@ -52,11 +52,12 @@ public class GiocatorePS implements DaoGiocatori {
                 giocatoriModel.setNomeCognome(giocatoreDTO.getNomeCognome());
                 giocatoriModel.setNumeroAmmonizioni(0);
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
             if (connection != null) {
                 DataSourceUtils.releaseConnection(connection, ((DataSourceTransactionManager) transactionManager).getDataSource());
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
         return giocatoriModel;
     }
@@ -120,7 +121,7 @@ public class GiocatorePS implements DaoGiocatori {
     @Override
     public void incrementaAmmonizioni(int idGiocatore) throws SQLException {
         ResultSet rs;
-        Connection connection;
+        Connection connection = null;
         PreparedStatement pr;
 
         String query = "update giocatore set numero_ammonizioni = numero_ammonizioni + 1 where id = ?";
@@ -129,13 +130,13 @@ public class GiocatorePS implements DaoGiocatori {
             pr = connection.prepareStatement(query);
             pr.setInt(1, idGiocatore);
             pr.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        } finally {
             if (connection != null) {
                 DataSourceUtils.releaseConnection(connection, ((DataSourceTransactionManager) transactionManager).getDataSource());
             }
-        } catch (SQLException e) {
-            throw new SQLException(e);
         }
-
     }
 
     @Override
@@ -143,7 +144,7 @@ public class GiocatorePS implements DaoGiocatori {
         Connection connection = cn.init();
         String deleteGiocatoreQuery = "delete from giocatore where id_squadra = ?";
         try (PreparedStatement ps = connection.prepareStatement(deleteGiocatoreQuery)) {
-            ps.setInt(1,id);
+            ps.setInt(1, id);
             ps.executeUpdate();
             connection.commit();
         } catch (SQLException e) {

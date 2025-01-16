@@ -46,7 +46,7 @@ public class SquadraStat implements DaoSquadra {
 
     @Override
     public SquadraModel create(SquadraDTO squadraDTO) throws SQLException {
-        Connection connection;
+        Connection connection = null;
         ResultSet rs;
         PreparedStatement statement;
 
@@ -67,11 +67,12 @@ public class SquadraStat implements DaoSquadra {
                 squadra.setColoriSociali(squadraDTO.getColoriSociali());
                 squadra.setNome(squadraDTO.getNome());
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
             if (connection != null) {
                 DataSourceUtils.releaseConnection(connection, ((DataSourceTransactionManager) transactionManager).getDataSource());
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
         return squadra;
     }

@@ -46,7 +46,7 @@ public class SquadraPS implements DaoSquadra {
         SquadraModel squadra = new SquadraModel();
 
         ResultSet rs;
-        Connection con;
+        Connection con = null;
         PreparedStatement statement;
 
         String query = "insert into squadra ( nome, colori_sociali )"
@@ -65,115 +65,116 @@ public class SquadraPS implements DaoSquadra {
                 squadra.setColoriSociali(squadraDTO.getColoriSociali());
                 squadra.setNome(squadraDTO.getNome());
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
             if (con != null) {
                 DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
         return squadra;
     }
 
-    @Override
-    @Transactional
-    public void delete(int id) throws SQLException {
-        Connection connection = cn.init();
-        tifoseriaPS.delete(id);
-        giocatorePS.delete(id);
-        String deleteSquadraTorneoQuery = "delete from squadra_torneo where id_squadra = ?";
-        try (PreparedStatement ps = connection.prepareStatement(deleteSquadraTorneoQuery)) {
-            ps.setInt(1, id);
-            ps.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        @Override
+        @Transactional
+        public void delete ( int id) throws SQLException {
+            Connection connection = cn.init();
+            tifoseriaPS.delete(id);
+            giocatorePS.delete(id);
+            String deleteSquadraTorneoQuery = "delete from squadra_torneo where id_squadra = ?";
+            try (PreparedStatement ps = connection.prepareStatement(deleteSquadraTorneoQuery)) {
+                ps.setInt(1, id);
+                ps.executeUpdate();
+                connection.commit();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+            String deleteSquadraQuery = "delete from squadra where id = ?";
+            try {
+                PreparedStatement preparedStatement = connection.prepareStatement(deleteSquadraQuery);
+                preparedStatement.setInt(1, id);
+                preparedStatement.executeUpdate();
+                connection.commit();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
 
-        String deleteSquadraQuery = "delete from squadra where id = ?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(deleteSquadraQuery);
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        @Override
+        public Optional<SquadraModel> findById ( int id){
+            String query = "select s.* from squadra s where s.id = ?";
+            Connection connection = cn.init();
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setInt(1, id);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        SquadraModel squadraModel = MapperSquadra.rsToModel(rs);
+                        return Optional.of(squadraModel);
+                    } else {
+                        return Optional.empty();
+                    }
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
-    }
 
-    @Override
-    public Optional<SquadraModel> findById(int id) {
-        String query = "select s.* from squadra s where s.id = ?";
-        Connection connection = cn.init();
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setInt(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
+        @Override
+        public List<SquadraModel> readAll ( boolean listaGiocatori) throws SQLException {
+            Connection connection = cn.init();
+            List<SquadraModel> squadre = new ArrayList<>();
+            String querySquadreTifoseria = "select s.*, t.*, t.id as id_tifoseria FROM squadra s LEFT JOIN tifoseria t ON t.id_squadra = s.id";
+            PreparedStatement pr = connection.prepareStatement(querySquadreTifoseria);
+            ResultSet rs = pr.executeQuery();
+            while (rs.next()) {
+                SquadraModel squadraModel = MapperSquadra.rsToModelWithTifoseria(rs);
+                if (listaGiocatori) {
+                    String queryGiocatori = "select g.nome_cognome, g.id, g.numero_ammonizioni from giocatore g where g.id_squadra = ?";
+                    PreparedStatement ps = connection.prepareStatement(queryGiocatori);
+                    ps.setInt(1, squadraModel.getIdSquadra());
+                    try (ResultSet rsGiocatori = ps.executeQuery()) {
+                        while (rsGiocatori.next()) {
+                            GiocatoriModel giocatoriModel = MapperGiocatore.rsToModel(rsGiocatori);
+                            squadraModel.getGiocatori().add(giocatoriModel);
+                        }
+                    }
+                }
+                squadre.add(squadraModel);
+            }
+            return squadre;
+        }
+
+        @Override
+        public Optional<SquadraModel> readForName (String nome){
+            String query = "select * from squadra where nome = ?";
+            Connection connection = cn.init();
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, nome);
+                ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
                     SquadraModel squadraModel = MapperSquadra.rsToModel(rs);
                     return Optional.of(squadraModel);
                 } else {
                     return Optional.empty();
                 }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
-    }
 
-    @Override
-    public List<SquadraModel> readAll(boolean listaGiocatori) throws SQLException {
-        Connection connection = cn.init();
-        List<SquadraModel> squadre = new ArrayList<>();
-        String querySquadreTifoseria = "select s.*, t.*, t.id as id_tifoseria FROM squadra s LEFT JOIN tifoseria t ON t.id_squadra = s.id";
-        PreparedStatement pr = connection.prepareStatement(querySquadreTifoseria);
-        ResultSet rs = pr.executeQuery();
-        while (rs.next()) {
-            SquadraModel squadraModel = MapperSquadra.rsToModelWithTifoseria(rs);
-            if (listaGiocatori) {
-                String queryGiocatori = "select g.nome_cognome, g.id, g.numero_ammonizioni from giocatore g where g.id_squadra = ?";
-                PreparedStatement ps = connection.prepareStatement(queryGiocatori);
-                ps.setInt(1, squadraModel.getIdSquadra());
-                try (ResultSet rsGiocatori = ps.executeQuery()) {
-                    while (rsGiocatori.next()) {
-                        GiocatoriModel giocatoriModel = MapperGiocatore.rsToModel(rsGiocatori);
-                        squadraModel.getGiocatori().add(giocatoriModel);
-                    }
+        @Override
+        public List<Integer> recuperoTornei ( int idSquadra) throws SQLException {
+            Connection connection = cn.init();
+            List<Integer> idTonei = new ArrayList<>();
+            String query = "select t.id from torneo t join squadra_torneo st on t.id = st.id_torneo where st.id_squadra = ?";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, idSquadra);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    idTonei.add(rs.getInt("id"));
                 }
             }
-            squadre.add(squadraModel);
-        }
-        return squadre;
-    }
-
-    @Override
-    public Optional<SquadraModel> readForName(String nome) {
-        String query = "select * from squadra where nome = ?";
-        Connection connection = cn.init();
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setString(1, nome);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                SquadraModel squadraModel = MapperSquadra.rsToModel(rs);
-                return Optional.of(squadraModel);
-            } else {
-                return Optional.empty();
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return idTonei;
         }
     }
-
-    @Override
-    public List<Integer> recuperoTornei(int idSquadra) throws SQLException {
-        Connection connection = cn.init();
-        List<Integer> idTonei = new ArrayList<>();
-        String query = "select t.id from torneo t join squadra_torneo st on t.id = st.id_torneo where st.id_squadra = ?";
-        PreparedStatement ps = connection.prepareStatement(query);
-        ps.setInt(1, idSquadra);
-        try (ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                idTonei.add(rs.getInt("id"));
-            }
-        }
-        return idTonei;
-    }
-}

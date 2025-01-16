@@ -9,6 +9,8 @@ import it.reactive.torneoDemo.utility.DaoProfile;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -29,7 +31,7 @@ public class GiocatoreStat implements DaoGiocatori {
 
     @Override
     public GiocatoriModel create(GiocatoreDTO giocatoreDTO, int id) throws SQLException {
-        Connection co = cn.init();
+        Connection con = null;
         GiocatoriModel giocatoriModel = new GiocatoriModel();
 
         String createGiocatore = "insert into giocatore (nome_cognome,id_squadra) values ('"
@@ -37,7 +39,8 @@ public class GiocatoreStat implements DaoGiocatori {
                 + "', " + id + ")";
 
         try {
-            PreparedStatement ps = co.prepareStatement(createGiocatore, PreparedStatement.RETURN_GENERATED_KEYS);
+            con = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
+            PreparedStatement ps = con.prepareStatement(createGiocatore, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.executeUpdate();
 
             ResultSet generatedKeys = ps.getGeneratedKeys();
@@ -47,9 +50,12 @@ public class GiocatoreStat implements DaoGiocatori {
                 giocatoriModel.setNomeCognome(giocatoreDTO.getNomeCognome());
                 giocatoriModel.setNumeroAmmonizioni(0);
             }
-            co.commit();
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            if (con != null) {
+                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
         }
         return giocatoriModel;
     }

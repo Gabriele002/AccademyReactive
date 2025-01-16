@@ -9,6 +9,8 @@ import it.reactive.torneoDemo.utility.DaoProfile;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -31,7 +33,7 @@ public class TifoseriaStat implements DaoTifoseria {
 
     @Override
     public TifoseriaModel create(TifoseriaDTO tifoseriaDTO, int id) throws SQLException {
-        Connection co = cn.init();
+        Connection cn = null;
         TifoseriaModel tifoseriaModel = new TifoseriaModel();
 
         String createGiocatore = "insert into tifoseria (nome_tifoseria,id_squadra) values ('"
@@ -39,7 +41,8 @@ public class TifoseriaStat implements DaoTifoseria {
                 + "', " + id + ")";
 
         try {
-            PreparedStatement ps = co.prepareStatement(createGiocatore, PreparedStatement.RETURN_GENERATED_KEYS);
+            cn = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
+            PreparedStatement ps = cn.prepareStatement(createGiocatore, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.executeUpdate();
             ResultSet generatedKeys = ps.getGeneratedKeys();
             if (generatedKeys.next()) {
@@ -47,10 +50,12 @@ public class TifoseriaStat implements DaoTifoseria {
                 tifoseriaModel.setIdTifoseria(generatedId);
                 tifoseriaModel.setNomeTifoseria(tifoseriaDTO.getNomeTifoseria());
             }
-            co.commit();
         } catch (SQLException e) {
-            co.rollback();
             throw new RuntimeException(e);
+        } finally {
+            if (cn != null) {
+                DataSourceUtils.releaseConnection(cn, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
         }
         return tifoseriaModel;
     }

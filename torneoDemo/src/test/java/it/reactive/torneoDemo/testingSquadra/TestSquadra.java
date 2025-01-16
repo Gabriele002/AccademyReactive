@@ -81,9 +81,10 @@ public abstract class TestSquadra {
     }
 
     @Test
-    @Transactional
     void delete() throws Exception {
-        daoSquadra.delete(4);
+        List<SquadraModel> squadraModelsInit = daoSquadra.readAll(false);
+       // daoSquadra.delete(4);
+        squadraService.deleteSquadra(4);
         List<SquadraModel> squadraModelList = new ArrayList<>();
         SquadraModel squadraModel = new SquadraModel();
         squadraModel.setIdSquadra(1);
@@ -144,6 +145,8 @@ public abstract class TestSquadra {
         squadraModelList.add(squadraModel2);
         squadraModelList.add(squadraModel3);
         List<SquadraModel> squadraModels = daoSquadra.readAll(false);
+        //squadraService.returnSquadre(false);
+
         assertEquals(squadraModelList.size() -1, squadraModels.size()); // - 1 perche richiamo un altra delete prima di questa
     }
 
@@ -163,6 +166,7 @@ public abstract class TestSquadra {
         squadraDTO.setColoriSociali("Nero");
         squadraDTO.setNome("Pippo");
         SquadraResponse squadraResponse = squadraService.createSquadra(squadraDTO);
+        List<SquadraResponse> squadraModels = squadraService.returnSquadre(false);
         SquadraModel squadraModel = daoSquadra.readForName("Pippo").get();
         SquadraResponse squadraResponseMapper = MapperSquadra.modelToResponse(squadraModel);
         assertEquals(squadraResponseMapper, squadraResponse);
@@ -204,7 +208,7 @@ public abstract class TestSquadra {
         giocatoreDTO.setNomeCognome("Pippo456");
         squadraService.aggiungiGiocatore(giocatoreDTO, 5);
         SquadraModel squadraModel = daoSquadra.findById(5).get();
-        Set<GiocatoriModel> giocatoriModelsRecuperati = daoGiocatori.readGiocatoriWithIdSquadra(5);
+        Set<GiocatoriModel> giocatoriModelsRecuperati = daoGiocatori.readGiocatoriWithIdSquadra(1);
         Set<GiocatoriModel> giocatoriModels = new HashSet<>();
         GiocatoriModel giocatoriModel = new GiocatoriModel();
         giocatoriModel.setSquadra(squadraModel);

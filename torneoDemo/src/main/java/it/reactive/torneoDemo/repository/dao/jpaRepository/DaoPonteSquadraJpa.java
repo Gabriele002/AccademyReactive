@@ -9,6 +9,7 @@ import it.reactive.torneoDemo.repository.dao.DaoSquadra;
 import it.reactive.torneoDemo.repository.dao.jpaRepository.repoJpa.RepoGiocatoreJpa;
 import it.reactive.torneoDemo.repository.dao.jpaRepository.repoJpa.RepoSquadraJpa;
 import it.reactive.torneoDemo.repository.dao.jpaRepository.repoJpa.RepoTifoseriaJpa;
+import it.reactive.torneoDemo.repository.dao.jpaRepository.repoJpa.RepoTorneoJpa;
 import it.reactive.torneoDemo.utility.DaoProfile;
 import it.reactive.torneoDemo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,6 @@ import java.util.Optional;
 import java.util.Set;
 
 @Repository
-@Transactional
 @Profile(DaoProfile.TORNEO_DAO_SPRING_JPA_JPAREPOSITORY)
 public class DaoPonteSquadraJpa implements DaoSquadra {
 
@@ -36,7 +36,11 @@ public class DaoPonteSquadraJpa implements DaoSquadra {
     @Autowired
     RepoGiocatoreJpa repoGiocatoreJpa;
 
+    @Autowired
+    RepoTorneoJpa repoTorneoJpa;
+
     @Override
+    @Transactional
     public SquadraModel create(SquadraDTO squadraDTO) throws SQLException {
         SquadraModel squadraModel = new SquadraModel();
         squadraModel.setNome(Utility.formattaStringaPerDb(squadraDTO.getNome()));
@@ -46,31 +50,37 @@ public class DaoPonteSquadraJpa implements DaoSquadra {
     }
 
     @Override
+    @Transactional
     public void delete(int id) {
         Set<GiocatoriModel> giocatoriModel = repoGiocatoreJpa.findByIdSquadra(id);
         giocatoriModel.forEach(g-> repoGiocatoreJpa.delete(g));
         Optional<TifoseriaModel> tifoseriaModel = repoTifoseriaJpa.findByIdSquadra(id);
         tifoseriaModel.ifPresent(model -> repoTifoseriaJpa.delete(model));
-        repoSquadraJpa.deleteSquadraTorneo(id);
+        List<TorneoModel> torneiAssociatiAdUnaSquadra = repoTorneoJpa.findBySquadre_idSquadra(id);
+        torneiAssociatiAdUnaSquadra.forEach(t -> t.getSquadre().remove(repoSquadraJpa.findById(id)));
         repoSquadraJpa.deleteById(id);
     }
 
+    @Transactional
     @Override
     public Optional<SquadraModel> findById(int id) throws SQLException {
         return repoSquadraJpa.findById(id);
     }
 
+    @Transactional
     @Override
     public List<SquadraModel> readAll(boolean listaGiocatori) {
         return repoSquadraJpa.findAll();
     }
 
+    @Transactional
     @Override
     public Optional<SquadraModel> readForName(String nome) {
         return repoSquadraJpa.findByNome(nome);
     }
 
     @Override
+    @Transactional
     public List<Integer> recuperoTornei(int idSquadra) {
         SquadraModel squadraModel = repoSquadraJpa.findById(idSquadra).get();
         Set<TorneoModel> torneoModelList = squadraModel.getTornei();

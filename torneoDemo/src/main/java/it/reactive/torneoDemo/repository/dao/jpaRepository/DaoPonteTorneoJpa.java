@@ -11,6 +11,7 @@ import it.reactive.torneoDemo.utility.DaoProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -27,6 +28,7 @@ public class DaoPonteTorneoJpa implements DaoTorneo {
 
 
     @Override
+    @Transactional
     public TorneoModel create(TorneoDTO torneoDTO) throws SQLException {
         TorneoModel torneoModel = new TorneoModel();
         torneoModel.setNomeTorneo(torneoDTO.getNomeTorneo());
@@ -34,11 +36,13 @@ public class DaoPonteTorneoJpa implements DaoTorneo {
     }
 
     @Override
+    @Transactional
     public Optional<TorneoModel> findById(int id) {
         return repoTorneoJpa.findById(id);
     }
 
     @Override
+    @Transactional
     public void delete(int id) throws SQLException {
         TorneoModel torneoModel = repoTorneoJpa.findById(id).get();
         torneoModel.getSquadre().clear();
@@ -47,6 +51,7 @@ public class DaoPonteTorneoJpa implements DaoTorneo {
     }
 
     @Override
+    @Transactional
     public TorneoModel findByIdWithSquadre(int id) throws SQLException {
         TorneoModel torneoModel = repoTorneoJpa.findById(id).get();
         Set<SquadraModel> squadraModels = torneoModel.getSquadre();
@@ -55,6 +60,7 @@ public class DaoPonteTorneoJpa implements DaoTorneo {
     }
 
     @Override
+    @Transactional
     public void aggiungoSquadraAlTorneo(int idSquadra, int idTorneo) throws SQLException {
         TorneoModel torneo = repoTorneoJpa.findById(idTorneo).get();
         SquadraModel squadra = repoSquadraJpa.findById(idSquadra).get();
@@ -64,6 +70,7 @@ public class DaoPonteTorneoJpa implements DaoTorneo {
     }
 
     @Override
+    @Transactional
     public List<TorneoModel> getAllTorneo(){
         List<TorneoModel>torneoModelList = repoTorneoJpa.findAll();
         torneoModelList.forEach(torneoModel ->torneoModel.getSquadre()
@@ -75,6 +82,7 @@ public class DaoPonteTorneoJpa implements DaoTorneo {
     }
 
     @Override
+    @Transactional
     public List<Integer> readTorniSquadra(int idTorneo) {
         List<Integer> idSquadre = new ArrayList<>();
         TorneoModel torneoModel = repoTorneoJpa.findById(idTorneo).get();

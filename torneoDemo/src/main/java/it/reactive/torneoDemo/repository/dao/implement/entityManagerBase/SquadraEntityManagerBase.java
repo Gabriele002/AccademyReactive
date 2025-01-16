@@ -9,6 +9,7 @@ import it.reactive.torneoDemo.utility.DaoProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -19,6 +20,7 @@ import java.util.*;
 
 @Repository
 @Profile(DaoProfile.TORNEO_DAO_SPRING_JPA_ENTITY_MANAGER_BASE)
+@Transactional
 public class SquadraEntityManagerBase implements DaoSquadra {
 
     @PersistenceContext
@@ -39,8 +41,10 @@ public class SquadraEntityManagerBase implements DaoSquadra {
         return squadraModel;
     }
 
+    @Transactional
     @Override
     public void delete(int id) throws Exception {
+        entityManager.joinTransaction();
         SquadraModel squadraModel = entityManager.find(SquadraModel.class, id);
         Set<GiocatoriModel> giocatoriModelList = giocatoreEntityManagerBase.readGiocatoriWithIdSquadra(id);
         if (!giocatoriModelList.isEmpty()){
@@ -77,7 +81,9 @@ public class SquadraEntityManagerBase implements DaoSquadra {
     }
 
     @Override
+    @Transactional
     public Optional<SquadraModel> readForName(String nome) {
+        entityManager.joinTransaction();
         TypedQuery<SquadraModel> query = entityManager.createNamedQuery("findByName", SquadraModel.class);
         query.setParameter("nomeSquadra", nome);
         List<SquadraModel> squadraModelList = query.getResultList();

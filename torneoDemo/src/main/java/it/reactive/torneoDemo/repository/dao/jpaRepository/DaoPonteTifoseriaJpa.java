@@ -9,6 +9,7 @@ import it.reactive.torneoDemo.utility.DaoProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -21,6 +22,7 @@ public class DaoPonteTifoseriaJpa implements DaoTifoseria {
     RepoTifoseriaJpa repoTifoseriaJpa;
 
     @Override
+    @Transactional
     public TifoseriaModel create(TifoseriaDTO tifoseriaDTO, int id) throws SQLException {
         TifoseriaModel tifoseriaModel = new TifoseriaModel();
         tifoseriaModel.setNomeTifoseria(tifoseriaDTO.getNomeTifoseria());
@@ -31,11 +33,13 @@ public class DaoPonteTifoseriaJpa implements DaoTifoseria {
     }
 
     @Override
+    @Transactional
     public Optional<TifoseriaModel> readForIdSquadra(int idSquadra) throws SQLException {
         return repoTifoseriaJpa.findByIdSquadra(idSquadra);
     }
 
     @Override
+    @Transactional
     public TifoseriaModel update(TifoseriaDTO tifoseriaDTO, int id) throws SQLException {
         TifoseriaModel tifoseriaModel = repoTifoseriaJpa.findByIdSquadra(id).get();
         tifoseriaModel.setNomeTifoseria(tifoseriaDTO.getNomeTifoseria());
@@ -44,6 +48,7 @@ public class DaoPonteTifoseriaJpa implements DaoTifoseria {
     }
 
     @Override
+    @Transactional
     public void delete(int id) {
         repoTifoseriaJpa.deleteById(id);
     }

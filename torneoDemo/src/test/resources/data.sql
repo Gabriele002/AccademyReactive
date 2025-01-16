@@ -6,4 +6,4 @@ INSERT INTO squadra (id, colori_sociali, nome) VALUES
 (5, 'Azzurro e Bianco', 'Napoli');
 
 insert into giocatore (id, nome_cognome, numero_ammonizioni, id_squadra) values
-(1, 'Cristiano Ronaldo', 0, 1)
+(1, 'Cristiano Ronaldo', 0, 1);
