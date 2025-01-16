@@ -16,6 +16,9 @@ public class CountryResource extends BaseResource {
         this.continent = continent;
     }
 
+    public CountryResource() {
+    }
+
     public long getChiave() {
         return chiave;
     }
