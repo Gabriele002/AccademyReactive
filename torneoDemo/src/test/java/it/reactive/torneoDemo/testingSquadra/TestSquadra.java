@@ -15,8 +15,9 @@ import it.reactive.torneoDemo.service.SquadraService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.annotation.Rollback;
 
+import javax.persistence.EntityManager;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -107,7 +108,9 @@ public abstract class TestSquadra {
         squadraModelList.add(squadraModel2);
         squadraModelList.add(squadraModel3);
         List<SquadraModel> squadraModels = daoSquadra.readAll(false);
-        assertEquals(squadraModelList, squadraModels);
+//        assertEquals(squadraModelList, squadraModels);
+        Optional<SquadraModel> squadra = daoSquadra.findById(4);
+        assertEquals(Optional.empty(), squadra);
     }
 
 

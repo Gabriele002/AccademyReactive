@@ -25,6 +25,7 @@ import java.util.Set;
 
 @Repository
 @Profile(DaoProfile.TORNEO_DAO_SPRING_JPA_JPAREPOSITORY)
+@Transactional
 public class DaoPonteSquadraJpa implements DaoSquadra {
 
     @Autowired
@@ -40,7 +41,6 @@ public class DaoPonteSquadraJpa implements DaoSquadra {
     RepoTorneoJpa repoTorneoJpa;
 
     @Override
-    @Transactional
     public SquadraModel create(SquadraDTO squadraDTO) throws SQLException {
         SquadraModel squadraModel = new SquadraModel();
         squadraModel.setNome(Utility.formattaStringaPerDb(squadraDTO.getNome()));
@@ -50,7 +50,6 @@ public class DaoPonteSquadraJpa implements DaoSquadra {
     }
 
     @Override
-    @Transactional
     public void delete(int id) {
         Set<GiocatoriModel> giocatoriModel = repoGiocatoreJpa.findByIdSquadra(id);
         giocatoriModel.forEach(g-> repoGiocatoreJpa.delete(g));
@@ -61,26 +60,22 @@ public class DaoPonteSquadraJpa implements DaoSquadra {
         repoSquadraJpa.deleteById(id);
     }
 
-    @Transactional
     @Override
     public Optional<SquadraModel> findById(int id) throws SQLException {
         return repoSquadraJpa.findById(id);
     }
 
-    @Transactional
     @Override
     public List<SquadraModel> readAll(boolean listaGiocatori) {
         return repoSquadraJpa.findAll();
     }
 
-    @Transactional
     @Override
     public Optional<SquadraModel> readForName(String nome) {
         return repoSquadraJpa.findByNome(nome);
     }
 
     @Override
-    @Transactional
     public List<Integer> recuperoTornei(int idSquadra) {
         SquadraModel squadraModel = repoSquadraJpa.findById(idSquadra).get();
         Set<TorneoModel> torneoModelList = squadraModel.getTornei();
