@@ -1,6 +1,7 @@
 package it.reactive.accademy.demoTorneoBatch.config.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -14,8 +15,10 @@ public class SquadraModel {
     @Column(name = "id")
     private Integer idSquadra;
 
+    @Column(name = "nome")
     private String nome;
 
+    @Column(name = "colori_sociali")
     private String coloriSociali;
 
     @OneToMany(mappedBy = "squadra", fetch = FetchType.EAGER)

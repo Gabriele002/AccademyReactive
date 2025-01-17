@@ -1,6 +1,7 @@
 package it.reactive.accademy.demoTorneoBatch.config.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
 import java.util.Objects;
 
 @Entity
@@ -13,6 +14,8 @@ public class GiocatoriModel {
 
     @Column(name = "nome_cognome")
     private String nomeCognome;
+
+    @Column(name = "numero_ammonizioni")
     private Integer numeroAmmonizioni;
 
     @ManyToOne
@@ -68,8 +71,14 @@ public class GiocatoriModel {
         return Objects.hash(idGiocatore, nomeCognome, numeroAmmonizioni, squadra);
     }
 
+
     @Override
     public String toString() {
-        return "";
+        return "GiocatoriModel{" +
+                "idGiocatore=" + idGiocatore +
+                ", nomeCognome='" + nomeCognome + '\'' +
+                ", numeroAmmonizioni=" + numeroAmmonizioni +
+                ", squadra=" + squadra +
+                '}';
     }
 }

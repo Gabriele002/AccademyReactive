@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class BatchConf {
                         String queryStr = "select g from GiocatoriModel g";
                         Query query = entityManager.createQuery(queryStr);
                         List<GiocatoriModel> giocatoriModelList = query.getResultList();
-                        giocatoriModelList.forEach(System.out::println);
+                        giocatoriModelList.forEach(giocatoriModel -> log.info(giocatoriModel.toString()));
                         return RepeatStatus.FINISHED;
                     }
                 }, transactionManager)

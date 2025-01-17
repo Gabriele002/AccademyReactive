@@ -1,6 +1,7 @@
 package it.reactive.accademy.demoTorneoBatch.config.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
 import java.util.HashSet;
 import java.util.Set;
 
