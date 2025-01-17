@@ -24,6 +24,9 @@ deployment:
     active: true
 
 notification:
-    email: "bear-noreply@intesasanpaolo.com" # available: indirizzo email
-    when : always # available: always
+  email: "bear-noreply@intesasanpaolo.com" # available: indirizzo email
+  when: always # available: always
+
+
+
 

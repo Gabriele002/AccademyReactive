@@ -16,6 +16,4 @@ public class CountryFactory {
         countryResource.setNome(infoCountry[2]);
         return countryResource;
     }
-
-
 }

@@ -1,5 +1,6 @@
 package com.intesasanpaolo.bear.mpab0.corsobearesercizi.command;
 
+import com.intesasanpaolo.bear.core.command.BaseCommand;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.model.CountryModel;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.service.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +12,13 @@ import java.util.List;
 
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class CountryCommandService {
+public class CountryCommandJdbc extends BaseCommand<List<CountryModel>> {
 
     @Autowired
     CountryService countryService;
 
-
-    public List<CountryModel> getListaCountry() throws Exception {
-        return countryService.getCountry();
+    @Override
+    public List<CountryModel> doExecute() throws Exception {
+        return countryService.getJdbc();
     }
 }
