@@ -11,8 +11,8 @@ public class CountryFactory {
         String[] infoCountry = countryModel.getInfo().split("-");
         CountryResource countryResource = new CountryResource();
         countryResource.setChiave(countryModel.getId());
-        countryResource.setContinent(infoCountry[0]);
-        countryResource.setLenguage(infoCountry[1]);
+        countryResource.setContinente(infoCountry[0]);
+        countryResource.setLingua(infoCountry[1]);
         countryResource.setNome(infoCountry[2]);
         return countryResource;
     }

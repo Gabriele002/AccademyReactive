@@ -3,11 +3,11 @@ package it.reactive.accademy.demoTorneoBatch.config;
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -19,8 +19,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableConfigurationProperties
-public class H2BatchConfiguration {
+public class ConfigurationDataSource {
+
+    public static final String TORNEO_DATASOURCE = "TORNEO";
 
     @Bean(name = "dataSource")
     @Primary
@@ -32,12 +33,10 @@ public class H2BatchConfiguration {
                 .build();
     }
 
-    @Bean(name = "TORNEO")
+    @Bean(TORNEO_DATASOURCE)
     @ConfigurationProperties(prefix = "spring.datasource-torneo")
     public DataSource dataSource() {
-        DataSource dataSource = DataSourceBuilder.create().build();
-        System.out.println("DataSource: " + dataSource);
-        return dataSource;
+        return DataSourceBuilder.create().build();
     }
 
     @Bean(name = "entityManagerFactory")
@@ -47,8 +46,15 @@ public class H2BatchConfiguration {
         factoryBean.setPackagesToScan("it.reactive.accademy.demoTorneoBatch.config.model");
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         factoryBean.setJpaVendorAdapter(vendorAdapter);
-
         return factoryBean;
+    }
+
+
+    @Bean(name = "JDBC_TEMPLATE")
+    public JdbcTemplate jdbcTemplate(@Qualifier("TORNEO") DataSource dataSource) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        jdbcTemplate.setDataSource(dataSource);
+        return jdbcTemplate;
     }
 
 

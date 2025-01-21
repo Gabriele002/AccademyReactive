@@ -1,19 +1,20 @@
 package com.intesasanpaolo.bear.mpab0.corsobearesercizi.resource;
 
 import com.intesasanpaolo.bear.core.resource.BaseResource;
+import io.swagger.models.auth.In;
 
 public class CountryResource extends BaseResource {
 
-    private long chiave;
+    private Integer chiave;
     private String nome;
-    private String lenguage;
-    private String continent;
+    private String lingua;
+    private String continente;
 
-    public CountryResource(long chiave, String nome, String lenguage, String continent) {
+    public CountryResource(Integer chiave, String nome, String lenguage, String continent) {
         this.chiave = chiave;
         this.nome = nome;
-        this.lenguage = lenguage;
-        this.continent = continent;
+        this.lingua = lenguage;
+        this.continente = continent;
     }
 
     public CountryResource() {
@@ -23,7 +24,7 @@ public class CountryResource extends BaseResource {
         return chiave;
     }
 
-    public void setChiave(long chiave) {
+    public void setChiave(Integer chiave) {
         this.chiave = chiave;
     }
 
@@ -35,19 +36,19 @@ public class CountryResource extends BaseResource {
         this.nome = nome;
     }
 
-    public String getLenguage() {
-        return lenguage;
+    public String getLingua() {
+        return lingua;
     }
 
-    public void setLenguage(String lenguage) {
-        this.lenguage = lenguage;
+    public void setLingua(String lingua) {
+        this.lingua = lingua;
     }
 
-    public String getContinent() {
-        return continent;
+    public String getContinente() {
+        return continente;
     }
 
-    public void setContinent(String continent) {
-        this.continent = continent;
+    public void setContinente(String continente) {
+        this.continente = continente;
     }
 }

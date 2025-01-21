@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -87,7 +86,7 @@ public class CountryController extends CoreController {
     }
 
     @PostMapping(value = "/{id}")
-    public ResponseEntity<CountryResource> getCountryByID(@PathVariable Integer id) throws Exception {
+    public ResponseEntity<CountryResource> getCountryByID(@PathVariable("id") Integer id) throws Exception {
         CountryModel countryModel = beanFactory.getBean(JpaCommand.class, id).execute().orElseThrow(() -> new Exception("Country non presente"));
         CountryResource countryResource = countryFactory.mapperModelToResource(countryModel);
         return ResponseEntity.ok(countryResource);
