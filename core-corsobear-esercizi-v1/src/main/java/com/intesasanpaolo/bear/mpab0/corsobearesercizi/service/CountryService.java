@@ -1,16 +1,20 @@
 package com.intesasanpaolo.bear.mpab0.corsobearesercizi.service;
 
+import com.intesasanpaolo.bear.connector.jdbc.JDBCQueryType;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.connector.jdbc.GetCountriesJdbcConnector;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.connector.GetCountriesJdbcRequestTransformer;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.connector.GetCountriesJdbcResponseTransformer;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.connector.jpa.JpaRepository;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.model.CountryModel;
 import com.intesasanpaolo.bear.service.BaseService;
+import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.sql.JDBCType;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,5 +67,13 @@ public class CountryService extends BaseService {
         return country;
     }
 
+
+
+    public List<CountryModel> countryModelsFindByLingua(String lingua) {
+        String query = "select * from countries c where info like ?";
+        return jdbcConnector.call(query,request,response,
+                Collections.singletonList("%" + lingua + "%"),
+                JDBCQueryType.FIND);
+    }
 }
 

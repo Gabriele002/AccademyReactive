@@ -1,4 +1,4 @@
-package it.reactive.accademy.demoTorneoBatch.config.model;
+package it.reactive.accademy.demoTorneoBatch.model;
 
 import jakarta.persistence.*;
 

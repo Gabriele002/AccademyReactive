@@ -1,4 +1,4 @@
-package it.reactive.accademy.demoTorneoBatch.config.model.dto;
+package it.reactive.accademy.demoTorneoBatch.dto;
 
 import java.io.Serializable;
 

@@ -1,10 +1,10 @@
 package it.reactive.accademy.demoTorneoBatch.config;
 
-import it.reactive.accademy.demoTorneoBatch.config.model.GiocatoriModel;
-import it.reactive.accademy.demoTorneoBatch.config.model.SquadraModel;
-import it.reactive.accademy.demoTorneoBatch.config.model.TifoseriaModel;
-import it.reactive.accademy.demoTorneoBatch.config.model.TorneoModel;
-import it.reactive.accademy.demoTorneoBatch.config.model.dto.*;
+import it.reactive.accademy.demoTorneoBatch.dto.*;
+import it.reactive.accademy.demoTorneoBatch.model.GiocatoriModel;
+import it.reactive.accademy.demoTorneoBatch.model.SquadraModel;
+import it.reactive.accademy.demoTorneoBatch.model.TifoseriaModel;
+import it.reactive.accademy.demoTorneoBatch.model.TorneoModel;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -174,7 +174,7 @@ public class BatchConf {
 
             } else if (tipoRecord instanceof SquadraDto) {
                 return itemStreamWriterSquadra;
-            } else if (tipoRecord instanceof  GiocatoreDto) {
+            } else if (tipoRecord instanceof GiocatoreDto) {
                 return itemWriterGiocatori;
             } else if (tipoRecord instanceof SquadraTorneoDto) {
                 return itemWriterSquadraTorneo;
@@ -234,7 +234,7 @@ public class BatchConf {
                     default -> new ItemProcessor<String, TipoRecord>() {
                         @Override
                         public TipoRecord process(String riga) throws Exception {
-                            return null;
+                            throw new RuntimeException("Tipo non gestito");
                         }
                     };
                 };

@@ -1,4 +1,4 @@
-package it.reactive.accademy.demoTorneoBatch.config.model.dto;
+package it.reactive.accademy.demoTorneoBatch.dto;
 
 public class TorneoDto extends TipoRecord {
     String nome;
