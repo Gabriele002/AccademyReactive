@@ -43,7 +43,7 @@ public class ConfigurationDataSource {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(@Qualifier("TORNEO") DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setDataSource(dataSource);
-        factoryBean.setPackagesToScan("it.reactive.accademy.demoTorneoBatch.config.model");
+        factoryBean.setPackagesToScan("it.reactive.accademy.demoTorneoBatch.model");
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         factoryBean.setJpaVendorAdapter(vendorAdapter);
         return factoryBean;
