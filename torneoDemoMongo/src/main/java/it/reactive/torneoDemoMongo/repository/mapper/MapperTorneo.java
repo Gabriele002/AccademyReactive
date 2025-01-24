@@ -17,19 +17,16 @@ public class MapperTorneo {
     @Autowired
     MapperSquadra mapperSquadra;
 
+
     public TorneoResponse modelToResponse(TorneoMongo torneoModel) {
         TorneoResponse torneoResponse = new TorneoResponse();
         torneoResponse.setNomeTorneo(torneoModel.getNome());
         torneoResponse.setIdTorneo(String.valueOf(torneoModel.get_id()));
-        if (torneoModel.getSquadre() != null){
-            Set<SquadraResponse> squadraResponse = torneoModel.getSquadre().stream()
-                    .map(squadraModelMongo -> {
-                                return mapperSquadra.modelToResponse(squadraModelMongo);
-                            }
-                    ).collect(Collectors.toSet());
-            torneoResponse.setSquadre(squadraResponse);
-        }else {
-            torneoResponse.setSquadre(new HashSet<>());
+        if (!torneoModel.getIdSquadre().isEmpty()) {
+            Set<SquadraResponse> squadraResponses =torneoModel.getSquadreTorneo().stream()
+                    .map(squadraModelMongo ->
+                    mapperSquadra.modelToResponse(squadraModelMongo)).collect(Collectors.toSet());
+            torneoResponse.setSquadre(squadraResponses);
         }
         return torneoResponse;
     }

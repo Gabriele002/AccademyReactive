@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Document(collection = "torneo")
@@ -15,18 +16,28 @@ public class TorneoMongo {
 
     private String nome;
 
-    private Set<SquadraModelMongo> squadre = new HashSet<>();
+    private Set<ObjectId> IdSquadre = new HashSet<>();
+
+    private Set<SquadraModelMongo> squadreTorneo = new HashSet<>();
+
+    public Set<SquadraModelMongo> getSquadreTorneo() {
+        return squadreTorneo;
+    }
+
+    public void setSquadreTorneo(Set<SquadraModelMongo> squadreTorneo) {
+        this.squadreTorneo = squadreTorneo;
+    }
 
     public Object get_id() {
         return _id;
     }
 
-    public Set<SquadraModelMongo> getSquadre() {
-        return squadre;
+    public Set<ObjectId> getIdSquadre() {
+        return IdSquadre;
     }
 
-    public void setSquadre(Set<SquadraModelMongo> squadre) {
-        this.squadre = squadre;
+    public void setIdSquadre(Set<ObjectId> idSquadre) {
+        this.IdSquadre = idSquadre;
     }
 
     public void set_id(ObjectId _id) {
@@ -39,5 +50,15 @@ public class TorneoMongo {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+
+    @Override
+    public String toString() {
+        return "TorneoMongo{" +
+                "_id=" + _id +
+                ", nome='" + nome + '\'' +
+                ", IdSquadre=" + IdSquadre +
+                '}';
     }
 }

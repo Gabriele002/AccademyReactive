@@ -30,7 +30,7 @@ public class SquadraModelMongo {
         this.tifoseriaModelMongo = tifoseriaModelMongo;
     }
 
-    public Object get_id() {
+    public ObjectId get_id() {
         return _id;
     }
 

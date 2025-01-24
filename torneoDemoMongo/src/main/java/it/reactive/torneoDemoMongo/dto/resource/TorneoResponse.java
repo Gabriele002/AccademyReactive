@@ -2,12 +2,13 @@ package it.reactive.torneoDemoMongo.dto.resource;
 
 import it.reactive.torneoDemoMongo.model.SquadraModelMongo;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class TorneoResponse {
     private String idTorneo;
     private String nomeTorneo;
-    private Set<SquadraResponse> squadre;
+    private Set<SquadraResponse> squadre = new HashSet<>();
 
 
     public String getIdTorneo() {

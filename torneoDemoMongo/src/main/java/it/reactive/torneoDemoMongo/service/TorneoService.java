@@ -1,9 +1,7 @@
 package it.reactive.torneoDemoMongo.service;
 
 
-import it.reactive.torneoDemoMongo.dto.in.SquadraDtoNome;
 import it.reactive.torneoDemoMongo.dto.in.TorneoDTO;
-import it.reactive.torneoDemoMongo.dto.resource.SquadraResponse;
 import it.reactive.torneoDemoMongo.dto.resource.TorneoResponse;
 import it.reactive.torneoDemoMongo.exception.CodiceErrori;
 import it.reactive.torneoDemoMongo.exception.SquadraNonPresenteException;
@@ -12,19 +10,13 @@ import it.reactive.torneoDemoMongo.model.SquadraModelMongo;
 import it.reactive.torneoDemoMongo.model.TorneoMongo;
 import it.reactive.torneoDemoMongo.repository.dao.SquadraDaoImpl;
 import it.reactive.torneoDemoMongo.repository.dao.TorneoDaoImpl;
+import it.reactive.torneoDemoMongo.repository.mapper.MapperSquadra;
 import it.reactive.torneoDemoMongo.repository.mapper.MapperTorneo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class TorneoService {
@@ -41,6 +33,9 @@ public class TorneoService {
     @Autowired
     MapperTorneo mapperTorneo;
 
+    @Autowired
+    MapperSquadra mapperSquadra;
+
 
     public TorneoResponse createTorneo(TorneoDTO torneoDTO) throws SQLException {
         TorneoMongo torneoModel = torneoDao.create(torneoDTO);
@@ -55,9 +50,12 @@ public class TorneoService {
         TorneoMongo torneoModelFind = torneoDao.findById(idTorneo).orElseThrow(() ->
                 new TorneoNonTrovatoException(CodiceErrori.ERRORE_TORNERONONTROVATO));
 
-        torneoModelFind.getSquadre().add(squadraModel);
+        torneoModelFind.getIdSquadre().add(squadraModel.get_id());
         torneoDao.aggiungiSquadra(torneoModelFind);
-        return mapperTorneo.modelToResponse(torneoModelFind);
+        SquadraModelMongo squadraModelMongo = torneoDao.getUltimaSquadraPerTorneo(idTorneo);
+        torneoModelFind.getSquadreTorneo().add(squadraModelMongo);
+        TorneoResponse torneoResponse = mapperTorneo.modelToResponse(torneoModelFind);
+        return torneoResponse;
     }
 
 
