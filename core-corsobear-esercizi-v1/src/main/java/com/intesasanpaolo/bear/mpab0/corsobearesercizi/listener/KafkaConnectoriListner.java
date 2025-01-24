@@ -1,4 +1,4 @@
-package com.intesasanpaolo.bear.mpab0.corsobearesercizi.connector.Kafka;
+package com.intesasanpaolo.bear.mpab0.corsobearesercizi.listener;
 
 import com.intesasanpaolo.bear.eventlistener.BaseEventListener;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.command.CountryCommandListnerKafka;

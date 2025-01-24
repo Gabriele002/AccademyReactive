@@ -25,19 +25,23 @@ public class WriterCustomsGiocatori {
         return new ItemStreamWriter<TipoRecord>() {
             @Override
             public void write(Chunk<? extends TipoRecord> chunk) throws Exception {
-                chunk.forEach(tipoFile -> {
+                Connection con = null;
+                try {
+                    con = dataSource.getConnection();
+
+                PreparedStatement pr = con.prepareStatement("select s.id from squadra s where nome = ?");
+                PreparedStatement prInsert = con.prepareStatement("insert into giocatore(nome_cognome, numero_ammonizioni, id_squadra) values (?,?,?)");
+
+                    chunk.forEach(tipoFile -> {
                     GiocatoreDto giocatoreDto = (GiocatoreDto) tipoFile;
                     try {
                         ResultSet rs = null;
-                        Connection con = dataSource.getConnection();
-                        PreparedStatement pr = con.prepareStatement("select s.id from squadra s where nome = ?");
                         pr.setString(1, giocatoreDto.getNomeSquadra());
                         rs = pr.executeQuery();
                         int id = 0;
                         if (rs.next()) {
                             id = rs.getInt("id");
                         }
-                        PreparedStatement prInsert = con.prepareStatement("insert into giocatore(nome_cognome, numero_ammonizioni, id_squadra) values (?,?,?)");
                         prInsert.setString(1, giocatoreDto.getNomeCognome());
                         prInsert.setInt(2, 0);
                         prInsert.setInt(3, id);
@@ -47,6 +51,11 @@ public class WriterCustomsGiocatori {
                     }
 
                 });
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                } finally {
+                    con.close();
+                }
             }
         };
     }

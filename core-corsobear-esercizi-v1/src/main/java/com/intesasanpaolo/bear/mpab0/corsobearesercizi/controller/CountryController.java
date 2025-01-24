@@ -52,6 +52,7 @@ public class CountryController extends CoreController {
         return ResponseEntity.ok(countryResources);
     }
 
+    // Implemenatazione con il service
     public ResponseEntity<List<CountryResource>> getCountryService() throws Exception {
         List<CountryModel> countryResourceList = beanFactory.getBean(CountryCommandService.class).getListaCountry();
         List<CountryResource> countryResources = countryResourceList
@@ -62,7 +63,7 @@ public class CountryController extends CoreController {
         return ResponseEntity.ok(countryResources);
     }
 
-
+    // Implemenatazione con il service e il pasaggio dei parametri
     public ResponseEntity<List<CountryResource>> getCountryServiceConParametri(Integer id, String info) throws Exception {
         List<CountryModel> countryResourceList = beanFactory.getBean(CountryCommandWithParam.class, info, id).getCountry();
         List<CountryResource> countryResources = countryResourceList
@@ -73,7 +74,7 @@ public class CountryController extends CoreController {
         return ResponseEntity.ok(countryResources);
     }
 
-
+    //Implementazione con jdbc
     @GetMapping(value = "/countries")
     public ResponseEntity<List<CountryResource>> getCountryConnector() throws Exception {
         List<CountryModel> countryResourceList = beanFactory.getBean(CountryCommandJdbc.class).execute();
@@ -85,6 +86,7 @@ public class CountryController extends CoreController {
         return ResponseEntity.ok(countryResources);
     }
 
+    //Implementazione jpa
     @PostMapping(value = "/{id}")
     public ResponseEntity<CountryResource> getCountryByID(@PathVariable("id") Integer id) throws Exception {
         CountryModel countryModel = beanFactory.getBean(JpaCommand.class, id).execute().orElseThrow(() -> new Exception("Country non presente"));

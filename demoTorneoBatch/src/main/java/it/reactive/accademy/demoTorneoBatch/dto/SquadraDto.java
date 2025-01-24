@@ -41,4 +41,14 @@ public class SquadraDto extends TipoRecord {
     public void setColori_sociali(String colori_sociali) {
         this.colori_sociali = colori_sociali;
     }
+
+    @Override
+    public String toString() {
+        return "SquadraDto{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", colori_sociali='" + colori_sociali + '\'' +
+                ", tifoseriaNome='" + tifoseriaNome + '\'' +
+                '}';
+    }
 }

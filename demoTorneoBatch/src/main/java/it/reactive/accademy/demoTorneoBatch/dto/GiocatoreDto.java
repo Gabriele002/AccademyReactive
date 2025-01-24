@@ -4,6 +4,16 @@ public class GiocatoreDto extends TipoRecord {
 
     private String nomeCognome;
 
+    private Integer idSquadra;
+
+    public Integer getIdSquadra() {
+        return idSquadra;
+    }
+
+    public void setIdSquadra(Integer idSquadra) {
+        this.idSquadra = idSquadra;
+    }
+
     public String getNomeCognome() {
         return nomeCognome;
     }

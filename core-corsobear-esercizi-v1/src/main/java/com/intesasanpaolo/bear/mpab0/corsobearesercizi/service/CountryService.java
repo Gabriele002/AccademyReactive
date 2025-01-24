@@ -1,8 +1,8 @@
 package com.intesasanpaolo.bear.mpab0.corsobearesercizi.service;
 
 import com.intesasanpaolo.bear.connector.jdbc.JDBCQueryType;
-import com.intesasanpaolo.bear.mpab0.corsobearesercizi.connector.GetCountriesJdbcRequestTransformer;
-import com.intesasanpaolo.bear.mpab0.corsobearesercizi.connector.GetCountriesJdbcResponseTransformer;
+import com.intesasanpaolo.bear.mpab0.corsobearesercizi.connector.jdbc.GetCountriesJdbcRequestTransformer;
+import com.intesasanpaolo.bear.mpab0.corsobearesercizi.connector.jdbc.GetCountriesJdbcResponseTransformer;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.connector.Kafka.GetCountriesJdbcRequestTransformerKafka;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.connector.Kafka.GetCountriesJdbcResponseTransformerKafka;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.connector.jdbc.GetCountriesJdbcConnector;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 

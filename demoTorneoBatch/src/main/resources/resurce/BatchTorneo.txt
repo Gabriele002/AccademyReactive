@@ -2,7 +2,7 @@ TOTorneo 1                                                                      
 TOTorneo 2                                                                                            -                                                                                                   -
 SQSquadra 1                                                                                           Colori                                                                                              Pippo
 SQSquadra 2                                                                                           Colori                                                                                              -
+GIGiocatore 1                                       Cognome 1                                         Squadra 2                                                                                           -
+GIGiocatore 2                                       Cognome 2                                         Squadra 1                                                                                           -
 TSTorneo 1                                                                                            Squadra 2                                                                                           -
 TSTorneo 1                                                                                            Squadra 1                                                                                           -
-GIGiocatore 2                                       Cognome 2                                         Squadra 1                                                                                           -
-GIGiocatore 1                                       Cognome 1                                         Squadra 2                                                                                           -

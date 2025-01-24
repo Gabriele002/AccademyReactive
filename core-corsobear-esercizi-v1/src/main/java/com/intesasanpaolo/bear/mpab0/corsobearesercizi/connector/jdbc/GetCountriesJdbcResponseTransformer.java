@@ -1,4 +1,4 @@
-package com.intesasanpaolo.bear.mpab0.corsobearesercizi.connector;
+package com.intesasanpaolo.bear.mpab0.corsobearesercizi.connector.jdbc;
 
 import com.intesasanpaolo.bear.connector.jdbc.response.JDBCResponse;
 import com.intesasanpaolo.bear.connector.jdbc.transformer.IJDBCResponseTransformer;

@@ -31,9 +31,9 @@ public class GiocatoreController {
     @Autowired
     RepoTorneoJpa repoTorneoJpa;
 
-    @ApiOperation(value = "Aggiorna ammonizione per un determinato giocatore", response = GiocatoreResponse.class)
+    @ApiOperation(value = "Aggiorna ammonizione per un determinato giocatore", response = Void.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Aggiorna giocatore", response = GiocatoreResponse.class),
+            @ApiResponse(code = 200, message = "Numero estratto con sucesso", response = ResponseEntity.class),
             @ApiResponse(code = 400, message = "Dati inseriti non validi"),
             @ApiResponse(code = 500, message = "Errore di server")})
             @ApiResponse(code = 550, message = "C6 in caso di valisazione fallita per l id giocatore", response = ErrorResponse.class)

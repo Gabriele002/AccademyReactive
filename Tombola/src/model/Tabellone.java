@@ -14,5 +14,7 @@ public class Tabellone {
 
     private ArrayList<Vittoria> vittorie;
 
+    private ArrayList<Integer> NUmeriestratti;
+
 
 }

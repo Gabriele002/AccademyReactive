@@ -1,4 +1,4 @@
-package com.intesasanpaolo.bear.mpab0.corsobearesercizi.connector;
+package com.intesasanpaolo.bear.mpab0.corsobearesercizi.connector.jdbc;
 
 import com.intesasanpaolo.bear.connector.jdbc.JDBCQueryType;
 import com.intesasanpaolo.bear.connector.jdbc.request.JDBCRequest;
@@ -6,8 +6,6 @@ import com.intesasanpaolo.bear.connector.jdbc.transformer.IJDBCRequestTransforme
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.model.CountryModel;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Service;
-
-import java.util.Arrays;
 
 @Service
 public class GetCountriesJdbcRequestTransformer implements IJDBCRequestTransformer<String, Void> {
