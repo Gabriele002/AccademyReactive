@@ -1,13 +1,14 @@
 package it.reactive.torneoDemoMongo.repository.mapper;
 
+import it.reactive.torneoDemoMongo.dto.in.GiocatoreDTO;
 import it.reactive.torneoDemoMongo.dto.in.SquadraDTO;
 import it.reactive.torneoDemoMongo.dto.resource.SquadraResponse;
-import it.reactive.torneoDemoMongo.model.GiocatoriModelMongo;
 import it.reactive.torneoDemoMongo.model.SquadraModelMongo;
 import it.reactive.torneoDemoMongo.model.TifoseriaModelMongo;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -42,4 +43,6 @@ public class MapperSquadra {
         squadraResponse.setIdSquadra(String.valueOf(squadraModelMongo.get_id()));
         return squadraResponse;
     }
+
+
 }

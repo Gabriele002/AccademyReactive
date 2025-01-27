@@ -1,6 +1,7 @@
 package it.reactive.torneoDemoMongo.repository.dao;
 
 import it.reactive.torneoDemoMongo.dto.in.SquadraDTO;
+import it.reactive.torneoDemoMongo.dto.in.SquadreDiGiocatoriDTO;
 import it.reactive.torneoDemoMongo.model.SquadraModelMongo;
 import it.reactive.torneoDemoMongo.repository.mapper.MapperSquadra;
 import it.reactive.torneoDemoMongo.utility.Utility;
@@ -27,6 +28,10 @@ public class SquadraDaoImpl {
     public SquadraModelMongo creaSquadra(SquadraDTO squadraDTO) {
         squadraDTO.setNome(Utility.formattaStringaPerDb(squadraDTO.getNome()));
         SquadraModelMongo squadraModelMongo = mapperSquadra.dtotoMongo(squadraDTO);
+        return mongoTemplate.insert(squadraModelMongo);
+    }
+
+    public SquadraModelMongo creaSquadraModel(SquadraModelMongo squadraModelMongo) {
         return mongoTemplate.save(squadraModelMongo);
     }
 
@@ -55,6 +60,14 @@ public class SquadraDaoImpl {
             squadraModelMongos.forEach(squadraModelMongo -> squadraModelMongo.setGiocatori(new HashSet<>()));
         }
         return squadraModelMongos;
+    }
+
+    public SquadraModelMongo creaSquadraConGiocatori(SquadreDiGiocatoriDTO squadreDiGiocatoriDTO) {
+        SquadraModelMongo squadraModelMongo = new SquadraModelMongo();
+        squadraModelMongo.setGiocatori(squadreDiGiocatoriDTO.getListaGiocatori());
+        squadraModelMongo.setNome(squadreDiGiocatoriDTO.getNome());
+        squadraModelMongo.setColoriSociali(squadreDiGiocatoriDTO.getColoriSociali());
+        return mongoTemplate.save(squadraModelMongo);
     }
 
 }

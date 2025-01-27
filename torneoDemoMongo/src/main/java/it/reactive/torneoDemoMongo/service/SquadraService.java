@@ -12,6 +12,7 @@ import it.reactive.torneoDemoMongo.model.GiocatoriModelMongo;
 import it.reactive.torneoDemoMongo.model.SquadraModelMongo;
 import it.reactive.torneoDemoMongo.model.TifoseriaModelMongo;
 import it.reactive.torneoDemoMongo.repository.dao.SquadraDaoImpl;
+import it.reactive.torneoDemoMongo.repository.mapper.MapperGiocatore;
 import it.reactive.torneoDemoMongo.repository.mapper.MapperSquadra;
 import it.reactive.torneoDemoMongo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class SquadraService {
 
     @Autowired
     MapperSquadra mapperSquadra;
+
+    @Autowired
+    MapperGiocatore giocatoreMapper;
 
     @Transactional
     public SquadraResponse createSquadra(SquadraDTO squadraDTO) throws Exception {
@@ -70,13 +74,12 @@ public class SquadraService {
 
     public SquadraResponse aggiungiGiocatore(GiocatoreDTO giocatoreDTO, String id) throws Exception {
         Optional<SquadraModelMongo> squadraModel = squadraDaoImpl.findById(id);
-        GiocatoriModelMongo giocatoriModelMongo = new GiocatoriModelMongo();
         if (squadraModel.isPresent()) {
-            String nomeCognomeGiocatore = Utility.formattaStringaPerDb(giocatoreDTO.getNomeCognome());
-            Set<GiocatoriModelMongo> giocatoriModelMongos = squadraModel.get().getGiocatori();
-            giocatoriModelMongo.setNomeCognome(Utility.formattaStringaPerDb(giocatoreDTO.getNomeCognome()));
-            giocatoriModelMongo.setNumeroAmmonizione(0);
-            giocatoriModelMongos.add(giocatoriModelMongo);
+            SquadraModelMongo squadraModelMongo = squadraModel.get();
+            Set<GiocatoriModelMongo> giocatoriModelMongos = squadraModelMongo.getGiocatori();
+            giocatoriModelMongos.add(giocatoreMapper.dtoToModel(giocatoreDTO));
+            squadraModelMongo.setGiocatori(giocatoriModelMongos);
+            squadraDaoImpl.creaSquadraModel(squadraModelMongo);
         } else {
             throw new SquadraNonPresenteException(CodiceErrori.ERRORE_SQUADRANONPRESENTE);
         }
@@ -85,25 +88,23 @@ public class SquadraService {
 
     public SquadraResponse aggiungiTifoseria(TifoseriaDTO tifoseriaDTO, String id) throws Exception {
         SquadraModelMongo squadraModel = squadraDaoImpl.findById(id).orElseThrow(() -> new SquadraDuplicataException(CodiceErrori.ERRORE_SQUADRADUPLICATA));
-        SquadraDTO squadraDTO = new SquadraDTO(squadraModel.getNome(), squadraModel.getColoriSociali());
         TifoseriaModelMongo tifoseriaModelMongo = new TifoseriaModelMongo();
         tifoseriaModelMongo.setNomeTifoseria(tifoseriaDTO.getNomeTifoseria());
         squadraModel.setTifoseriaModelMongo(tifoseriaModelMongo);
-        squadraDaoImpl.creaSquadra(squadraDTO);
+        squadraDaoImpl.creaSquadraModel(squadraModel);
         return mapperSquadra.modelToResponse(squadraModel);
     }
-
 
     public SquadraResponse aggiungoSquadraGiocatori(SquadreDiGiocatoriDTO squadreDiGiocatoriDTO) throws SQLException {
         SquadraDTO squadraDTO = new SquadraDTO(squadreDiGiocatoriDTO.getNome(), squadreDiGiocatoriDTO.getColoriSociali());
         Optional<SquadraModelMongo> squadraModelMongoOptional = squadraDaoImpl.findByNome(Utility.formattaStringaPerDb(squadreDiGiocatoriDTO.getNome()));
         if (squadraModelMongoOptional.isPresent()) {
-            new SquadraDuplicataException(CodiceErrori.ERRORE_SQUADRADUPLICATA);
+            throw new SquadraDuplicataException(CodiceErrori.ERRORE_SQUADRADUPLICATA);
         }
         SquadraModelMongo squadraModelMongo = mapperSquadra.dtotoMongo(squadraDTO);
         Set<GiocatoriModelMongo> giocatoriModels = squadreDiGiocatoriDTO.getListaGiocatori();
         squadraModelMongo.setGiocatori(giocatoriModels);
-        squadraDaoImpl.creaSquadra(squadraDTO);
+        squadraModelMongo = squadraDaoImpl.creaSquadraConGiocatori(squadreDiGiocatoriDTO);
         return mapperSquadra.modelToResponse(squadraModelMongo);
     }
 }

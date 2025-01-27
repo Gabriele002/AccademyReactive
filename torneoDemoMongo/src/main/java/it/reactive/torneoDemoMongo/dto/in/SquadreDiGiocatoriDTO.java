@@ -17,7 +17,7 @@ public class SquadreDiGiocatoriDTO {
     private String coloriSociali;
 
     @Valid
-    private HashSet<GiocatoriModelMongo> listaGiocatori;
+    private HashSet<GiocatoriModelMongo> listaGiocatori = new HashSet<>();
 
     public @NotBlank @Size(min = 3, max = 20) String getNome() {
         return nome;
