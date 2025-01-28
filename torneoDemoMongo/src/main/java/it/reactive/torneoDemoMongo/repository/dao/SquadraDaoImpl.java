@@ -3,7 +3,7 @@ package it.reactive.torneoDemoMongo.repository.dao;
 import it.reactive.torneoDemoMongo.dto.in.SquadraDTO;
 import it.reactive.torneoDemoMongo.dto.in.SquadreDiGiocatoriDTO;
 import it.reactive.torneoDemoMongo.model.SquadraModelMongo;
-import it.reactive.torneoDemoMongo.repository.mapper.MapperSquadra;
+import it.reactive.torneoDemoMongo.mapper.MapperSquadra;
 import it.reactive.torneoDemoMongo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -68,6 +68,13 @@ public class SquadraDaoImpl {
         squadraModelMongo.setNome(squadreDiGiocatoriDTO.getNome());
         squadraModelMongo.setColoriSociali(squadreDiGiocatoriDTO.getColoriSociali());
         return mongoTemplate.save(squadraModelMongo);
+    }
+
+    public Optional<SquadraModelMongo> trovaSquadraPerGiocatore(String nomeGiocatore) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("giocatori.nomeCognome").is(nomeGiocatore));
+        SquadraModelMongo squadra = mongoTemplate.findOne(query, SquadraModelMongo.class);
+        return Optional.ofNullable(squadra);
     }
 
 }

@@ -3,18 +3,19 @@ package it.reactive.torneoDemoMongo.model;
 import it.reactive.torneoDemoMongo.dto.resource.Trasferimenti;
 
 import java.util.List;
+import java.util.Set;
 
 public class GiocatoriModelMongo {
 
     private String nomeCognome;
     private Integer numeroAmmonizione = 0;
-    private List<Trasferimenti> trasferimenti;
+    private Set<Trasferimenti> trasferimenti;
 
-    public List<Trasferimenti> getTrasferimenti() {
+    public Set<Trasferimenti> getTrasferimenti() {
         return trasferimenti;
     }
 
-    public void setTrasferimenti(List<Trasferimenti> trasferimenti) {
+    public void setTrasferimenti(Set<Trasferimenti> trasferimenti) {
         this.trasferimenti = trasferimenti;
     }
 

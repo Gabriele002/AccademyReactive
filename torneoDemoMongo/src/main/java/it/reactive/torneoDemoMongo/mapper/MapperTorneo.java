@@ -1,4 +1,4 @@
-package it.reactive.torneoDemoMongo.repository.mapper;
+package it.reactive.torneoDemoMongo.mapper;
 
 import it.reactive.torneoDemoMongo.dto.in.TorneoDTO;
 import it.reactive.torneoDemoMongo.dto.resource.SquadraResponse;
@@ -7,7 +7,6 @@ import it.reactive.torneoDemoMongo.model.TorneoMongo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 

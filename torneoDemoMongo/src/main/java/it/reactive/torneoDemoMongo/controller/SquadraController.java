@@ -104,4 +104,5 @@ public class SquadraController {
         return ResponseEntity.noContent().build();
     }
 
+
 }

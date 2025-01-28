@@ -8,7 +8,8 @@ public enum CodiceErrori {
     ERRORE_SQUADRANONTROVATA("C5", "Squadra non trovata", HttpStatus.resolve(550)),
     ERRORE_TORNERONONTROVATO("C2", "Torneo non trovato", HttpStatus.resolve(550)),
     ERRORE_SQUADRADUPLICATA("C1", "Squadra gia censita",HttpStatus.resolve(550)),
-    ERRORE_GIOCATOREDUPLICATO("C3", "Giocatore gia presente", HttpStatus.resolve(550));
+    ERRORE_GIOCATOREDUPLICATO("C3", "Giocatore gia presente", HttpStatus.resolve(550)),
+    ERRORE_GIOCATORENONTROVATO("C3", "Giocatore gia presente", HttpStatus.resolve(550));
 
 
     private String codErr;

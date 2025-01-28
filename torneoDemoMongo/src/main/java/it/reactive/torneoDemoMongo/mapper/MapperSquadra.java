@@ -1,6 +1,5 @@
-package it.reactive.torneoDemoMongo.repository.mapper;
+package it.reactive.torneoDemoMongo.mapper;
 
-import it.reactive.torneoDemoMongo.dto.in.GiocatoreDTO;
 import it.reactive.torneoDemoMongo.dto.in.SquadraDTO;
 import it.reactive.torneoDemoMongo.dto.resource.SquadraResponse;
 import it.reactive.torneoDemoMongo.model.SquadraModelMongo;
@@ -8,8 +7,6 @@ import it.reactive.torneoDemoMongo.model.TifoseriaModelMongo;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Component

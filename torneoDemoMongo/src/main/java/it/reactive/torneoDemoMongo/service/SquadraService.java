@@ -4,16 +4,18 @@ import it.reactive.torneoDemoMongo.dto.in.GiocatoreDTO;
 import it.reactive.torneoDemoMongo.dto.in.SquadraDTO;
 import it.reactive.torneoDemoMongo.dto.in.SquadreDiGiocatoriDTO;
 import it.reactive.torneoDemoMongo.dto.in.TifoseriaDTO;
+import it.reactive.torneoDemoMongo.dto.resource.GiocatoreResponse;
 import it.reactive.torneoDemoMongo.dto.resource.SquadraResponse;
 import it.reactive.torneoDemoMongo.exception.CodiceErrori;
+import it.reactive.torneoDemoMongo.exception.CustomException;
 import it.reactive.torneoDemoMongo.exception.SquadraDuplicataException;
 import it.reactive.torneoDemoMongo.exception.SquadraNonPresenteException;
 import it.reactive.torneoDemoMongo.model.GiocatoriModelMongo;
 import it.reactive.torneoDemoMongo.model.SquadraModelMongo;
 import it.reactive.torneoDemoMongo.model.TifoseriaModelMongo;
 import it.reactive.torneoDemoMongo.repository.dao.SquadraDaoImpl;
-import it.reactive.torneoDemoMongo.repository.mapper.MapperGiocatore;
-import it.reactive.torneoDemoMongo.repository.mapper.MapperSquadra;
+import it.reactive.torneoDemoMongo.mapper.MapperGiocatore;
+import it.reactive.torneoDemoMongo.mapper.MapperSquadra;
 import it.reactive.torneoDemoMongo.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,9 @@ public class SquadraService {
 
     @Autowired
     MapperSquadra mapperSquadra;
+
+    @Autowired
+    MapperGiocatore mapperGiocatore;
 
     @Autowired
     MapperGiocatore giocatoreMapper;
@@ -77,6 +82,11 @@ public class SquadraService {
         if (squadraModel.isPresent()) {
             SquadraModelMongo squadraModelMongo = squadraModel.get();
             Set<GiocatoriModelMongo> giocatoriModelMongos = squadraModelMongo.getGiocatori();
+            boolean giocatorePresente = giocatoriModelMongos.stream()
+                    .anyMatch(giocatore -> giocatore.getNomeCognome().equals(giocatoreDTO.getNomeCognome()));
+            if (giocatorePresente) {
+                throw new CustomException(CodiceErrori.ERRORE_GIOCATOREDUPLICATO);
+            }
             giocatoriModelMongos.add(giocatoreMapper.dtoToModel(giocatoreDTO));
             squadraModelMongo.setGiocatori(giocatoriModelMongos);
             squadraDaoImpl.creaSquadraModel(squadraModelMongo);
@@ -107,6 +117,21 @@ public class SquadraService {
         squadraModelMongo = squadraDaoImpl.creaSquadraConGiocatori(squadreDiGiocatoriDTO);
         return mapperSquadra.modelToResponse(squadraModelMongo);
     }
+
+    public GiocatoreResponse aggiornoAmmonizioneGiocatore(String nomeGiocatore) {
+        SquadraModelMongo squadraModelMongo = squadraDaoImpl.trovaSquadraPerGiocatore(nomeGiocatore)
+                .orElseThrow(() -> new CustomException(CodiceErrori.ERRORE_GIOCATORENONTROVATO));
+
+        GiocatoriModelMongo giocatore = squadraModelMongo.getGiocatori().stream()
+                .filter(g -> g.getNomeCognome().equals(nomeGiocatore))
+                .findFirst()
+                .orElseThrow(() -> new CustomException(CodiceErrori.ERRORE_GIOCATORENONTROVATO));
+
+        giocatore.setNumeroAmmonizione(giocatore.getNumeroAmmonizione() + 1);
+        squadraDaoImpl.creaSquadraModel(squadraModelMongo);
+        return mapperGiocatore.modelToResponse(giocatore);
+    }
+
 }
 
 

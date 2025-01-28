@@ -10,8 +10,8 @@ import it.reactive.torneoDemoMongo.model.SquadraModelMongo;
 import it.reactive.torneoDemoMongo.model.TorneoMongo;
 import it.reactive.torneoDemoMongo.repository.dao.SquadraDaoImpl;
 import it.reactive.torneoDemoMongo.repository.dao.TorneoDaoImpl;
-import it.reactive.torneoDemoMongo.repository.mapper.MapperSquadra;
-import it.reactive.torneoDemoMongo.repository.mapper.MapperTorneo;
+import it.reactive.torneoDemoMongo.mapper.MapperSquadra;
+import it.reactive.torneoDemoMongo.mapper.MapperTorneo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
