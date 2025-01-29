@@ -16,8 +16,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static it.reactive.accademy.demoTorneoBatch.config.BatchConf.ENTITY_MANAGER_FACTORY;
-import static it.reactive.accademy.demoTorneoBatch.config.BatchConf.TASKLET_DELETE;
+import static it.reactive.accademy.utility.Costanti.ENTITY_MANAGER_FACTORY;
+import static it.reactive.accademy.utility.Costanti.TASKLET_DELETE;
 
 @Configuration
 public class TaskletDelete {

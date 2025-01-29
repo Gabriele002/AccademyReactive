@@ -15,7 +15,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static it.reactive.accademy.demoTorneoBatch.config.BatchConf.WRITER_SQUADRA;
+import static it.reactive.accademy.utility.Costanti.WRITER_SQUADRA;
+
 
 @Configuration
 public class WriterCustomsSquadra {

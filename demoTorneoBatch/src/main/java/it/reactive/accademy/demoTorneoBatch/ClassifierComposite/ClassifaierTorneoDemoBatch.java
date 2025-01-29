@@ -14,7 +14,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 
-import static it.reactive.accademy.demoTorneoBatch.config.BatchConf.CLASSIFAIER;
+import static it.reactive.accademy.utility.Costanti.CLASSIFAIER;
+
 
 @Configuration
 public class ClassifaierTorneoDemoBatch {

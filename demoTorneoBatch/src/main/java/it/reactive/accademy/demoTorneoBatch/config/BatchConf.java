@@ -75,7 +75,6 @@ public class BatchConf {
 
     @Bean(WRITER_INSERT)
     public ClassifierCompositeItemWriter<TipoRecord> writerInsert(@Qualifier(ConfigurationDataSource.TORNEO_DATASOURCE) DataSource dataSource,
-                                                                  @Qualifier(WRITER_SQUADRA_TORNEO) ItemWriter itemWriterSquadraTorneo,
                                                                   @Qualifier(WRITER_SQUADRA_TIFOSERIA) ItemStreamWriter<TipoRecord> writerSquadraTifoseria){
         Classifier<TipoRecord, ItemWriter<? super TipoRecord>> classifier = tipoRecord -> {
             if (tipoRecord instanceof TorneoDto) {

@@ -17,7 +17,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import java.util.List;
 
-import static it.reactive.accademy.demoTorneoBatch.config.BatchConf.*;
+import static it.reactive.accademy.utility.Costanti.*;
 
 @Configuration
 public class StepForJob {
