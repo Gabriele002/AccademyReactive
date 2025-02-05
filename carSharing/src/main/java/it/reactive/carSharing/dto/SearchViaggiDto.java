@@ -4,15 +4,13 @@ import it.reactive.carSharing.dto.enumDto.EnumRatingAutista;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
 public class SearchViaggiDto {
 
-
-    private LocalDateTime dataPartenzaDa;
-    private LocalDateTime dataPartenzaA;
+    private String dataPartenzaDa;
+    private String dataPartenzaA;
     private String cittaPartenza;
     private String cittaArrivo;
     private EnumRatingAutista ratingAutistaDa;

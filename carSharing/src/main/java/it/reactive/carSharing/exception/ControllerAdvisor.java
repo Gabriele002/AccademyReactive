@@ -17,7 +17,7 @@ import java.util.List;
 
 import static it.reactive.carSharing.utility.Utility.formattaMillisecodi;
 
-//@ControllerAdvice
+@ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(CustomException.class)

@@ -7,6 +7,7 @@ import it.reactive.carSharing.mapper.ViaggioMapper;
 import it.reactive.carSharing.model.Viaggi;
 import it.reactive.carSharing.response.ViaggioResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -54,14 +55,17 @@ public class ViaggioService {
         }
 
         if (searchViaggiDto.getDataPartenzaA() != null) {
-            //LocalDateTime dataPartenza = LocalDateTime.parse(searchViaggiDto.getDataPartenzaA(), formatter);
+            LocalDateTime dataPartenza = LocalDateTime.parse(searchViaggiDto.getDataPartenzaA(), formatter);
             predicates.add(criteriaBuilder.equal(root.get("dataArrivo"), searchViaggiDto.getDataPartenzaA()));
         }
 
         if (searchViaggiDto.getDataPartenzaDa() != null) {
-//            LocalDateTime dataPartenza = LocalDateTime.parse(searchViaggiDto.getDataPartenzaDa(), formatter);
+            LocalDateTime dataPartenza = LocalDateTime.parse(searchViaggiDto.getDataPartenzaDa(), formatter);
             predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("dataPartenza"), searchViaggiDto.getDataPartenzaDa()));
         }
+
+        criteriaBuilder.desc(root);
+        criteriaQuery.orderBy();
 
         switch (enumOrdinamento) {
             case CRE_DATA:
